@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bottom_sheet_bg">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <!-- Drag Handle -->
+        <View
+            android:layout_width="40dp"
+            android:layout_height="4dp"
+            android:layout_gravity="center"
+            android:layout_marginBottom="16dp"
+            android:background="#E0E0E0" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@android:drawable/ic_menu_sort_by_size"
+                    app:tint="@color/button_blue" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:text="Enter NPK Values"
+                    android:textColor="@color/black"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <ImageButton
+                android:id="@+id/btn_close"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_alignParentEnd="true"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@android:drawable/ic_menu_close_clear_cancel"
+                app:tint="@color/nav_inactive" />
+        </RelativeLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="Enter soil nutrient levels from your soil test report"
+            android:textColor="@color/text_secondary"
+            android:textSize="12sp" />
+
+        <!-- Nitrogen Field -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="Nitrogen (N)"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/input_field_bg"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingHorizontal="12dp">
+
+            <EditText
+                android:id="@+id/et_nitrogen"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:inputType="number"
+                android:text="85"
+                android:textColor="@color/black" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:text="kg/ha"
+                android:textColor="@color/text_secondary"
+                android:textSize="12sp" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <ImageButton
+                    android:id="@+id/btn_n_up"
+                    android:layout_width="24dp"
+                    android:layout_height="12dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:scaleType="centerInside"
+                    android:src="@android:drawable/arrow_up_float"
+                    app:tint="@color/black" />
+
+                <ImageButton
+                    android:id="@+id/btn_n_down"
+                    android:layout_width="24dp"
+                    android:layout_height="12dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:scaleType="centerInside"
+                    android:src="@android:drawable/arrow_down_float"
+                    app:tint="@color/black" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="Typical range: 0 - 140 kg/ha"
+            android:textColor="@color/text_secondary"
+            android:textSize="11sp" />
+
+        <!-- Phosphorus Field -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Phosphorus (P)"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/input_field_bg"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingHorizontal="12dp">
+
+            <EditText
+                android:id="@+id/et_phosphorus"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:inputType="number"
+                android:text="45"
+                android:textColor="@color/black" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:text="kg/ha"
+                android:textColor="@color/text_secondary"
+                android:textSize="12sp" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <ImageButton
+                    android:id="@+id/btn_p_up"
+                    android:layout_width="24dp"
+                    android:layout_height="12dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:scaleType="centerInside"
+                    android:src="@android:drawable/arrow_up_float"
+                    app:tint="@color/black" />
+
+                <ImageButton
+                    android:id="@+id/btn_p_down"
+                    android:layout_width="24dp"
+                    android:layout_height="12dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:scaleType="centerInside"
+                    android:src="@android:drawable/arrow_down_float"
+                    app:tint="@color/black" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="Typical range: 5 - 145 kg/ha"
+            android:textColor="@color/text_secondary"
+            android:textSize="11sp" />
+
+        <!-- Potassium Field -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Potassium (K)"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/input_field_bg"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingHorizontal="12dp">
+
+            <EditText
+                android:id="@+id/et_potassium"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:inputType="number"
+                android:text="43"
+                android:textColor="@color/black" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:text="kg/ha"
+                android:textColor="@color/text_secondary"
+                android:textSize="12sp" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <ImageButton
+                    android:id="@+id/btn_k_up"
+                    android:layout_width="24dp"
+                    android:layout_height="12dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:scaleType="centerInside"
+                    android:src="@android:drawable/arrow_up_float"
+                    app:tint="@color/black" />
+
+                <ImageButton
+                    android:id="@+id/btn_k_down"
+                    android:layout_width="24dp"
+                    android:layout_height="12dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:scaleType="centerInside"
+                    android:src="@android:drawable/arrow_down_float"
+                    app:tint="@color/black" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="Typical range: 5 - 205 kg/ha"
+            android:textColor="@color/text_secondary"
+            android:textSize="11sp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_save"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginBottom="16dp"
+            android:backgroundTint="@color/button_blue"
+            android:text="SAVE VALUES"
+            android:textStyle="bold"
+            app:cornerRadius="8dp" />
+
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

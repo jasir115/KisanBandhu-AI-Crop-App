@@ -1,0 +1,379 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_gray">
+
+    <!-- Header Section -->
+    <RelativeLayout
+        android:id="@+id/header_layout"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:background="@color/brand_green"
+        android:padding="16dp"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/logo"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_sprout_logo"
+            app:tint="@color/white"
+            android:contentDescription="App Logo" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="12dp"
+            android:layout_toEndOf="@id/logo"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="KisanBandhu"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/ai_crop_advisor"
+                android:textColor="@color/white"
+                android:textSize="12sp" />
+        </LinearLayout>
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="16dp"
+        app:layout_constraintTop_toBottomOf="@id/header_layout">
+
+        <ImageView
+            android:id="@+id/btn_back"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_back_arrow"
+            app:tint="@color/black"
+            android:contentDescription="Back" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/farm_info"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="खेत की जानकारी"
+                android:textColor="@color/text_secondary"
+                android:textSize="14sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        app:layout_constraintBottom_toTopOf="@id/btn_save_farm"
+        app:layout_constraintTop_toBottomOf="@id/toolbar">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <!-- Farm Size Section -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardBackgroundColor="@color/white"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="1dp"
+                app:strokeColor="#EEEEEE"
+                app:strokeWidth="1dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="20dp">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical">
+                        <ImageView android:layout_width="20dp" android:layout_height="20dp" android:src="@drawable/ic_sprout_logo" app:tint="#FF7043" android:contentDescription="Size Icon" />
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="12dp" android:text="Farm Size / खेत का आकार" android:textColor="@color/black" android:textSize="16sp" android:textStyle="bold" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <EditText
+                            android:id="@+id/et_farm_size"
+                            android:layout_width="0dp"
+                            android:layout_height="48dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/input_field_bg"
+                            android:gravity="center"
+                            android:hint="0"
+                            android:inputType="numberDecimal"
+                            android:textColor="@color/black" />
+
+                        <com.google.android.material.button.MaterialButtonToggleGroup
+                            android:id="@+id/toggle_unit"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="12dp"
+                            app:checkedButton="@+id/btn_acres"
+                            app:singleSelection="true">
+                            <com.google.android.material.button.MaterialButton
+                                android:id="@+id/btn_acres"
+                                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Acres"
+                                android:textAllCaps="false" />
+                            <com.google.android.material.button.MaterialButton
+                                android:id="@+id/btn_hectares"
+                                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Hectares"
+                                android:textAllCaps="false" />
+                        </com.google.android.material.button.MaterialButtonToggleGroup>
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:text="💡 Typical range: 1-50 acres (0.4-20 hectares)"
+                        android:textColor="@color/text_secondary"
+                        android:textSize="12sp" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Current Crops Section -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:cardBackgroundColor="@color/white"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="1dp"
+                app:strokeColor="#EEEEEE"
+                app:strokeWidth="1dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="20dp">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical">
+                        <ImageView android:layout_width="20dp" android:layout_height="20dp" android:src="@drawable/ic_leaf" app:tint="@color/brand_green" android:contentDescription="Leaf Icon" />
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="12dp" android:text="Current Crops / वर्तमान फसलें" android:textColor="@color/black" android:textSize="16sp" android:textStyle="bold" />
+                    </LinearLayout>
+
+                    <EditText
+                        android:id="@+id/et_current_crops"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:layout_marginTop="20dp"
+                        android:background="@drawable/input_field_bg"
+                        android:paddingHorizontal="12dp"
+                        android:hint="e.g. Rice, Wheat, Cotton"
+                        android:textColor="@color/black" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Farm Location Section -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:cardBackgroundColor="@color/white"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="1dp"
+                app:strokeColor="#EEEEEE"
+                app:strokeWidth="1dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="20dp">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical">
+                        <ImageView android:layout_width="20dp" android:layout_height="20dp" android:src="@drawable/ic_location_pin" app:tint="@color/button_blue" android:contentDescription="Map Icon" />
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="12dp" android:text="Farm Location / स्थान" android:textColor="@color/black" android:textSize="16sp" android:textStyle="bold" />
+                    </LinearLayout>
+
+                    <EditText
+                        android:id="@+id/et_farm_location"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:layout_marginTop="20dp"
+                        android:background="@drawable/input_field_bg"
+                        android:paddingHorizontal="12dp"
+                        android:text="Pune, Maharashtra"
+                        android:textColor="@color/black" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Soil Type Section -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:cardBackgroundColor="@color/white"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="1dp"
+                app:strokeColor="#EEEEEE"
+                app:strokeWidth="1dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="20dp">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical">
+                        <ImageView android:layout_width="20dp" android:layout_height="20dp" android:src="@drawable/ic_sprout_logo" app:tint="#8D6E63" android:contentDescription="Soil Icon" />
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="12dp" android:text="Soil Type / मिट्टी का प्रकार" android:textColor="@color/black" android:textSize="16sp" android:textStyle="bold" />
+                    </LinearLayout>
+
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="20dp" android:orientation="vertical">
+                        <TextView android:id="@+id/soil_black" android:layout_width="match_parent" android:layout_height="48dp" android:background="@drawable/input_field_bg" android:gravity="center_vertical" android:paddingHorizontal="12dp" android:text="Black Soil" android:textColor="@color/black" android:layout_marginBottom="8dp" android:clickable="true" android:focusable="true"/>
+                        <TextView android:id="@+id/soil_red" android:layout_width="match_parent" android:layout_height="48dp" android:background="@drawable/input_field_bg" android:gravity="center_vertical" android:paddingHorizontal="12dp" android:text="Red Soil" android:textColor="@color/black" android:layout_marginBottom="8dp" android:clickable="true" android:focusable="true"/>
+                        <TextView android:id="@+id/soil_alluvial" android:layout_width="match_parent" android:layout_height="48dp" android:background="@drawable/input_field_bg" android:gravity="center_vertical" android:paddingHorizontal="12dp" android:text="Alluvial Soil" android:textColor="@color/black" android:layout_marginBottom="8dp" android:clickable="true" android:focusable="true"/>
+                    </LinearLayout>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Irrigation Method Section -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:cardBackgroundColor="@color/white"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="1dp"
+                app:strokeColor="#EEEEEE"
+                app:strokeWidth="1dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="20dp">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical">
+                        <ImageView android:layout_width="20dp" android:layout_height="20dp" android:src="@drawable/ic_humidity" app:tint="@color/button_blue" android:contentDescription="Water Icon" />
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="12dp" android:text="Irrigation Method / सिंचाई विधि" android:textColor="@color/black" android:textSize="16sp" android:textStyle="bold" />
+                    </LinearLayout>
+
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="20dp" android:orientation="vertical">
+                        <TextView android:id="@+id/irr_drip" android:layout_width="match_parent" android:layout_height="48dp" android:background="@drawable/input_field_bg" android:gravity="center_vertical" android:paddingHorizontal="12dp" android:text="💧 Drip" android:textColor="@color/black" android:layout_marginBottom="8dp" android:clickable="true" android:focusable="true" />
+                        <TextView android:id="@+id/irr_sprinkler" android:layout_width="match_parent" android:layout_height="48dp" android:background="@drawable/input_field_bg" android:gravity="center_vertical" android:paddingHorizontal="12dp" android:text="💧 Sprinkler" android:textColor="@color/black" android:layout_marginBottom="8dp" android:clickable="true" android:focusable="true" />
+                        <TextView android:id="@+id/irr_flood" android:layout_width="match_parent" android:layout_height="48dp" android:background="@drawable/input_field_bg" android:gravity="center_vertical" android:paddingHorizontal="12dp" android:text="💧 Flood" android:textColor="@color/black" android:layout_marginBottom="8dp" android:clickable="true" android:focusable="true" />
+                    </LinearLayout>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Ownership Section -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                app:cardBackgroundColor="@color/white"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="1dp"
+                app:strokeColor="#EEEEEE"
+                app:strokeWidth="1dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="20dp">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical">
+                        <ImageView android:layout_width="20dp" android:layout_height="20dp" android:src="@drawable/ic_nav_home" app:tint="#9C27B0" android:contentDescription="Home Icon" />
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="12dp" android:text="Ownership / स्वामित्व" android:textColor="@color/black" android:textSize="16sp" android:textStyle="bold" />
+                    </LinearLayout>
+
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="20dp" android:orientation="vertical">
+                        <TextView android:id="@+id/own_owned" android:layout_width="match_parent" android:layout_height="48dp" android:background="@drawable/input_field_bg" android:gravity="center_vertical" android:paddingHorizontal="12dp" android:text="Owned" android:textColor="@color/black" android:layout_marginBottom="8dp" android:clickable="true" android:focusable="true" />
+                        <TextView android:id="@+id/own_leased" android:layout_width="match_parent" android:layout_height="48dp" android:background="@drawable/input_field_bg" android:gravity="center_vertical" android:paddingHorizontal="12dp" android:text="Leased" android:textColor="@color/black" android:layout_marginBottom="8dp" android:clickable="true" android:focusable="true" />
+                    </LinearLayout>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+        </LinearLayout>
+    </ScrollView>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_save_farm"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_margin="16dp"
+        android:backgroundTint="@color/brand_green"
+        android:text="@string/save_farm_info"
+        android:textStyle="bold"
+        app:cornerRadius="8dp"
+        app:icon="@android:drawable/ic_menu_save"
+        app:layout_constraintBottom_toTopOf="@id/bottom_navigation" />
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        app:itemIconTint="@color/nav_item_color_state"
+        app:itemTextColor="@color/nav_item_color_state"
+        app:labelVisibilityMode="labeled"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:menu="@menu/bottom_nav_menu" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

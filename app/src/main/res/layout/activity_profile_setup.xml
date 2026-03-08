@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/brand_green">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        app:layout_constraintBottom_toTopOf="@id/btn_start_farming"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:padding="24dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="Welcome!"
+                android:textColor="@color/white"
+                android:textSize="28sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="स्वागत है!"
+                android:textColor="@color/white"
+                android:textSize="20sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="Let's set up your profile"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
+
+            <!-- Photo Selection Card -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="0dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="20dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Choose Your Photo"
+                        android:textColor="@color/black"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="अपनी तस्वीर चुनें"
+                        android:textColor="@color/text_secondary"
+                        android:textSize="12sp" />
+
+                    <!-- Avatar Grid -->
+                    <GridLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:columnCount="5">
+                        <ImageView android:id="@+id/avatar_1" android:layout_width="48dp" android:layout_height="48dp" android:layout_margin="4dp" android:src="@android:drawable/ic_menu_gallery" android:background="@drawable/white_circle_bg" android:padding="8dp" />
+                        <ImageView android:id="@+id/avatar_2" android:layout_width="48dp" android:layout_height="48dp" android:layout_margin="4dp" android:src="@android:drawable/ic_menu_gallery" android:padding="8dp" />
+                        <ImageView android:id="@+id/avatar_3" android:layout_width="48dp" android:layout_height="48dp" android:layout_margin="4dp" android:src="@android:drawable/ic_menu_gallery" android:padding="8dp" />
+                        <ImageView android:id="@+id/avatar_4" android:layout_width="48dp" android:layout_height="48dp" android:layout_margin="4dp" android:src="@android:drawable/ic_menu_gallery" android:padding="8dp" />
+                        <ImageView android:id="@+id/avatar_5" android:layout_width="48dp" android:layout_height="48dp" android:layout_margin="4dp" android:src="@android:drawable/ic_menu_gallery" android:padding="8dp" />
+                    </GridLayout>
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_take_photo"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:text="Take Photo / फोटो लें"
+                        android:textAllCaps="false"
+                        android:textColor="@color/black"
+                        app:cornerRadius="20dp"
+                        app:icon="@android:drawable/ic_menu_camera"
+                        app:iconTint="@color/black"
+                        app:strokeColor="#E0E0E0" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Name Input Card -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="0dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:gravity="center_vertical">
+                        <ImageView android:layout_width="16dp" android:layout_height="16dp" android:src="@android:drawable/ic_menu_myplaces" app:tint="@color/brand_green" />
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="8dp" android:text="Your Name / आपका नाम" android:textColor="@color/black" android:textStyle="bold" />
+                    </LinearLayout>
+
+                    <EditText
+                        android:id="@+id/et_setup_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:layout_marginTop="12dp"
+                        android:background="@drawable/input_field_bg"
+                        android:hint="Enter your name..."
+                        android:paddingHorizontal="12dp"
+                        android:textSize="14sp"
+                        android:textColor="@color/black" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Location Input Card -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="0dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:gravity="center_vertical">
+                        <ImageView android:layout_width="16dp" android:layout_height="16dp" android:src="@android:drawable/ic_dialog_map" app:tint="@color/brand_green" />
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="8dp" android:text="Your Location / आपकी जगह" android:textColor="@color/black" android:textStyle="bold" />
+                    </LinearLayout>
+
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:orientation="vertical">
+                        <TextView android:id="@+id/loc_pune" android:layout_width="match_parent" android:layout_height="40dp" android:background="@drawable/input_field_bg" android:gravity="center_vertical" android:paddingHorizontal="12dp" android:text="📍 Pune, Maharashtra" android:layout_marginBottom="8dp" android:textColor="@color/black" />
+                        <TextView android:id="@+id/loc_delhi" android:layout_width="match_parent" android:layout_height="40dp" android:background="@drawable/input_field_bg" android:gravity="center_vertical" android:paddingHorizontal="12dp" android:text="📍 Delhi" android:layout_marginBottom="8dp" android:textColor="@color/black" />
+                        <TextView android:id="@+id/loc_mumbai" android:layout_width="match_parent" android:layout_height="40dp" android:background="@drawable/input_field_bg" android:gravity="center_vertical" android:paddingHorizontal="12dp" android:text="📍 Mumbai, Maharashtra" android:textColor="@color/black" />
+                    </LinearLayout>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+        </LinearLayout>
+    </ScrollView>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_start_farming"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_margin="16dp"
+        android:backgroundTint="#81C784"
+        android:text="START FARMING / शुरू करें"
+        android:textColor="@color/brand_green_dark"
+        android:textStyle="bold"
+        app:cornerRadius="8dp"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

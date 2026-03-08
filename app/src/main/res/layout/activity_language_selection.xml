@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/brand_green">
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="80dp"
+        android:text="@string/select_language"
+        android:textColor="@color/white"
+        android:textSize="28sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_subtitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Choose your preferred language"
+        android:textColor="#E0E0E0"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_title" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="32dp"
+        android:fillViewport="true"
+        app:layout_constraintBottom_toTopOf="@id/btn_continue"
+        app:layout_constraintTop_toBottomOf="@id/tv_subtitle">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingHorizontal="16dp">
+
+            <!-- English -->
+            <RelativeLayout
+                android:id="@+id/lang_english_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                android:background="@drawable/option_item_selector"
+                android:clickable="true"
+                android:focusable="true"
+                android:padding="16dp">
+                <TextView android:id="@+id/code_en" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="EN" android:textStyle="bold" android:textSize="18sp" android:textColor="@color/black" />
+                <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_toEndOf="@id/code_en" android:layout_marginStart="16dp" android:orientation="vertical">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/english" android:textColor="@color/black" android:textStyle="bold" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="English" android:textSize="12sp" android:textColor="@color/text_secondary" />
+                </LinearLayout>
+                <ImageView android:id="@+id/lang_english_check" android:layout_width="24dp" android:layout_height="24dp" android:layout_alignParentEnd="true" android:layout_centerVertical="true" android:src="@drawable/ic_check_circle" />
+            </RelativeLayout>
+
+            <!-- Hindi -->
+            <RelativeLayout
+                android:id="@+id/lang_hindi_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                android:background="@drawable/input_field_bg"
+                android:clickable="true"
+                android:focusable="true"
+                android:padding="16dp">
+                <TextView android:id="@+id/code_hi" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="IN" android:textStyle="bold" android:textSize="18sp" android:textColor="@color/black" />
+                <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_toEndOf="@id/code_hi" android:layout_marginStart="16dp" android:orientation="vertical">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/hindi" android:textColor="@color/black" android:textStyle="bold" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Hindi" android:textSize="12sp" android:textColor="@color/text_secondary" />
+                </LinearLayout>
+                <ImageView android:id="@+id/lang_hindi_check" android:layout_width="24dp" android:layout_height="24dp" android:layout_alignParentEnd="true" android:layout_centerVertical="true" android:src="@drawable/ic_check_circle" android:visibility="gone" />
+            </RelativeLayout>
+
+            <!-- Marathi -->
+            <RelativeLayout
+                android:id="@+id/lang_marathi_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                android:background="@drawable/input_field_bg"
+                android:clickable="true"
+                android:focusable="true"
+                android:padding="16dp">
+                <TextView android:id="@+id/code_mr" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="MR" android:textStyle="bold" android:textSize="18sp" android:textColor="@color/black" />
+                <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_toEndOf="@id/code_mr" android:layout_marginStart="16dp" android:orientation="vertical">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/marathi" android:textColor="@color/black" android:textStyle="bold" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Marathi" android:textSize="12sp" android:textColor="@color/text_secondary" />
+                </LinearLayout>
+                <ImageView android:id="@+id/lang_marathi_check" android:layout_width="24dp" android:layout_height="24dp" android:layout_alignParentEnd="true" android:layout_centerVertical="true" android:src="@drawable/ic_check_circle" android:visibility="gone" />
+            </RelativeLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_continue"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_margin="16dp"
+        android:backgroundTint="@color/white"
+        android:text="@string/continue_btn"
+        android:textColor="@color/brand_green"
+        android:textStyle="bold"
+        app:cornerRadius="8dp"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

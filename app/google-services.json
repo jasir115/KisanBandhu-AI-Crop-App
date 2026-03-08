@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "347931834877",
+    "project_id": "kisanbandhu-c7b38",
+    "storage_bucket": "kisanbandhu-c7b38.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:347931834877:android:57b09f4a2a0652a4ae4194",
+        "android_client_info": {
+          "package_name": "com.example.kisanbandhuai_basedcroprecommendationanddecisionsupportmobileapplication"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB5eC7JK3JyRzKaJGBmVshj4JVUCw6N9EA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
