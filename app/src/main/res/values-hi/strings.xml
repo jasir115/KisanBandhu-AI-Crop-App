@@ -61,4 +61,75 @@
     <string name="todays_weather">आज का मौसम</string>
     <string name="offline_mode">(ऑफलाइन मोड)</string>
     <string name="location_prefix">स्थान</string>
+
+    <!-- Crop Recommendation Flow -->
+    <string name="crop_rec_title">फसल सिफारिश इनपुट</string>
+    <string name="select_data_source">डेटा स्रोत चुनें</string>
+    <string name="choose_data_source">डेटा स्रोत चुनें</string>
+    <string name="data_source_pref">डेटा स्रोत</string>
+    <string name="change">बदलें</string>
+    <string name="soil_env_params">1. मिट्टी और पर्यावरणीय पैरामीटर</string>
+    <string name="npk_levels">NPK स्तर</string>
+    <string name="soil_ph">मिट्टी का pH</string>
+    <string name="humidity">नमी (%)</string>
+    <string name="live_fetched_params">2. लाइव प्राप्त पैरामीटर</string>
+    <string name="temperature">तापमान</string>
+    <string name="rainfall">वर्षा (मिमी)</string>
+    <string name="analyze_and_recommend">विश्लेषण करें और फसल की सिफारिश करें</string>
+    <string name="how_to_enter_soil_data">आप मिट्टी का डेटा कैसे दर्ज करना चाहते हैं?</string>
+    <string name="soil_data_source_desc">अपनी मिट्टी के स्वास्थ्य की जानकारी का स्रोत चुनें</string>
+    <string name="soil_test_kit">मिट्टी परीक्षण किट के परिणाम</string>
+    <string name="soil_test_kit_desc">भौतिक मिट्टी परीक्षण किट से मान दर्ज करें</string>
+    <string name="lab_report">लैब टेस्ट रिपोर्ट</string>
+    <string name="lab_report_desc">प्रयोगशाला विश्लेषण से डेटा आयात करें</string>
+    <string name="previous_records">पिछले रिकॉर्ड</string>
+    <string name="previous_records_desc">पिछले सीजन के परीक्षण से डेटा का उपयोग करें</string>
+    <string name="estimate_values">अनुमानित मान</string>
+    <string name="estimate_values_desc">ज्ञान के आधार पर अनुमानित मान दर्ज करें</string>
+    
+    <string name="enter_npk_details">NPK मान दर्ज करें</string>
+    <string name="enter_npk_desc">अपनी मिट्टी परीक्षण रिपोर्ट से मिट्टी के पोषक तत्व स्तर दर्ज करें</string>
+    <string name="nitrogen">नाइट्रोजन (N)</string>
+    <string name="phosphorus">फास्फोरस (P)</string>
+    <string name="potassium">पोटेशियम (K)</string>
+    <string name="typical_range_n">सामान्य सीमा: 0 - 140 किग्रा/हेक्टेयर</string>
+    <string name="typical_range_p">सामान्य सीमा: 5 - 145 किग्रा/हेक्टेयर</string>
+    <string name="typical_range_k">सामान्य सीमा: 5 - 205 किग्रा/हेक्टेयर</string>
+    
+    <string name="enter_ph_title">मिट्टी का pH स्तर दर्ज करें</string>
+    <string name="enter_ph_desc">अपनी मिट्टी परीक्षण किट या लैब रिपोर्ट से pH मान दर्ज करें</string>
+    <string name="ph_value">pH मान</string>
+    <string name="ph_status_acidic">अम्लीय</string>
+    <string name="ph_status_neutral">तटस्थ (आदर्श)</string>
+    <string name="ph_status_alkaline">क्षारीय</string>
+    <string name="ph_range_ideal">सामान्य सीमा 3.5 - 9.0 (आदर्श: 6.0 - 7.5)</string>
+    <string name="ph_scale_ref">pH स्केल संदर्भ</string>
+    <string name="ph_acidic_label">3.5 - 5.5\nअम्लीय</string>
+    <string name="ph_neutral_label">6.0 - 7.5\nतटस्थ</string>
+    <string name="ph_alkaline_label">7.6 - 9.0\nक्षारीय</string>
+    
+    <string name="enter_humidity_title">मिट्टी की नमी का स्तर दर्ज करें</string>
+    <string name="enter_humidity_desc">अपने मिट्टी परीक्षण से नमी प्रतिशत दर्ज करें</string>
+    <string name="humidity_value">नमी का स्तर</string>
+    <string name="moisture_dry">बहुत सूखा</string>
+    <string name="moisture_good">अच्छा</string>
+    <string name="moisture_wet">बहुत गीला</string>
+    
+    <string name="save_values">मान सहेजें</string>
+    <string name="save_value">मान सहेजें</string>
+    <string name="enter_manually">मैन्युअल रूप से दर्ज करें</string>
+
+    <string name="recommendation_ready">सिफारिश तैयार है!</string>
+    <string name="offline_prediction_badge">⚡ तेज़ ऑफ़लाइन AI भविष्यवाणी</string>
+    <string name="recommended_crop">अनुशंसित फसल</string>
+    <string name="best_suited">आपकी स्थितियों के लिए सबसे उपयुक्त</string>
+    <string name="your_input_params">आपके इनपुट पैरामीटर</string>
+    <string name="prev_crop_history">3. पिछला फसल इतिहास</string>
+    <string name="last_season">पिछला सीजन: कपास</string>
+    <string name="target_season">लक्ष्य: रबी सीजन (अक्टूबर - मार्च)</string>
+    <string name="edit_history">इतिहास संपादित करें</string>
+    <string name="top_match">शीर्ष मिलान</string>
+    <string name="calculating">गणना की जा रही है...</string>
+    <string name="feeding_ai_model">AI मॉडल को डेटा दिया जा रहा है...</string>
+    <string name="back_to_input">इनपुट पर वापस जाएं</string>
 </resources>

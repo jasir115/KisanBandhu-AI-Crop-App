@@ -39,7 +39,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="12dp"
-                    android:text="Enter NPK Values"
+                    android:text="@string/enter_npk_details"
                     android:textColor="@color/black"
                     android:textSize="18sp"
                     android:textStyle="bold" />
@@ -59,7 +59,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:text="Enter soil nutrient levels from your soil test report"
+            android:text="@string/enter_npk_desc"
             android:textColor="@color/text_secondary"
             android:textSize="12sp" />
 
@@ -68,7 +68,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
-            android:text="Nitrogen (N)"
+            android:text="@string/nitrogen"
             android:textColor="@color/black"
             android:textSize="14sp"
             android:textStyle="bold" />
@@ -129,7 +129,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:text="Typical range: 0 - 140 kg/ha"
+            android:text="@string/typical_range_n"
             android:textColor="@color/text_secondary"
             android:textSize="11sp" />
 
@@ -138,7 +138,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="Phosphorus (P)"
+            android:text="@string/phosphorus"
             android:textColor="@color/black"
             android:textSize="14sp"
             android:textStyle="bold" />
@@ -199,7 +199,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:text="Typical range: 5 - 145 kg/ha"
+            android:text="@string/typical_range_p"
             android:textColor="@color/text_secondary"
             android:textSize="11sp" />
 
@@ -208,7 +208,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="Potassium (K)"
+            android:text="@string/potassium"
             android:textColor="@color/black"
             android:textSize="14sp"
             android:textStyle="bold" />
@@ -269,7 +269,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:text="Typical range: 5 - 205 kg/ha"
+            android:text="@string/typical_range_k"
             android:textColor="@color/text_secondary"
             android:textSize="11sp" />
 
@@ -280,7 +280,7 @@
             android:layout_marginTop="32dp"
             android:layout_marginBottom="16dp"
             android:backgroundTint="@color/button_blue"
-            android:text="SAVE VALUES"
+            android:text="@string/save_values"
             android:textStyle="bold"
             app:cornerRadius="8dp" />
 

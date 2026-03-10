@@ -61,4 +61,74 @@
     <string name="todays_weather">Today\'s Weather</string>
     <string name="offline_mode">(Offline Mode)</string>
     <string name="location_prefix">Location</string>
+
+    <!-- Crop Recommendation Flow -->
+    <string name="crop_rec_title">Crop Recommendation Input</string>
+    <string name="select_data_source">Select Data Source</string>
+    <string name="choose_data_source">Choose Data Source</string>
+    <string name="data_source_pref">Data Source</string>
+    <string name="change">Change</string>
+    <string name="soil_env_params">1. Soil &amp; Environmental Parameters</string>
+    <string name="npk_levels">NPK Levels</string>
+    <string name="soil_ph">Soil pH</string>
+    <string name="humidity">Humidity (%)</string>
+    <string name="live_fetched_params">2. Live Fetched Parameters</string>
+    <string name="temperature">Temperature</string>
+    <string name="rainfall">Rainfall (mm)</string>
+    <string name="analyze_and_recommend">ANALYZE &amp; RECOMMEND CROP</string>
+    <string name="how_to_enter_soil_data">How do you want to enter soil data?</string>
+    <string name="soil_data_source_desc">Choose the source of your soil health information</string>
+    <string name="soil_test_kit">Soil Test Kit Results</string>
+    <string name="soil_test_kit_desc">Enter values from physical soil testing kit</string>
+    <string name="lab_report">Lab Test Report</string>
+    <string name="lab_report_desc">Import data from laboratory analysis</string>
+    <string name="previous_records">Previous Records</string>
+    <string name="previous_records_desc">Use data from last season\'s test</string>
+    <string name="estimate_values">Estimate Values</string>
+    <string name="estimate_values_desc">Enter approximate values based on knowledge</string>
+    <string name="enter_npk_details">Enter NPK Values</string>
+    <string name="enter_npk_desc">Enter soil nutrient levels from your soil test report</string>
+    <string name="nitrogen">Nitrogen (N)</string>
+    <string name="phosphorus">Phosphorus (P)</string>
+    <string name="potassium">Potassium (K)</string>
+    <string name="typical_range_n">Typical range: 0 - 140 kg/ha</string>
+    <string name="typical_range_p">Typical range: 5 - 145 kg/ha</string>
+    <string name="typical_range_k">Typical range: 5 - 205 kg/ha</string>
+    
+    <string name="enter_ph_title">Enter Soil pH Level</string>
+    <string name="enter_ph_desc">Enter pH value from your soil test kit or lab report</string>
+    <string name="ph_value">pH Value</string>
+    <string name="ph_status_acidic">Acidic</string>
+    <string name="ph_status_neutral">Neutral (Ideal)</string>
+    <string name="ph_status_alkaline">Alkaline</string>
+    <string name="ph_range_ideal">Typical range 3.5 - 9.0 (Ideal: 6.0 - 7.5)</string>
+    <string name="ph_scale_ref">pH Scale Reference</string>
+    <string name="ph_acidic_label">3.5 - 5.5\nAcidic</string>
+    <string name="ph_neutral_label">6.0 - 7.5\nNeutral</string>
+    <string name="ph_alkaline_label">7.6 - 9.0\nAlkaline</string>
+    
+    <string name="enter_humidity_title">Enter Soil Moisture Level</string>
+    <string name="enter_humidity_desc">Enter moisture percentage from your soil test</string>
+    <string name="humidity_value">Moisture Level</string>
+    <string name="moisture_dry">Too Dry</string>
+    <string name="moisture_good">Good</string>
+    <string name="moisture_wet">Too Wet</string>
+    
+    <string name="save_values">SAVE VALUES</string>
+    <string name="save_value">SAVE VALUE</string>
+    <string name="enter_manually">Enter Manually</string>
+
+    <string name="recommendation_ready">Recommendation Ready!</string>
+    <string name="offline_prediction_badge">⚡ Fast Offline AI Prediction</string>
+    <string name="recommended_crop">Recommended Crop</string>
+    <string name="best_suited">Best suited for your conditions</string>
+    <string name="your_input_params">Your Input Parameters</string>
+    <string name="prev_crop_history">3. Previous Crop History</string>
+    <string name="last_season">Last Season: Cotton</string>
+    <string name="target_season">Target: Rabi Season (Oct - Mar)</string>
+    <string name="edit_history">EDIT HISTORY</string>
+    <string name="top_match">Top Match</string>
+    <string name="calculating">Calculating...</string>
+    <string name="feeding_ai_model">Feeding data to AI model...</string>
+    <string name="back_to_input">Back to Input</string>
 </resources>

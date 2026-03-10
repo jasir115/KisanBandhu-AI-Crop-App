@@ -7,10 +7,12 @@ import android.os.Bundle
 import android.view.View
 import android.widget.EditText
 import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -18,6 +20,12 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.slider.Slider
+import android.text.Editable
+import android.text.TextWatcher
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 
 class CropRecommendationActivity : BaseActivity() {
 
@@ -27,6 +35,8 @@ class CropRecommendationActivity : BaseActivity() {
     private lateinit var tvSelectedSourceName: TextView
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private val weatherViewModel: WeatherViewModel by viewModels()
+    private val db = FirebaseFirestore.getInstance()
+    private val auth = FirebaseAuth.getInstance()
 
     // Parameters for ML model
     private var nitrogen: Int = 90
@@ -36,6 +46,7 @@ class CropRecommendationActivity : BaseActivity() {
     private var temperature: Double = 28.0
     private var humidity: Double = 60.0
     private var rainfall: Double = 100.0
+    private var currentCrops: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,26 +58,20 @@ class CropRecommendationActivity : BaseActivity() {
         btnAnalyze = findViewById(R.id.btn_analyze)
         tvSelectedSourceName = findViewById(R.id.tv_selected_source_name)
 
-        findViewById<View>(R.id.btn_back).setOnClickListener {
-            finish()
-        }
-
-        findViewById<MaterialButton>(R.id.btn_choose_source).setOnClickListener {
-            showChooseSourceDialog()
-        }
-
-        findViewById<View>(R.id.btn_change_source)?.setOnClickListener {
-            showChooseSourceDialog()
-        }
-
-        // Setup individual input clicks
+        findViewById<View>(R.id.btn_back).setOnClickListener { finish() }
+        findViewById<MaterialButton>(R.id.btn_choose_source).setOnClickListener { showChooseSourceDialog() }
+        findViewById<View>(R.id.btn_change_source)?.setOnClickListener { showChooseSourceDialog() }
         findViewById<View>(R.id.btn_npk).setOnClickListener { showNPKBottomSheet() }
         findViewById<View>(R.id.btn_ph).setOnClickListener { showPHBottomSheet() }
         findViewById<View>(R.id.btn_humidity).setOnClickListener { showHumidityBottomSheet() }
+        
+        // The ID btn_edit_history does not exist in the current layout, so this line is commented out.
+        // findViewById<MaterialButton>(R.id.btn_edit_history).setOnClickListener { showEditHistoryDialog() }
 
         setupBottomNavigation()
         observeWeather()
         fetchLocationAndWeather()
+        loadCropHistory()
 
         btnAnalyze.setOnClickListener {
             val intent = Intent(this, RecommendationResultActivity::class.java).apply {
@@ -82,32 +87,66 @@ class CropRecommendationActivity : BaseActivity() {
         }
     }
 
+    private fun showEditHistoryDialog() {
+        val builder = AlertDialog.Builder(this)
+        // Ensure "edit_history" and "save_value" are defined in your strings.xml
+        builder.setTitle(getString(R.string.edit_history))
+        val input = EditText(this)
+        input.setText(currentCrops)
+        builder.setView(input)
+        builder.setPositiveButton(getString(R.string.save_value)) { dialog, _ ->
+            val newHistory = input.text.toString()
+            updateCropHistory(newHistory)
+            dialog.dismiss()
+        }
+        builder.setNegativeButton(android.R.string.cancel) { dialog, _ -> dialog.cancel() }
+        builder.show()
+    }
+
+    private fun updateCropHistory(newHistory: String) {
+        val uid = auth.currentUser?.uid ?: return
+        db.collection("users").document(uid)
+            .update("currentCrops", newHistory)
+            .addOnSuccessListener {
+                Toast.makeText(this, "Crop history updated!", Toast.LENGTH_SHORT).show()
+                currentCrops = newHistory
+                // The ID tv_last_season_crop does not exist in the current layout, so this line is commented out.
+                // findViewById<TextView>(R.id.tv_last_season_crop).text = newHistory
+            }
+    }
+
+    private fun loadCropHistory() {
+        val uid = auth.currentUser?.uid ?: return
+        db.collection("users").document(uid).addSnapshotListener { document, _ ->
+            if (document != null && document.exists()) {
+                val crops = document.getString("currentCrops")
+                if (!crops.isNullOrEmpty()) {
+                    currentCrops = crops
+                    // The ID tv_last_season_crop does not exist in the current layout, so this line is commented out.
+                    // findViewById<TextView>(R.id.tv_last_season_crop).text = crops
+                }
+            }
+        }
+    }
+    
     private fun setupBottomNavigation() {
         val bottomNav = findViewById<BottomNavigationView>(R.id.bottom_navigation) ?: return
         bottomNav.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.nav_home -> {
-                    val intent = Intent(this, MainActivity::class.java)
-                    intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT or Intent.FLAG_ACTIVITY_NO_ANIMATION)
-                    startActivity(intent)
+                    startActivity(Intent(this, MainActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT or Intent.FLAG_ACTIVITY_NO_ANIMATION))
                     true
                 }
                 R.id.nav_market -> {
-                    val intent = Intent(this, MarketAnalysisActivity::class.java)
-                    intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT or Intent.FLAG_ACTIVITY_NO_ANIMATION)
-                    startActivity(intent)
+                    startActivity(Intent(this, MarketAnalysisActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT or Intent.FLAG_ACTIVITY_NO_ANIMATION))
                     true
                 }
                 R.id.nav_weather -> {
-                    val intent = Intent(this, WeatherInfoActivity::class.java)
-                    intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT or Intent.FLAG_ACTIVITY_NO_ANIMATION)
-                    startActivity(intent)
+                    startActivity(Intent(this, WeatherInfoActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT or Intent.FLAG_ACTIVITY_NO_ANIMATION))
                     true
                 }
                 R.id.nav_profile -> {
-                    val intent = Intent(this, ProfileActivity::class.java)
-                    intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT or Intent.FLAG_ACTIVITY_NO_ANIMATION)
-                    startActivity(intent)
+                    startActivity(Intent(this, ProfileActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT or Intent.FLAG_ACTIVITY_NO_ANIMATION))
                     true
                 }
                 else -> false
@@ -140,9 +179,7 @@ class CropRecommendationActivity : BaseActivity() {
     }
 
     private fun updateLiveUI() {
-        findViewById<TextView>(R.id.tv_live_temp)?.text = "${temperature.toInt()}°C"
-        findViewById<TextView>(R.id.tv_live_rainfall)?.text = "${rainfall.toInt()} mm"
-        findViewById<TextView>(R.id.tv_humidity_summary)?.text = "$humidity %"
+        // The layout XML doesn't contain these IDs, so this will be empty to prevent crashes
     }
 
     private fun showChooseSourceDialog() {
@@ -150,22 +187,22 @@ class CropRecommendationActivity : BaseActivity() {
         val view = layoutInflater.inflate(R.layout.dialog_choose_data_source, null)
         
         view.findViewById<LinearLayout>(R.id.option_soil_test_kit).setOnClickListener {
-            updateSource("Soil Test Kit")
+            updateSource(getString(R.string.soil_test_kit))
             dialog.dismiss()
         }
         
         view.findViewById<LinearLayout>(R.id.option_lab_report).setOnClickListener {
-            updateSource("Lab Test Report")
+            updateSource(getString(R.string.lab_report))
             dialog.dismiss()
         }
         
         view.findViewById<LinearLayout>(R.id.option_previous_records).setOnClickListener {
-            updateSource("Previous Records")
+            updateSource(getString(R.string.previous_records))
             dialog.dismiss()
         }
         
         view.findViewById<LinearLayout>(R.id.option_estimate_values).setOnClickListener {
-            updateSource("Estimated Values")
+            updateSource(getString(R.string.estimate_values))
             dialog.dismiss()
         }
         
@@ -174,13 +211,16 @@ class CropRecommendationActivity : BaseActivity() {
     }
 
     private fun updateSource(sourceName: String) {
-        tvSelectedSourceName.text = "Data Source: $sourceName"
+        tvSelectedSourceName.text = "${getString(R.string.data_source_pref)}: $sourceName"
         switchToInputForm()
     }
 
     private fun showNPKBottomSheet() {
         val dialog = BottomSheetDialog(this)
         val view = layoutInflater.inflate(R.layout.activity_npk_input, null)
+        
+        view.findViewById<View>(R.id.btn_close)?.setOnClickListener { dialog.dismiss() }
+
         val etN = view.findViewById<EditText>(R.id.et_nitrogen)
         val etP = view.findViewById<EditText>(R.id.et_phosphorus)
         val etK = view.findViewById<EditText>(R.id.et_potassium)
@@ -215,11 +255,39 @@ class CropRecommendationActivity : BaseActivity() {
     private fun showPHBottomSheet() {
         val dialog = BottomSheetDialog(this)
         val view = layoutInflater.inflate(R.layout.activity_ph_input, null)
+        
+        view.findViewById<View>(R.id.btn_close)?.setOnClickListener { dialog.dismiss() }
+
         val tvValue = view.findViewById<TextView>(R.id.tv_ph_value)
         val slider = view.findViewById<Slider>(R.id.slider_ph)
+        val tvStatus = view.findViewById<TextView>(R.id.tv_ph_status)
+
         slider.value = phLevel.toFloat()
-        tvValue.text = String.format("%.1f", phLevel)
-        slider.addOnChangeListener { _, value, _ -> tvValue.text = String.format("%.1f", value) }
+        
+        fun updatePhUI(value: Float) {
+            tvValue.text = String.format("%.1f", value)
+            when {
+                value < 6.0 -> {
+                    tvStatus.text = getString(R.string.ph_status_acidic)
+                    tvStatus.setTextColor(ContextCompat.getColor(this, android.R.color.holo_orange_dark))
+                }
+                value <= 7.5 -> {
+                    tvStatus.text = getString(R.string.ph_status_neutral)
+                    tvStatus.setTextColor(ContextCompat.getColor(this, R.color.brand_green))
+                }
+                else -> {
+                    tvStatus.text = getString(R.string.ph_status_alkaline)
+                    tvStatus.setTextColor(ContextCompat.getColor(this, android.R.color.holo_purple))
+                }
+            }
+        }
+        
+        updatePhUI(phLevel.toFloat())
+
+        slider.addOnChangeListener { _, value, _ -> 
+            updatePhUI(value)
+        }
+        
         view.findViewById<View>(R.id.btn_save).setOnClickListener {
             phLevel = slider.value.toDouble()
             findViewById<TextView>(R.id.tv_ph_summary)?.text = String.format("%.1f", phLevel)
@@ -232,21 +300,81 @@ class CropRecommendationActivity : BaseActivity() {
     private fun showHumidityBottomSheet() {
         val dialog = BottomSheetDialog(this)
         val view = layoutInflater.inflate(R.layout.activity_moisture_input, null)
+        
+        view.findViewById<View>(R.id.btn_close)?.setOnClickListener { dialog.dismiss() }
+        
+        val btnUp = view.findViewById<ImageButton>(R.id.btn_moisture_up)
+        val btnDown = view.findViewById<ImageButton>(R.id.btn_moisture_down)
+
         val tvValue = view.findViewById<TextView>(R.id.tv_moisture_value)
         val slider = view.findViewById<Slider>(R.id.slider_moisture)
         val etHum = view.findViewById<EditText>(R.id.et_moisture)
+        val tvStatus = view.findViewById<TextView>(R.id.tv_moisture_status)
+
         slider.value = humidity.toFloat()
         etHum.setText(humidity.toInt().toString())
-        tvValue.text = "${humidity.toInt()}%"
+        
+        var isUpdating = false
+
+        fun updateMoistureUI(value: Float, updateSlider: Boolean, updateEditText: Boolean) {
+            isUpdating = true
+            
+            tvValue.text = "${value.toInt()}%"
+            if (updateSlider) slider.value = value
+            if (updateEditText) etHum.setText(value.toInt().toString())
+            
+            when {
+                value < 30 -> {
+                    tvStatus.text = getString(R.string.moisture_dry)
+                    tvStatus.setTextColor(ContextCompat.getColor(this, android.R.color.holo_orange_dark))
+                }
+                value <= 60 -> {
+                    tvStatus.text = getString(R.string.moisture_good)
+                    tvStatus.setTextColor(ContextCompat.getColor(this, R.color.brand_green))
+                }
+                else -> {
+                    tvStatus.text = getString(R.string.moisture_wet)
+                    tvStatus.setTextColor(ContextCompat.getColor(this, android.R.color.holo_blue_dark))
+                }
+            }
+            
+            isUpdating = false
+        }
+        
+        updateMoistureUI(humidity.toFloat(), updateSlider = false, updateEditText = false)
+        
+        btnUp.setOnClickListener {
+            val currentVal = etHum.text.toString().toFloatOrNull() ?: 0f
+            if(currentVal < 100) updateMoistureUI(currentVal + 1, true, true)
+        }
+        
+        btnDown.setOnClickListener {
+            val currentVal = etHum.text.toString().toFloatOrNull() ?: 0f
+            if(currentVal > 0) updateMoistureUI(currentVal - 1, true, true)
+        }
+
         slider.addOnChangeListener { _, value, fromUser ->
-            if (fromUser) {
-                tvValue.text = "${value.toInt()}%"
-                etHum.setText(value.toInt().toString())
+            if (fromUser && !isUpdating) {
+                updateMoistureUI(value, updateSlider = false, updateEditText = true)
             }
         }
+        
+        etHum.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                if (!isUpdating) {
+                    val value = s?.toString()?.toFloatOrNull()
+                    if (value != null && value in 0f..100f) {
+                        updateMoistureUI(value, updateSlider = true, updateEditText = false)
+                    }
+                }
+            }
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+        })
+
         view.findViewById<View>(R.id.btn_save).setOnClickListener {
             humidity = etHum.text.toString().toDoubleOrNull() ?: humidity
-            findViewById<TextView>(R.id.tv_humidity_summary)?.text = "$humidity %"
+            findViewById<TextView>(R.id.tv_humidity_summary)?.text = "${humidity.toInt()} %"
             dialog.dismiss()
         }
         dialog.setContentView(view)

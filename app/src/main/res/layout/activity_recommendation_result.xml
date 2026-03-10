@@ -34,7 +34,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="KisanBandhu"
+                android:text="@string/app_name"
                 android:textColor="@color/white"
                 android:textSize="18sp"
                 android:textStyle="bold" />
@@ -42,7 +42,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="AI Crop Advisor"
+                android:text="@string/ai_crop_advisor"
                 android:textColor="@color/white"
                 android:textSize="12sp" />
         </LinearLayout>
@@ -69,7 +69,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:text="Back to Input"
+            android:text="@string/back_to_input"
             android:textColor="@color/black"
             android:textSize="18sp"
             android:textStyle="bold" />
@@ -115,7 +115,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
-                        android:text="Recommendation Ready!"
+                        android:text="@string/recommendation_ready"
                         android:textColor="@color/brand_green_dark"
                         android:textSize="22sp"
                         android:textStyle="bold" />
@@ -125,7 +125,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
-                        android:text="⚡ Fast Offline AI Prediction"
+                        android:text="@string/offline_prediction_badge"
                         android:textColor="#F57C00"
                         android:textSize="12sp"
                         android:textStyle="bold" />
@@ -150,7 +150,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:text="Feeding data to AI model..."
+                    android:text="@string/feeding_ai_model"
                     android:textColor="@color/text_secondary" />
             </LinearLayout>
 
@@ -189,7 +189,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="8dp"
-                            android:text="Recommended Crop"
+                            android:text="@string/recommended_crop"
                             android:textColor="@color/black"
                             android:textStyle="bold" />
                     </LinearLayout>
@@ -217,7 +217,7 @@
                                 android:id="@+id/tv_recommended_crop"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Calculating..."
+                                android:text="@string/calculating"
                                 android:textColor="@color/brand_green_dark"
                                 android:textSize="24sp"
                                 android:textStyle="bold" />
@@ -226,7 +226,7 @@
                                 android:id="@+id/tv_suitability_text"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Best suited for your conditions"
+                                android:text="@string/best_suited"
                                 android:textColor="@color/text_secondary"
                                 android:textSize="12sp" />
                         </LinearLayout>
@@ -239,7 +239,7 @@
                             android:background="@drawable/bg_square_badge"
                             android:paddingHorizontal="12dp"
                             android:paddingVertical="4dp"
-                            android:text="Top Match"
+                            android:text="@string/top_match"
                             android:textColor="@color/white"
                             android:textSize="12sp"
                             android:textStyle="bold" />
@@ -267,7 +267,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Your Input Parameters"
+                        android:text="@string/your_input_params"
                         android:textColor="@color/black"
                         android:textSize="16sp"
                         android:textStyle="bold" />
@@ -279,38 +279,38 @@
                         android:columnCount="2">
 
                         <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:orientation="vertical" android:layout_marginBottom="12dp">
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Nitrogen (N)" android:textColor="@color/text_secondary" android:textSize="12sp" />
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/nitrogen" android:textColor="@color/text_secondary" android:textSize="12sp" />
                             <TextView android:id="@+id/tv_param_n" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="0 kg/ha" android:textColor="@color/black" android:textStyle="bold" />
                         </LinearLayout>
 
                         <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:orientation="vertical" android:layout_marginBottom="12dp">
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Phosphorus (P)" android:textColor="@color/text_secondary" android:textSize="12sp" />
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/phosphorus" android:textColor="@color/text_secondary" android:textSize="12sp" />
                             <TextView android:id="@+id/tv_param_p" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="0 kg/ha" android:textColor="@color/black" android:textStyle="bold" />
                         </LinearLayout>
 
                         <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:orientation="vertical" android:layout_marginBottom="12dp">
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Potassium (K)" android:textColor="@color/text_secondary" android:textSize="12sp" />
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/potassium" android:textColor="@color/text_secondary" android:textSize="12sp" />
                             <TextView android:id="@+id/tv_param_k" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="0 kg/ha" android:textColor="@color/black" android:textStyle="bold" />
                         </LinearLayout>
 
                         <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:orientation="vertical" android:layout_marginBottom="12dp">
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Soil pH" android:textColor="@color/text_secondary" android:textSize="12sp" />
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/soil_ph" android:textColor="@color/text_secondary" android:textSize="12sp" />
                             <TextView android:id="@+id/tv_param_ph" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="0.0" android:textColor="@color/black" android:textStyle="bold" />
                         </LinearLayout>
 
                         <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:orientation="vertical" android:layout_marginBottom="12dp">
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Temperature" android:textColor="@color/text_secondary" android:textSize="12sp" />
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/temperature" android:textColor="@color/text_secondary" android:textSize="12sp" />
                             <TextView android:id="@+id/tv_param_temp" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="0°C" android:textColor="@color/black" android:textStyle="bold" />
                         </LinearLayout>
 
                         <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:orientation="vertical" android:layout_marginBottom="12dp">
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Humidity" android:textColor="@color/text_secondary" android:textSize="12sp" />
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/humidity" android:textColor="@color/text_secondary" android:textSize="12sp" />
                             <TextView android:id="@+id/tv_param_humidity" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="0%" android:textColor="@color/black" android:textStyle="bold" />
                         </LinearLayout>
 
                         <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:orientation="vertical">
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Rainfall" android:textColor="@color/text_secondary" android:textSize="12sp" />
-                            <TextView android:id="@+id/tv_param_rainfall" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="0 mm" android:textColor="@color/black" textStyle="bold" />
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/rainfall" android:textColor="@color/text_secondary" android:textSize="12sp" />
+                            <TextView android:id="@+id/tv_param_rainfall" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="0 mm" android:textColor="@color/black" android:textStyle="bold" />
                         </LinearLayout>
 
                     </GridLayout>
