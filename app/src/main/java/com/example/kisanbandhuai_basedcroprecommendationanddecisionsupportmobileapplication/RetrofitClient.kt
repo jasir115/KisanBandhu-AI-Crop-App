@@ -7,6 +7,7 @@ object RetrofitClient {
 
     private const val BASE_URL = "https://kisanbandhu-backend.onrender.com/"
     private const val GOV_BASE_URL = "https://api.data.gov.in/"
+    private const val GEMINI_BASE_URL = "https://generativelanguage.googleapis.com/"
 
     val api: ApiService by lazy {
         Retrofit.Builder()
@@ -22,5 +23,13 @@ object RetrofitClient {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(ApiService::class.java)
+    }
+
+    val geminiApi: GeminiApiService by lazy {
+        Retrofit.Builder()
+            .baseUrl(GEMINI_BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+            .create(GeminiApiService::class.java)
     }
 }

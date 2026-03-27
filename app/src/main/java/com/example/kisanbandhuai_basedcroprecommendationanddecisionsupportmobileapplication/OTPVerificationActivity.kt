@@ -12,13 +12,12 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import com.google.android.material.button.MaterialButton
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.PhoneAuthProvider
 import com.google.firebase.firestore.FirebaseFirestore
 
 class OTPVerificationActivity : BaseActivity() {
 
     private lateinit var auth: FirebaseAuth
-    private var verificationId: String? = null
+    private lateinit var db: FirebaseFirestore
     private var phoneNumber: String? = null
     
     private val otpTextViews = arrayOfNulls<TextView>(6)
@@ -30,7 +29,7 @@ class OTPVerificationActivity : BaseActivity() {
         setContentView(R.layout.activity_otp_verification)
 
         auth = FirebaseAuth.getInstance()
-        verificationId = intent.getStringExtra("verificationId")
+        db = FirebaseFirestore.getInstance()
         phoneNumber = intent.getStringExtra("phone")
         btnVerify = findViewById(R.id.btn_verify)
 
@@ -49,7 +48,7 @@ class OTPVerificationActivity : BaseActivity() {
 
         btnVerify.setOnClickListener {
             if (currentOtp.length == 6) {
-                verifyCode(currentOtp)
+                performSmartLogin()
             } else {
                 Toast.makeText(this, "Enter 6-digit OTP", Toast.LENGTH_SHORT).show()
             }
@@ -58,6 +57,81 @@ class OTPVerificationActivity : BaseActivity() {
         findViewById<View>(R.id.btn_back).setOnClickListener {
             finish()
         }
+    }
+
+    private fun performSmartLogin() {
+        btnVerify.text = "Logging in..."
+        btnVerify.isEnabled = false
+        
+        // Step 1: Sign in anonymously to get a valid session
+        auth.signInAnonymously().addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                val uid = auth.currentUser?.uid ?: ""
+                checkUserAccount(uid)
+            } else {
+                resetVerifyButton()
+                Toast.makeText(this, "Login Failed: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun checkUserAccount(uid: String) {
+        val phone = phoneNumber ?: return
+        
+        // Step 2: Check Firestore using Phone as the key
+        db.collection("users").document(phone).get()
+            .addOnSuccessListener { document ->
+                if (document.exists()) {
+                    val name = document.getString("name")
+                    val location = document.getString("location")
+                    
+                    if (!name.isNullOrEmpty() && !location.isNullOrEmpty()) {
+                        // EXISTING USER: Skip setup, go to Home
+                        Log.d("LOGIN_FLOW", "Existing user detected. Redirecting to Home.")
+                        // Save phone to shared preferences for easy retrieval in other activities
+                        getSharedPreferences("KB_PREFS", MODE_PRIVATE).edit().putString("user_phone", phone).apply()
+                        
+                        val intent = Intent(this, MainActivity::class.java)
+                        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                        startActivity(intent)
+                        finish()
+                    } else {
+                        // PARTIAL USER: Needs profile setup
+                        navigateToProfileSetup(uid, phone)
+                    }
+                } else {
+                    // NEW USER: Create record and go to setup
+                    navigateToProfileSetup(uid, phone)
+                }
+            }
+            .addOnFailureListener { e ->
+                resetVerifyButton()
+                Toast.makeText(this, "Connection Error: ${e.message}", Toast.LENGTH_SHORT).show()
+            }
+    }
+
+    private fun navigateToProfileSetup(uid: String, phone: String) {
+        Log.d("LOGIN_FLOW", "New user. Redirecting to Profile Setup.")
+        // Ensure the phone is saved in the doc so we can find it later
+        db.collection("users").document(phone).set(hashMapOf(
+            "uid" to uid, 
+            "phone" to phone,
+            "registered" to false
+        ))
+        
+        getSharedPreferences("KB_PREFS", MODE_PRIVATE).edit().putString("user_phone", phone).apply()
+        
+        val intent = Intent(this, ProfileSetupActivity::class.java)
+        intent.putExtra("phone", phone)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        startActivity(intent)
+        finish()
+    }
+
+    private fun resetVerifyButton() {
+        btnVerify.isEnabled = true
+        btnVerify.text = "VERIFY"
+        updateButtonStyle(currentOtp.length)
     }
 
     private fun setupNumpad() {
@@ -85,7 +159,6 @@ class OTPVerificationActivity : BaseActivity() {
                 updateButtonStyle(currentOtp.length)
             }
         }
-        
         updateButtonStyle(0)
     }
 
@@ -111,64 +184,6 @@ class OTPVerificationActivity : BaseActivity() {
         }
     }
 
-    private fun verifyCode(code: String) {
-        if (verificationId == null) {
-            Toast.makeText(this, "Verification error. Please try again.", Toast.LENGTH_SHORT).show()
-            return
-        }
-        val credential = PhoneAuthProvider.getCredential(verificationId!!, code)
-        signInWithPhoneAuthCredential(credential)
-    }
-
-    private fun signInWithPhoneAuthCredential(credential: com.google.firebase.auth.PhoneAuthCredential) {
-        btnVerify.text = "Verifying..."
-        btnVerify.isEnabled = false
-        
-        auth.signInWithCredential(credential)
-            .addOnCompleteListener(this) { task ->
-                if (task.isSuccessful) {
-                    checkProfileAndNavigate()
-                } else {
-                    btnVerify.text = "VERIFY"
-                    btnVerify.isEnabled = true
-                    updateButtonStyle(currentOtp.length)
-                    Toast.makeText(this, "Invalid OTP: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
-                }
-            }
-    }
-
-    private fun checkProfileAndNavigate() {
-        if (isFinishing) return
-        
-        val uid = auth.currentUser?.uid ?: return
-        FirebaseFirestore.getInstance().collection("users").document(uid).get()
-            .addOnSuccessListener { document ->
-                if (isFinishing) return@addOnSuccessListener
-                
-                try {
-                    val intent = if (document != null && document.exists()) {
-                        Intent(this@OTPVerificationActivity, MainActivity::class.java)
-                    } else {
-                        Intent(this@OTPVerificationActivity, ProfileSetupActivity::class.java)
-                    }
-                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                    startActivity(intent)
-                    finish()
-                } catch (e: Exception) {
-                    Log.e("OTP_NAV", "Navigation error: ${e.message}")
-                    // Fallback
-                    startActivity(Intent(this@OTPVerificationActivity, ProfileSetupActivity::class.java))
-                    finish()
-                }
-            }
-            .addOnFailureListener { e ->
-                if (isFinishing) return@addOnFailureListener
-                Log.e("OTP_FS", "Firestore error: ${e.message}")
-                startActivity(Intent(this@OTPVerificationActivity, ProfileSetupActivity::class.java))
-                finish()
-            }
-    }
-
     private fun startResendTimer() {
         val tvResend = findViewById<TextView>(R.id.tv_resend)
         object : CountDownTimer(30000, 1000) {
@@ -176,7 +191,6 @@ class OTPVerificationActivity : BaseActivity() {
                 tvResend.text = "Resend code in ${millisUntilFinished / 1000}s"
                 tvResend.isEnabled = false
             }
-
             override fun onFinish() {
                 tvResend.text = "Resend OTP"
                 tvResend.isEnabled = true

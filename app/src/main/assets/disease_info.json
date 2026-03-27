@@ -1,0 +1,51 @@
+{
+  "Apple___Apple_scab": {
+    "hindi_name": "सेब का पपड़ी रोग",
+    "description": "A fungal disease causing dark, olive-green to black spots on leaves and fruit.",
+    "symptoms": "• Velvety spots on leaves\n• Cracked fruit\n• Yellowing leaves",
+    "prevention": "• Remove fallen leaves\n• Prune for airflow\n• Plant resistant varieties",
+    "treatment": "Apply fungicides like Captan or Mancozeb during the growing season."
+  },
+  "Corn___Common_rust": {
+    "hindi_name": "मक्का का सामान्य रतुआ",
+    "description": "A fungal disease that thrives in high humidity and cool temperatures.",
+    "symptoms": "• Small, cinnamon-brown pustules\n• Leaf yellowing\n• Premature leaf death",
+    "prevention": "• Use rust-resistant hybrids\n• Early planting\n• Crop rotation",
+    "treatment": "Foliar fungicides like Pyraclostrobin if infection is severe."
+  },
+  "Potato___Early_blight": {
+    "hindi_name": "आलू का अगेती झुलसा",
+    "description": "Common fungal disease affecting older leaves first, reducing tuber yield.",
+    "symptoms": "• Concentric rings (target spots)\n• Yellow halo around spots\n• Stem lesions",
+    "prevention": "• Crop rotation\n• Space plants well\n• Avoid overhead irrigation",
+    "treatment": "Use fungicides containing chlorothalonil or copper-based sprays."
+  },
+  "Potato___Late_blight": {
+    "hindi_name": "आलू का पछेती झुलसा",
+    "description": "A destructive disease that causes rapid rotting of leaves and tubers.",
+    "symptoms": "• Dark water-soaked spots\n• White mold on leaf undersides\n• Foul smell from rotting tissue",
+    "prevention": "• Use certified seeds\n• Destroy infected plants\n• Avoid wet conditions",
+    "treatment": "Immediate spray of Metalaxyl or Mancozeb fungicides."
+  },
+  "Tomato___Bacterial_spot": {
+    "hindi_name": "टमाटर का जीवाणु धब्बा",
+    "description": "A bacterial disease causing small, dark, raised spots on leaves and fruit.",
+    "symptoms": "• Small black spots with yellow halos\n• Leaf drop\n• Scabby fruit spots",
+    "prevention": "• Use pathogen-free seeds\n• Avoid overhead watering\n• Clean garden tools",
+    "treatment": "Copper-based bactericides can help limit spread."
+  },
+  "Tomato___Early_blight": {
+    "hindi_name": "टमाटर का अगेती झुलसा",
+    "description": "Fungal disease causing target-like spots on lower leaves.",
+    "symptoms": "• Concentric ring spots\n• Yellowing of lower leaves\n• Stem cankers",
+    "prevention": "• Mulching\n• Crop rotation\n• Proper drainage",
+    "treatment": "Apply Chlorothalonil or copper fungicides."
+  },
+  "healthy": {
+    "hindi_name": "स्वस्थ फसल",
+    "description": "The crop appears healthy with no visible signs of disease.",
+    "symptoms": "• Vibrant green leaves\n• Strong stems\n• Regular growth pattern",
+    "prevention": "• Regular monitoring\n• Balanced fertilization\n• Proper watering",
+    "treatment": "Continue regular maintenance and preventive care."
+  }
+}

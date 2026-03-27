@@ -56,7 +56,7 @@
     <string name="tagline">आपका स्मार्ट खेती साथी</string>
     
     <string name="get_crop_recommendation">फसल की\nसिफारिश प्राप्त करें</string>
-    <string name="crop_health_scanner">फसल स्वास्थ्य और\nकीटनाशक स्कैनर</string>
+    <string name="crop_health_scanner">फसल रोग और\nस्वास्थ्य विश्लेषक</string>
     <string name="market_price_analysis">बाजार मूल्य और डेटा\nविश्लेषण</string>
     <string name="todays_weather">आज का मौसम</string>
     <string name="offline_mode">(ऑफलाइन मोड)</string>
@@ -151,7 +151,7 @@
     <string name="edit_history">इतिहासिक संपादित करें</string>
     <string name="top_match">शीर्ष मिलान</string>
     <string name="calculating">गणना की जा रही है...</string>
-    <string name="feeding_ai_model">AI मॉडल को डेटा दिया जा रहा है...</string>
+    <string name="feeding_ai_model">Feeding data to AI model...</string>
     <string name="back_to_input">इनपुट पर वापस जाएं</string>
     <string name="check_market_price">बाजार मूल्य जांचें</string>
 

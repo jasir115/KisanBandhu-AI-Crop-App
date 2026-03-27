@@ -9,11 +9,7 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import com.google.android.material.button.MaterialButton
-import com.google.firebase.FirebaseException
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.PhoneAuthOptions
-import com.google.firebase.auth.PhoneAuthProvider
-import java.util.concurrent.TimeUnit
 
 class MobileEntryActivity : BaseActivity() {
     
@@ -35,7 +31,13 @@ class MobileEntryActivity : BaseActivity() {
         btnSendOtp.setOnClickListener {
             val phoneNumber = etMobile.text.toString()
             if (phoneNumber.length == 10) {
-                sendVerificationCode("+91$phoneNumber")
+                // BYPASS LOGIC: Skip real Firebase Phone Auth SMS sending.
+                // We just proceed to the next screen with the phone number.
+                val intent = Intent(this, OTPVerificationActivity::class.java)
+                intent.putExtra("phone", phoneNumber)
+                // Passing a mock verificationId since the next screen expects one
+                intent.putExtra("verificationId", "MOCK_MODE") 
+                startActivity(intent)
             } else {
                 Toast.makeText(this, "Please enter a valid 10-digit number", Toast.LENGTH_SHORT).show()
             }
@@ -51,68 +53,9 @@ class MobileEntryActivity : BaseActivity() {
             btnSendOtp.backgroundTintList = ColorStateList.valueOf(Color.WHITE)
             btnSendOtp.setTextColor(ContextCompat.getColor(this, R.color.brand_green_dark))
         } else {
-            // Semi-transparent/dimmed green when inactive
             btnSendOtp.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#81C784"))
             btnSendOtp.setTextColor(ContextCompat.getColor(this, R.color.brand_green_dark))
         }
-    }
-
-    private fun sendVerificationCode(number: String) {
-        btnSendOtp.isEnabled = false
-        btnSendOtp.text = "Sending..."
-
-        val options = PhoneAuthOptions.newBuilder(auth)
-            .setPhoneNumber(number)
-            .setTimeout(60L, TimeUnit.SECONDS)
-            .setActivity(this)
-            .setCallbacks(callbacks)
-            .build()
-        PhoneAuthProvider.verifyPhoneNumber(options)
-    }
-
-    private val callbacks = object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
-        override fun onVerificationCompleted(credential: com.google.firebase.auth.PhoneAuthCredential) {
-            signInWithPhoneAuthCredential(credential)
-        }
-
-        override fun onVerificationFailed(e: FirebaseException) {
-            btnSendOtp.isEnabled = true
-            btnSendOtp.text = getString(R.string.send_otp)
-            updateButtonStyle(etMobile.text.length)
-            Toast.makeText(this@MobileEntryActivity, "Error: ${e.message}", Toast.LENGTH_LONG).show()
-        }
-
-        override fun onCodeSent(verificationId: String, token: PhoneAuthProvider.ForceResendingToken) {
-            val intent = Intent(this@MobileEntryActivity, OTPVerificationActivity::class.java)
-            intent.putExtra("verificationId", verificationId)
-            intent.putExtra("phone", etMobile.text.toString())
-            startActivity(intent)
-        }
-    }
-
-    private fun signInWithPhoneAuthCredential(credential: com.google.firebase.auth.PhoneAuthCredential) {
-        auth.signInWithCredential(credential)
-            .addOnCompleteListener(this) { task ->
-                if (task.isSuccessful) {
-                    checkProfileAndNavigate()
-                } else {
-                    Toast.makeText(this, "Sign-in failed: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
-                }
-            }
-    }
-
-    private fun checkProfileAndNavigate() {
-        val uid = auth.currentUser?.uid ?: return
-        com.google.firebase.firestore.FirebaseFirestore.getInstance()
-            .collection("users").document(uid).get()
-            .addOnSuccessListener { document ->
-                if (document.exists()) {
-                    startActivity(Intent(this, MainActivity::class.java))
-                } else {
-                    startActivity(Intent(this, ProfileSetupActivity::class.java))
-                }
-                finish()
-            }
     }
 
     private fun setupNumpad() {

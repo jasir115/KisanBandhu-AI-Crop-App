@@ -2,12 +2,10 @@ package com.example.kisanbandhuai_basedcroprecommendationanddecisionsupportmobil
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
-import coil.load
-import coil.transform.CircleCropTransformation
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -29,7 +27,7 @@ class ProfileActivity : SwipeableActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_profile)
 
-        // Initialize Views with NEW distinct IDs that match activity_profile.xml
+        // Initialize Views
         tvName = findViewById(R.id.tv_profile_name)
         tvLocation = findViewById(R.id.tv_profile_location)
         ivAvatar = findViewById(R.id.iv_profile_avatar)
@@ -40,34 +38,46 @@ class ProfileActivity : SwipeableActivity() {
 
         setupBottomNavigation()
         loadUserProfile()
-        
-        // Setup Click Listeners
+        setupClickListeners()
+    }
+
+    private fun setupClickListeners() {
+        // Edit Farm Information
         findViewById<View>(R.id.btn_edit_farm)?.setOnClickListener {
             startActivity(Intent(this, FarmInfoActivity::class.java))
         }
 
+        // Edit Contact Information
         findViewById<View>(R.id.btn_edit_contact)?.setOnClickListener {
             startActivity(Intent(this, ContactInfoActivity::class.java))
         }
 
+        // Menu: Edit Profile
         findViewById<View>(R.id.btn_menu_edit_profile)?.setOnClickListener {
             startActivity(Intent(this, EditProfileActivity::class.java))
         }
 
+        // Menu: Crop History
         findViewById<View>(R.id.btn_menu_crop_history)?.setOnClickListener {
             startActivity(Intent(this, CropHistoryActivity::class.java))
         }
 
+        // Menu: Settings
         findViewById<View>(R.id.btn_menu_settings)?.setOnClickListener {
             startActivity(Intent(this, SettingsActivity::class.java))
         }
 
+        // Menu: Help & Support
         findViewById<View>(R.id.btn_menu_help)?.setOnClickListener {
             startActivity(Intent(this, HelpSupportActivity::class.java))
         }
 
+        // Logout
         findViewById<View>(R.id.btn_logout).setOnClickListener {
-            FirebaseAuth.getInstance().signOut()
+            auth.signOut()
+            // Clear local preferences
+            getSharedPreferences("KB_PREFS", MODE_PRIVATE).edit().clear().apply()
+            
             val intent = Intent(this, WelcomeActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             startActivity(intent)
@@ -76,42 +86,62 @@ class ProfileActivity : SwipeableActivity() {
     }
 
     private fun loadUserProfile() {
-        val uid = auth.currentUser?.uid ?: return
-        db.collection("users").document(uid).addSnapshotListener { document, error ->
-            if (error != null) return@addSnapshotListener
+        // Fetch using Phone instead of UID for consistency
+        val phone = getSharedPreferences("KB_PREFS", MODE_PRIVATE).getString("user_phone", null)
+        
+        if (phone == null) {
+            Log.e("PROFILE_DEBUG", "Phone is null in SharedPreferences")
+            // Fallback to searching by UID if phone is not in prefs
+            val uid = auth.currentUser?.uid ?: return
+            db.collection("users").whereEqualTo("uid", uid).limit(1).get()
+                .addOnSuccessListener { query ->
+                    if (!query.isEmpty) {
+                        val doc = query.documents[0]
+                        populateUI(doc)
+                    }
+                }
+            return
+        }
+
+        db.collection("users").document(phone).addSnapshotListener { document, error ->
+            if (error != null) {
+                Log.e("PROFILE_DEBUG", "Firestore Error: ${error.message}")
+                return@addSnapshotListener
+            }
             
             if (document != null && document.exists()) {
-                val profile = document.toObject(UserProfile::class.java)
-                
-                // Update User Info
-                tvName.text = profile?.name ?: "User"
-                tvLocation.text = "📍 ${profile?.location ?: "Location"}"
-                
-                // Update Contact Info
-                tvPhone.text = profile?.mobileNumber ?: "+91 XXXXX XXXXX"
-                tvEmail.text = profile?.email ?: "email@example.com"
-                
-                // Update Farm Information (Real-time updates)
-                val farmSizeText = if (profile != null && profile.farmSize > 0) {
-                    "${profile.farmSize} ${profile.farmSizeUnit}"
-                } else {
-                    "Not Set"
-                }
-                tvFarmSize.text = farmSizeText
-                tvCurrentCrops.text = if (!profile?.currentCrops.isNullOrEmpty()) profile?.currentCrops else "--"
-                
-                // Load Image
-                if (!profile?.profileImageUrl.isNullOrEmpty()) {
-                    ivAvatar.load(profile?.profileImageUrl) {
-                        transformations(CircleCropTransformation())
-                        placeholder(R.drawable.ic_sprout_logo)
-                        error(R.drawable.ic_sprout_logo)
-                    }
-                } else {
-                    // Clear image if URL is empty/null
-                    ivAvatar.setImageResource(R.drawable.ic_sprout_logo)
-                    ivAvatar.setColorFilter(android.graphics.Color.WHITE, android.graphics.PorterDuff.Mode.SRC_IN)
-                }
+                populateUI(document)
+            }
+        }
+    }
+
+    private fun populateUI(document: com.google.firebase.firestore.DocumentSnapshot) {
+        tvName.text = document.getString("name") ?: "Farmer"
+        tvLocation.text = "📍 ${document.getString("location") ?: "Not Set"}"
+        
+        // Use the phone stored in the document, or the ID
+        val phone = document.getString("phone") ?: document.id
+        tvPhone.text = "+91 $phone"
+        
+        // Sync Email from Contact Info
+        tvEmail.text = document.getString("email") ?: "Not Set"
+        
+        // Sync Farm Details
+        val farmSize = document.get("farmSize") ?: "0"
+        val farmSizeUnit = document.getString("farmSizeUnit") ?: "Acres"
+        tvFarmSize.text = "$farmSize $farmSizeUnit"
+        
+        tvCurrentCrops.text = document.getString("currentCrops") ?: "None"
+
+        // Sync Avatar and Clear Tint
+        val avatarName = document.getString("profileImageUrl")
+        if (!avatarName.isNullOrEmpty()) {
+            val resId = resources.getIdentifier(avatarName, "drawable", packageName)
+            if (resId != 0) {
+                ivAvatar.setImageResource(resId)
+                // Remove the green XML tint so the avatar's real colors show
+                ivAvatar.imageTintList = null
+                ivAvatar.colorFilter = null
             }
         }
     }
@@ -143,10 +173,5 @@ class ProfileActivity : SwipeableActivity() {
                 else -> false
             }
         }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        findViewById<BottomNavigationView>(R.id.bottom_navigation)?.selectedItemId = R.id.nav_profile
     }
 }

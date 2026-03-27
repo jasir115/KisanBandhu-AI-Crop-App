@@ -1,6 +1,7 @@
 package com.example.kisanbandhuai_basedcroprecommendationanddecisionsupportmobileapplication
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.EditText
 import android.widget.TextView
@@ -25,6 +26,7 @@ class FarmInfoActivity : AppCompatActivity() {
     
     private val auth = FirebaseAuth.getInstance()
     private val db = FirebaseFirestore.getInstance()
+    private var userPhone: String? = null
 
     private lateinit var soilViews: List<TextView>
     private lateinit var irrViews: List<TextView>
@@ -33,6 +35,9 @@ class FarmInfoActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_farm_info)
+
+        // Retrieve phone from SharedPreferences (Primary ID)
+        userPhone = getSharedPreferences("KB_PREFS", MODE_PRIVATE).getString("user_phone", null)
 
         etFarmSize = findViewById(R.id.et_farm_size)
         etCurrentCrops = findViewById(R.id.et_current_crops)
@@ -90,43 +95,46 @@ class FarmInfoActivity : AppCompatActivity() {
     }
 
     private fun loadFarmInfo() {
-        val uid = auth.currentUser?.uid ?: return
-        db.collection("users").document(uid).get()
+        val phone = userPhone ?: return
+        db.collection("users").document(phone).get()
             .addOnSuccessListener { document ->
                 if (document.exists()) {
-                    val profile = document.toObject(UserProfile::class.java)
-                    etFarmSize.setText(profile?.farmSize?.toString() ?: "")
-                    etCurrentCrops.setText(profile?.currentCrops ?: "")
-                    etFarmLocation.setText(profile?.farmLocation ?: "")
+                    etFarmSize.setText(document.get("farmSize")?.toString() ?: "")
+                    etCurrentCrops.setText(document.getString("currentCrops") ?: "")
+                    etFarmLocation.setText(document.getString("farmLocation") ?: "")
                     
-                    if (profile?.farmSizeUnit == "Hectares") {
+                    val unit = document.getString("farmSizeUnit")
+                    if (unit == "Hectares") {
                         toggleUnit.check(R.id.btn_hectares)
                     } else {
                         toggleUnit.check(R.id.btn_acres)
                     }
                     
                     // Pre-select options visually
-                    profile?.soilType?.let { text ->
+                    document.getString("soilType")?.let { text ->
                         soilViews.find { it.text.toString() == text }?.let {
                             selectOption(it, soilViews) { selectedSoilType = it }
                         }
                     }
-                    profile?.irrigationMethod?.let { text ->
+                    document.getString("irrigationMethod")?.let { text ->
                         irrViews.find { it.text.toString() == text }?.let {
                             selectOption(it, irrViews) { selectedIrrigation = it }
                         }
                     }
-                    profile?.ownershipType?.let { text ->
+                    document.getString("ownershipType")?.let { text ->
                         ownViews.find { it.text.toString() == text }?.let {
                             selectOption(it, ownViews) { selectedOwnership = it }
                         }
                     }
                 }
             }
+            .addOnFailureListener { e ->
+                Log.e("FARM_DEBUG", "Load failed: ${e.message}")
+            }
     }
 
     private fun saveFarmInfo() {
-        val uid = auth.currentUser?.uid ?: return
+        val phone = userPhone ?: return
         
         btnSave.isEnabled = false
         btnSave.text = "Saving..."
@@ -136,23 +144,24 @@ class FarmInfoActivity : AppCompatActivity() {
         val updates = hashMapOf<String, Any>(
             "farmSize" to (etFarmSize.text.toString().toDoubleOrNull() ?: 0.0),
             "farmSizeUnit" to sizeUnit,
-            "currentCrops" to etCurrentCrops.text.toString(),
-            "farmLocation" to etFarmLocation.text.toString(),
+            "currentCrops" to etCurrentCrops.text.toString().trim(),
+            "farmLocation" to etFarmLocation.text.toString().trim(),
             "soilType" to selectedSoilType,
             "irrigationMethod" to selectedIrrigation,
             "ownershipType" to selectedOwnership
         )
 
-        db.collection("users").document(uid)
+        db.collection("users").document(phone)
             .update(updates)
             .addOnSuccessListener {
                 Toast.makeText(this, "Farm Info Saved!", Toast.LENGTH_SHORT).show()
                 finish()
             }
             .addOnFailureListener { e ->
-                Toast.makeText(this, "Error: ${e.message}", Toast.LENGTH_SHORT).show()
+                Log.e("FARM_DEBUG", "Update failed: ${e.message}")
                 btnSave.isEnabled = true
-                btnSave.text = "SAVE FARM INFO / सहेजें"
+                btnSave.text = "SAVE FARM INFO"
+                Toast.makeText(this, "Error: ${e.localizedMessage}", Toast.LENGTH_SHORT).show()
             }
     }
 }

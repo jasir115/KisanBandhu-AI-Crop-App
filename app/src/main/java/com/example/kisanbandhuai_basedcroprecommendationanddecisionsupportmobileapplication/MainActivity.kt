@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
@@ -59,23 +60,57 @@ class MainActivity : SwipeableActivity() {
 
         setupBottomNavigation()
         observeWeather()
-        loadUserName()
+        loadUserProfile()
         
         // Initial location check
         checkLocationPermission()
     }
 
-    private fun loadUserName() {
-        val uid = auth.currentUser?.uid ?: return
-        db.collection("users").document(uid).addSnapshotListener { document, error ->
-            if (error != null) return@addSnapshotListener
+    private fun loadUserProfile() {
+        val phone = getSharedPreferences("KB_PREFS", MODE_PRIVATE).getString("user_phone", null)
+        
+        if (phone == null) {
+            val uid = auth.currentUser?.uid ?: return
+            db.collection("users").whereEqualTo("uid", uid).limit(1).get()
+                .addOnSuccessListener { query ->
+                    if (!query.isEmpty) {
+                        val doc = query.documents[0]
+                        updateUI(doc.getString("name"), doc.getString("profileImageUrl"))
+                    }
+                }
+            return
+        }
+
+        db.collection("users").document(phone).addSnapshotListener { document, error ->
+            if (error != null) {
+                Log.e("MAIN_FS", "Error: ${error.message}")
+                return@addSnapshotListener
+            }
             
             if (document != null && document.exists()) {
                 val name = document.getString("name")
-                if (!name.isNullOrEmpty()) {
-                    val welcomeText = getString(R.string.welcome) + " " + name + "!"
-                    findViewById<TextView>(R.id.tv_welcome_name)?.text = welcomeText
-                }
+                val avatarName = document.getString("profileImageUrl")
+                updateUI(name, avatarName)
+            }
+        }
+    }
+
+    private fun updateUI(name: String?, avatarName: String?) {
+        if (!name.isNullOrEmpty()) {
+            val welcomeText = getString(R.string.welcome) + " " + name + "!"
+            findViewById<TextView>(R.id.tv_welcome_name)?.text = welcomeText
+        }
+        
+        val ivLogo = findViewById<ImageView>(R.id.logo) ?: return
+        
+        if (!avatarName.isNullOrEmpty()) {
+            val resId = resources.getIdentifier(avatarName, "drawable", packageName)
+            if (resId != 0) {
+                ivLogo.setImageResource(resId)
+                // IMPORTANT: Clear the XML white tint so the avatar colors show correctly
+                ivLogo.imageTintList = null 
+                ivLogo.clearColorFilter()
+                ivLogo.setPadding(2, 2, 2, 2)
             }
         }
     }

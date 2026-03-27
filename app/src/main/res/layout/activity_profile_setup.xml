@@ -29,25 +29,19 @@
                 android:textStyle="bold" />
 
             <TextView
+                android:id="@+id/tv_setup_phone_display"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="स्वागत है!"
-                android:textColor="@color/white"
-                android:textSize="20sp" />
+                android:layout_marginTop="4dp"
+                android:text="Logged in as: --"
+                android:textColor="#E8F5E9"
+                android:textSize="14sp" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="Let's set up your profile"
-                android:textColor="@color/white"
-                android:textSize="16sp" />
-
-            <!-- Photo Selection Card -->
+            <!-- Avatar Selection Card -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
+                android:layout_marginTop="24dp"
                 app:cardCornerRadius="16dp"
                 app:cardElevation="0dp">
 
@@ -61,43 +55,42 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Choose Your Photo"
+                        android:text="Choose Your Avatar"
                         android:textColor="@color/black"
                         android:textStyle="bold" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="अपनी तस्वीर चुनें"
-                        android:textColor="@color/text_secondary"
-                        android:textSize="12sp" />
+                    <!-- Selected Avatar Preview -->
+                    <ImageView
+                        android:id="@+id/iv_selected_avatar"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:layout_marginTop="16dp"
+                        android:src="@drawable/av_farmer_1"
+                        android:padding="4dp"
+                        android:background="@drawable/white_circle_bg"
+                        android:contentDescription="Selected Avatar" />
 
                     <!-- Avatar Grid -->
-                    <GridLayout
-                        android:layout_width="wrap_content"
+                    <HorizontalScrollView
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
-                        android:columnCount="5">
-                        <ImageView android:id="@+id/avatar_1" android:layout_width="48dp" android:layout_height="48dp" android:layout_margin="4dp" android:src="@android:drawable/ic_menu_gallery" android:background="@drawable/white_circle_bg" android:padding="8dp" />
-                        <ImageView android:id="@+id/avatar_2" android:layout_width="48dp" android:layout_height="48dp" android:layout_margin="4dp" android:src="@android:drawable/ic_menu_gallery" android:padding="8dp" />
-                        <ImageView android:id="@+id/avatar_3" android:layout_width="48dp" android:layout_height="48dp" android:layout_margin="4dp" android:src="@android:drawable/ic_menu_gallery" android:padding="8dp" />
-                        <ImageView android:id="@+id/avatar_4" android:layout_width="48dp" android:layout_height="48dp" android:layout_margin="4dp" android:src="@android:drawable/ic_menu_gallery" android:padding="8dp" />
-                        <ImageView android:id="@+id/avatar_5" android:layout_width="48dp" android:layout_height="48dp" android:layout_margin="4dp" android:src="@android:drawable/ic_menu_gallery" android:padding="8dp" />
-                    </GridLayout>
+                        android:scrollbars="none">
+                        
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:padding="4dp">
 
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btn_take_photo"
-                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:text="Take Photo / फोटो लें"
-                        android:textAllCaps="false"
-                        android:textColor="@color/black"
-                        app:cornerRadius="20dp"
-                        app:icon="@android:drawable/ic_menu_camera"
-                        app:iconTint="@color/black"
-                        app:strokeColor="#E0E0E0" />
+                            <ImageView android:id="@+id/avatar_1" android:layout_width="56dp" android:layout_height="56dp" android:layout_margin="6dp" android:background="@drawable/option_item_selector" android:padding="8dp" android:src="@drawable/av_farmer_1" />
+                            <ImageView android:id="@+id/avatar_2" android:layout_width="56dp" android:layout_height="56dp" android:layout_margin="6dp" android:background="@drawable/white_circle_bg" android:padding="8dp" android:src="@drawable/av_farmer_2" />
+                            <ImageView android:id="@+id/avatar_3" android:layout_width="56dp" android:layout_height="56dp" android:layout_margin="6dp" android:background="@drawable/white_circle_bg" android:padding="8dp" android:src="@drawable/av_farmer_3" />
+                            <ImageView android:id="@+id/avatar_4" android:layout_width="56dp" android:layout_height="56dp" android:layout_margin="6dp" android:background="@drawable/white_circle_bg" android:padding="8dp" android:src="@drawable/av_farmer_4" />
+                            <ImageView android:id="@+id/avatar_5" android:layout_width="56dp" android:layout_height="56dp" android:layout_margin="6dp" android:background="@drawable/white_circle_bg" android:padding="8dp" android:src="@drawable/av_farmer_5" />
+                            <ImageView android:id="@+id/avatar_6" android:layout_width="56dp" android:layout_height="56dp" android:layout_margin="6dp" android:background="@drawable/white_circle_bg" android:padding="8dp" android:src="@drawable/av_farmer_6" />
+                        </LinearLayout>
+                    </HorizontalScrollView>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
@@ -115,10 +108,7 @@
                     android:orientation="vertical"
                     android:padding="16dp">
 
-                    <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:gravity="center_vertical">
-                        <ImageView android:layout_width="16dp" android:layout_height="16dp" android:src="@android:drawable/ic_menu_myplaces" app:tint="@color/brand_green" />
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="8dp" android:text="Your Name / आपका नाम" android:textColor="@color/black" android:textStyle="bold" />
-                    </LinearLayout>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Your Name / आपका नाम" android:textColor="@color/black" android:textStyle="bold" />
 
                     <EditText
                         android:id="@+id/et_setup_name"
@@ -129,7 +119,8 @@
                         android:hint="Enter your name..."
                         android:paddingHorizontal="12dp"
                         android:textSize="14sp"
-                        android:textColor="@color/black" />
+                        android:textColor="@color/black"
+                        android:inputType="textPersonName" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
@@ -147,22 +138,19 @@
                     android:orientation="vertical"
                     android:padding="16dp">
 
-                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:gravity="center_vertical" android:orientation="horizontal">
-                        <ImageView android:layout_width="16dp" android:layout_height="16dp" android:src="@android:drawable/ic_dialog_map" app:tint="@color/brand_green" />
-                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginStart="8dp" android:layout_weight="1" android:text="Your Location / आपकी जगह" android:textColor="@color/black" android:textStyle="bold" />
+                    <RelativeLayout android:layout_width="match_parent" android:layout_height="wrap_content">
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Your Location / आपकी जगह" android:textColor="@color/black" android:textStyle="bold" />
                         <com.google.android.material.button.MaterialButton
                             android:id="@+id/btn_get_location"
                             style="@style/Widget.MaterialComponents.Button.TextButton"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Get Current / अभी का स्थान"
+                            android:layout_alignParentEnd="true"
+                            android:text="Detect / अभी का स्थान"
                             android:textAllCaps="false"
                             android:textColor="@color/brand_green"
-                            android:textSize="12sp"
-                            app:icon="@android:drawable/ic_menu_mylocation"
-                            app:iconSize="14dp"
-                            app:iconTint="@color/brand_green" />
-                    </LinearLayout>
+                            android:textSize="12sp" />
+                    </RelativeLayout>
 
                     <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:orientation="vertical">
                         <TextView android:id="@+id/loc_pune" android:layout_width="match_parent" android:layout_height="40dp" android:background="@drawable/input_field_bg" android:gravity="center_vertical" android:paddingHorizontal="12dp" android:text="📍 Pune, Maharashtra" android:layout_marginBottom="8dp" android:textColor="@color/black" />
