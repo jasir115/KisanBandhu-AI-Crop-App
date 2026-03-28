@@ -1,21 +1,37 @@
-# Add project specific ProGuard rules here.
-# You can control the set of applied configuration files using the
-# proguardFiles setting in build.gradle.
-#
-# For more details, see
-#   http://developer.android.com/guide/developing/tools/proguard.html
+# --- App Specific Models ---
+-keep class com.kisanbandhu.app.** { *; }
 
-# If your project uses WebView with JS, uncomment the following
-# and specify the fully qualified class name to the JavaScript interface
-# class:
-#-keepclassmembers class fqcn.of.javascript.interface.for.webview {
-#   public *;
-#}
+# --- TensorFlow Lite ---
+-keep class org.tensorflow.lite.** { *; }
+-dontwarn org.tensorflow.lite.**
 
-# Uncomment this to preserve the line number information for
-# debugging stack traces.
-#-keepattributes SourceFile,LineNumberTable
+# --- ONNX Runtime ---
+-keep class ai.onnxruntime.** { *; }
+-dontwarn ai.onnxruntime.**
 
-# If you keep the line number information, uncomment this to
-# hide the original source file name.
-#-renamesourcefileattribute SourceFile
+# --- Google Gemini AI ---
+-keep class com.google.ai.client.generativeai.** { *; }
+-dontwarn com.google.ai.client.generativeai.**
+
+# --- Firebase & Google Services ---
+-keep class com.google.firebase.** { *; }
+-keep class com.google.android.gms.** { *; }
+
+# --- Retrofit & OkHttp ---
+-keepattributes Signature, InnerClasses, EnclosingMethod
+-keepattributes RuntimeVisibleAnnotations, RuntimeVisibleParameterAnnotations
+-keepattributes AnnotationDefault
+-keep class retrofit2.** { *; }
+-keep class okhttp3.** { *; }
+-dontwarn retrofit2.**
+-dontwarn okhttp3.**
+
+# --- Gson ---
+-keepattributes Signature
+-keepattributes *Annotation*
+-dontwarn sun.misc.**
+-keep class com.google.gson.** { *; }
+
+# --- Coil (Image Loading) ---
+-keep class coil.** { *; }
+-dontwarn coil.**

@@ -62,6 +62,25 @@
     <string name="offline_mode">(Offline Mode)</string>
     <string name="location_prefix">Location</string>
 
+    <!-- Market Analysis Strings -->
+    <string name="market_analysis_title">Market Price &amp; Analysis</string>
+    <string name="smart_rec_active">Smart Recommendation Active</string>
+    <string name="smart_rec_desc">Based on your soil data, we have analyzed market prices and soil suitability.</string>
+    <string name="detecting_location">Detecting location...</string>
+    <string name="filter">Filter</string>
+    <string name="search_crops_hint">Search crops or prices...</string>
+    <string name="rising">Rising</string>
+    <string name="falling">Falling</string>
+    <string name="best_deal">Best Deal</string>
+    <string name="category_vegetables">🥦 Vegetables</string>
+    <string name="category_fruits">🍇 Fruits</string>
+    <string name="category_grains">🌾 Grains</string>
+    <string name="ai_rec_soil">AI Recommended for your soil</string>
+    <string name="set_price_alerts">Set Price Alerts</string>
+    <string name="set_price_alerts_desc">Get notified when prices reach your target</string>
+    <string name="create_alert">Create Alert</string>
+    <string name="market_disclaimer">📍 Note: Prices are indicative and may vary by region, quality grade, and market conditions. Always confirm with your local Mandi before making decisions.</string>
+
     <!-- Crop Recommendation Flow -->
     <string name="crop_rec_title">Crop Recommendation Input</string>
     <string name="select_data_source">Select Data Source</string>
@@ -157,4 +176,32 @@
     <string name="crop_cotton">Cotton</string>
     <string name="crop_jute">Jute</string>
     <string name="crop_coffee">Coffee</string>
+
+    <!-- Account Deletion -->
+    <string name="delete_account">Delete Account</string>
+    <string name="delete_account_title">Delete Account?</string>
+    <string name="delete_account_msg">Are you sure you want to delete your account? This action cannot be undone and all your data will be permanently removed.</string>
+    <string name="reauth_required_title">Re-authentication Required</string>
+    <string name="reauth_required_msg">For your security, please log out and log back in again to verify it is you before deleting your account.</string>
+    <string name="cancel">Cancel</string>
+    <string name="delete">Delete</string>
+    <string name="ok">OK</string>
+
+    <!-- Location Disclosure -->
+    <string name="location_disclosure_title">Location Access</string>
+    <string name="location_disclosure_msg">To provide you with accurate Mandi rates and weather alerts for your specific farm, KisanBandhu needs to access your location.</string>
+    <string name="agree">Agree</string>
+    <string name="privacy_policy_url">https://gist.github.com/jasir115/c487cf8b5c76138ab076703efc62e2a1</string>
+
+    <!-- Camera Disclosure -->
+    <string name="camera_disclosure_title">Camera Access Required</string>
+    <string name="camera_disclosure_msg">KisanBandhu needs camera access to let you take photos of diseased crops for AI analysis. Photos are used only for disease detection.</string>
+    <string name="proceed">Proceed</string>
+    <string name="camera_permission_denied">Crop health analysis cannot be performed without camera access</string>
+
+    <!-- Voice Disclosure -->
+    <string name="voice_disclosure_title">Voice Search Access</string>
+    <string name="voice_disclosure_msg">KisanBandhu needs microphone access to let you search for Mandi prices using your voice. Audio is processed only for the search query and is not recorded.</string>
+    <string name="voice_permission_denied">Voice search requires microphone permission</string>
+    <string name="coming_soon">This feature is coming soon in the next update!</string>
 </resources>

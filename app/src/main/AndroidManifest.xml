@@ -1,12 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.example.kisanbandhuai_basedcroprecommendationanddecisionsupportmobileapplication">
+    package="com.kisanbandhu.app">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+
+    <queries>
+        <intent>
+            <action android:name="android.speech.RecognitionService" />
+        </intent>
+    </queries>
 
     <application
         android:allowBackup="true"
@@ -19,7 +26,7 @@
         android:theme="@style/Theme.KisanBandhuAIBasedCropRecommendationAndDecisionSupportMobileApplication">
 
         <activity
-            android:name=".SplashActivity"
+            android:name="com.kisanbandhu.app.SplashActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -27,29 +34,28 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".WelcomeActivity" android:exported="false" />
-        <activity android:name=".LanguageSelectionActivity" android:exported="false" />
-        <activity android:name=".MobileEntryActivity" android:exported="false" />
-        <activity android:name=".OTPVerificationActivity" android:exported="false" />
-        <activity android:name=".ProfileSetupActivity" android:exported="false" />
+        <activity android:name="com.kisanbandhu.app.WelcomeActivity" android:exported="false" />
+        <activity android:name="com.kisanbandhu.app.LanguageSelectionActivity" android:exported="false" />
+        <activity android:name="com.kisanbandhu.app.MobileEntryActivity" android:exported="false" />
+        <activity android:name="com.kisanbandhu.app.OTPVerificationActivity" android:exported="false" />
+        <activity android:name="com.kisanbandhu.app.ProfileSetupActivity" android:exported="false" />
 
-        <activity android:name=".MainActivity" android:exported="false" />
-        <activity android:name=".CropRecommendationActivity" android:exported="false" />
-        <activity android:name=".NPKInputActivity" android:exported="false" />
-        <activity android:name=".PHInputActivity" android:exported="false" />
-        <activity android:name=".MoistureInputActivity" android:exported="false" />
-        <activity android:name=".RecommendationResultActivity" android:exported="false" />
-        <activity android:name=".MarketAnalysisActivity" android:exported="false" />
-        <activity android:name=".WeatherInfoActivity" android:exported="false" />
-        <activity android:name=".ProfileActivity" android:exported="false" />
-        <activity android:name=".LoginActivity" android:exported="false" />
-        <activity android:name=".CropHealthActivity" android:exported="false" />
-        <activity android:name=".FarmInfoActivity" android:exported="false" />
-        <activity android:name=".EditProfileActivity" android:exported="false" />
-        <activity android:name=".ContactInfoActivity" android:exported="false" />
-        <activity android:name=".CropHistoryActivity" android:exported="false" />
-        <activity android:name=".SettingsActivity" android:exported="false" />
-        <activity android:name=".HelpSupportActivity" android:exported="false" />
+        <activity android:name="com.kisanbandhu.app.MainActivity" android:exported="false" />
+        <activity android:name="com.kisanbandhu.app.CropRecommendationActivity" android:exported="false" />
+        <activity android:name="com.kisanbandhu.app.NPKInputActivity" android:exported="false" />
+        <activity android:name="com.kisanbandhu.app.PHInputActivity" android:exported="false" />
+        <activity android:name="com.kisanbandhu.app.MoistureInputActivity" android:exported="false" />
+        <activity android:name="com.kisanbandhu.app.RecommendationResultActivity" android:exported="false" />
+        <activity android:name="com.kisanbandhu.app.MarketAnalysisActivity" android:exported="false" />
+        <activity android:name="com.kisanbandhu.app.WeatherInfoActivity" android:exported="false" />
+        <activity android:name="com.kisanbandhu.app.ProfileActivity" android:exported="false" />
+        <activity android:name="com.kisanbandhu.app.CropHealthActivity" android:exported="false" />
+        <activity android:name="com.kisanbandhu.app.FarmInfoActivity" android:exported="false" />
+        <activity android:name="com.kisanbandhu.app.EditProfileActivity" android:exported="false" />
+        <activity android:name="com.kisanbandhu.app.ContactInfoActivity" android:exported="false" />
+        <activity android:name="com.kisanbandhu.app.CropHistoryActivity" android:exported="false" />
+        <activity android:name="com.kisanbandhu.app.SettingsActivity" android:exported="false" />
+        <activity android:name="com.kisanbandhu.app.HelpSupportActivity" android:exported="false" />
 
     </application>
 

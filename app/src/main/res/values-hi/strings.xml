@@ -151,7 +151,7 @@
     <string name="edit_history">इतिहासिक संपादित करें</string>
     <string name="top_match">शीर्ष मिलान</string>
     <string name="calculating">गणना की जा रही है...</string>
-    <string name="feeding_ai_model">Feeding data to AI model...</string>
+    <string name="feeding_ai_model">AI मॉडल को डेटा दिया जा रहा है...</string>
     <string name="back_to_input">इनपुट पर वापस जाएं</string>
     <string name="check_market_price">बाजार मूल्य जांचें</string>
 
@@ -178,4 +178,26 @@
     <string name="crop_cotton">कपास</string>
     <string name="crop_jute">जूट</string>
     <string name="crop_coffee">कॉफ़ी</string>
+
+    <!-- Account Deletion -->
+    <string name="delete_account">खाता हटाएं</string>
+    <string name="delete_account_title">खाता हटाएं?</string>
+    <string name="delete_account_msg">क्या आप वाकई अपना खाता हटाना चाहते हैं? यह क्रिया वापस नहीं ली जा सकती और आपका सारा डेटा स्थायी रूप से हटा दिया जाएगा।</string>
+    <string name="reauth_required_title">पुनः प्रमाणीकरण आवश्यक</string>
+    <string name="reauth_required_msg">आपकी सुरक्षा के लिए, कृपया अपना खाता हटाने से पहले यह सत्यापित करने के लिए कि यह आप ही हैं, लॉग आउट करें और फिर से लॉग इन करें।</string>
+    <string name="cancel">रद्द करें</string>
+    <string name="delete">हटाएं</string>
+    <string name="ok">ठीक है</string>
+
+    <!-- Location Disclosure -->
+    <string name="location_disclosure_title">स्थान की अनुमति</string>
+    <string name="location_disclosure_msg">किसानबंधु को सटीक स्थानीय मौसम और मंडी (बाजार) मूल्य प्रदान करने के लिए आपके स्थान की आवश्यकता है। यह डेटा सुरक्षित रूप से संसाधित किया जाता है और खेती की सिफारिशों के लिए आवश्यक है।</string>
+    <string name="agree">सहमत हैं</string>
+    <string name="privacy_policy_url">https://gist.github.com/jasir115/c487cf8b5c76138ab076703efc62e2a1</string>
+
+    <!-- Camera Disclosure -->
+    <string name="camera_disclosure_title">कैमरा एक्सेस आवश्यक</string>
+    <string name="camera_disclosure_msg">किसानबंधु को आपको AI विश्लेषण के लिए रोगग्रस्त फसलों की तस्वीरें लेने देने के लिए कैमरा एक्सेस की आवश्यकता है। तस्वीरों का उपयोग केवल रोग का पता लगाने के लिए किया जाता है।</string>
+    <string name="proceed">आगे बढ़ें</string>
+    <string name="camera_permission_denied">कैमरा एक्सेस के बिना फसल स्वास्थ्य विश्लेषण नहीं किया जा सकता है</string>
 </resources>

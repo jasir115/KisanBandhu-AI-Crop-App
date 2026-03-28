@@ -7,19 +7,19 @@ plugins {
 }
 
 android {
-    namespace = "com.example.kisanbandhuai_basedcroprecommendationanddecisionsupportmobileapplication"
+    // UPDATED PACKAGE NAME FOR PLAY STORE
+    namespace = "com.kisanbandhu.app"
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "com.example.kisanbandhuai_basedcroprecommendationanddecisionsupportmobileapplication"
+        applicationId = "com.kisanbandhu.app"
         minSdk = 26
         targetSdk = 36
         versionCode = 1
-        versionName = "1.0"
+        versionName = "1.0.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
-        // Load Gemini API Key from local.properties
         val properties = Properties()
         val localPropertiesFile = project.rootProject.file("local.properties")
         if (localPropertiesFile.exists()) {
@@ -31,6 +31,16 @@ android {
 
     buildFeatures {
         buildConfig = true
+    }
+
+    buildTypes {
+        release {
+            isMinifyEnabled = true // ENABLED FOR PRODUCTION
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+        }
     }
 
     compileOptions {
@@ -64,9 +74,7 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.7")
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.8.7")
     
-    // Fixed: dashes in version catalog accessors must be dots in Kotlin DSL
     implementation(libs.play.services.location)
-    
     implementation(libs.retrofit)
     implementation(libs.retrofit.gson)
     implementation(libs.okhttp)
