@@ -2,6 +2,7 @@ package com.kisanbandhu.app
 
 import android.Manifest
 import android.content.Intent
+import android.content.IntentSender
 import android.content.pm.PackageManager
 import android.content.res.ColorStateList
 import android.graphics.Color
@@ -9,68 +10,124 @@ import android.location.Geocoder
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
+import android.view.View
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.google.android.gms.location.LocationServices
+import com.google.android.gms.common.api.ResolvableApiException
+import com.google.android.gms.location.*
 import com.google.android.material.button.MaterialButton
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.kisanbandhu.app.R
 import com.kisanbandhu.app.utils.LocationUtils
-import java.util.Locale
+import java.util.*
 
 class ProfileSetupActivity : BaseActivity() {
 
-    private var selectedLocation: String? = null
-    private var selectedAvatarName: String = "av_farmer_1"
-    private var userPhone: String? = null
-    
+    private lateinit var etName: EditText
+    private lateinit var ivSelectedAvatar: ImageView
+    private lateinit var tvPhoneDisplay: TextView
+    private lateinit var btnStartFarming: MaterialButton
+    private var selectedAvatarName = "av_farmer_1"
+    private var selectedLocation = "Pune, Maharashtra"
+    private var userPhone: String = ""
     private val auth = FirebaseAuth.getInstance()
     private val db = FirebaseFirestore.getInstance()
     
-    private lateinit var etName: EditText
-    private lateinit var btnStart: MaterialButton
-    private lateinit var ivSelectedAvatar: ImageView
+    private val REQUEST_CHECK_SETTINGS = 0x2
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // FIXED: Removed duplicate and incorrect setContentView
         setContentView(R.layout.activity_profile_setup)
 
-        userPhone = intent.getStringExtra("phone") ?: getSharedPreferences("KB_PREFS", MODE_PRIVATE).getString("user_phone", null)
-        Log.d("SETUP_DEBUG", "Activity created for: $userPhone")
-
         etName = findViewById(R.id.et_setup_name)
-        btnStart = findViewById(R.id.btn_start_farming)
         ivSelectedAvatar = findViewById(R.id.iv_selected_avatar)
-        
+        tvPhoneDisplay = findViewById(R.id.tv_setup_phone_display)
+        btnStartFarming = findViewById(R.id.btn_start_farming)
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+
+        userPhone = intent.getStringExtra("phone") ?: getSharedPreferences("KB_PREFS", MODE_PRIVATE).getString("user_phone", "") ?: ""
+        tvPhoneDisplay.text = "Logged in as: +91 $userPhone"
+
         setupAvatarSelection()
         setupLocationSelection()
-        
-        findViewById<MaterialButton>(R.id.btn_get_location).setOnClickListener {
-            // STRICT: Always show disclosure if permission is missing
-            checkLocationPermission()
-        }
 
         etName.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-            override fun afterTextChanged(s: Editable?) { updateButtonStyle() }
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                checkFormValidity()
+            }
+            override fun afterTextChanged(s: Editable?) {}
         })
 
-        btnStart.setOnClickListener {
-            val name = etName.text.toString().trim()
-            if (name.isEmpty() || selectedLocation == null || userPhone.isNullOrEmpty()) {
-                Toast.makeText(this, "Please complete all details", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
-            }
-            saveProfileAndStart(name, selectedLocation!!)
+        btnStartFarming.setOnClickListener {
+            saveProfileAndProceed()
         }
-        updateButtonStyle()
+        
+        checkFormValidity()
+    }
+
+    private fun checkFormValidity() {
+        val name = etName.text.toString().trim()
+        val isValid = name.isNotEmpty()
+        
+        btnStartFarming.isEnabled = isValid
+        if (isValid) {
+            btnStartFarming.backgroundTintList = ColorStateList.valueOf(Color.WHITE)
+            btnStartFarming.setTextColor(ContextCompat.getColor(this, R.color.brand_green_dark))
+            btnStartFarming.alpha = 1.0f
+        } else {
+            btnStartFarming.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#81C784"))
+            btnStartFarming.setTextColor(ContextCompat.getColor(this, R.color.brand_green_dark))
+            btnStartFarming.alpha = 0.6f
+        }
+    }
+
+    private fun setupAvatarSelection() {
+        val avatarIds = listOf(R.id.avatar_1, R.id.avatar_2, R.id.avatar_3, R.id.avatar_4, R.id.avatar_5, R.id.avatar_6)
+        val avatarNames = listOf("av_farmer_1", "av_farmer_2", "av_farmer_3", "av_farmer_4", "av_farmer_5", "av_farmer_6")
+
+        avatarIds.forEachIndexed { index, id ->
+            findViewById<ImageView>(id).setOnClickListener {
+                selectedAvatarName = avatarNames[index]
+                val resId = resources.getIdentifier(selectedAvatarName, "drawable", packageName)
+                if (resId != 0) {
+                    ivSelectedAvatar.setImageResource(resId)
+                }
+                
+                avatarIds.forEach { fid -> 
+                    findViewById<ImageView>(fid).setBackgroundResource(R.drawable.white_circle_bg)
+                }
+                findViewById<ImageView>(id).setBackgroundResource(R.drawable.option_item_selector)
+                checkFormValidity()
+            }
+        }
+    }
+
+    private fun setupLocationSelection() {
+        val locPune = findViewById<TextView>(R.id.loc_pune)
+        val locDelhi = findViewById<TextView>(R.id.loc_delhi)
+        val locMumbai = findViewById<TextView>(R.id.loc_mumbai)
+        val btnDetect = findViewById<View>(R.id.btn_get_location)
+
+        val locs = listOf(locPune, locDelhi, locMumbai)
+        locs.forEach { view ->
+            view.setOnClickListener {
+                locs.forEach { it.setBackgroundResource(R.drawable.input_field_bg) }
+                view.setBackgroundResource(R.drawable.option_item_selector)
+                selectedLocation = view.text.toString().replace("📍 ", "")
+                checkFormValidity()
+            }
+        }
+
+        btnDetect.setOnClickListener {
+            checkLocationPermission()
+        }
     }
 
     private fun checkLocationPermission() {
@@ -78,97 +135,122 @@ class ProfileSetupActivity : BaseActivity() {
             LocationUtils.showLocationDisclosure(
                 this,
                 onAgree = { requestLocationPermission() },
-                onCancel = { Toast.makeText(this, "Please select a location manually", Toast.LENGTH_SHORT).show() }
+                onCancel = { /* Just stay with manual choice */ }
             )
-        } else {
-            getCurrentLocation()
+            return
         }
+        enableGPSAndDetect()
+    }
+
+    private fun enableGPSAndDetect() {
+        val locationRequest = LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 10000).build()
+        val builder = LocationSettingsRequest.Builder().addLocationRequest(locationRequest)
+        val client = LocationServices.getSettingsClient(this)
+        
+        client.checkLocationSettings(builder.build())
+            .addOnSuccessListener { detectCurrentLocation() }
+            .addOnFailureListener { exception ->
+                if (exception is ResolvableApiException) {
+                    try {
+                        exception.startResolutionForResult(this, REQUEST_CHECK_SETTINGS)
+                    } catch (e: IntentSender.SendIntentException) {}
+                }
+            }
     }
 
     private fun requestLocationPermission() {
-        ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), 1002)
+        ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), 1003)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == REQUEST_CHECK_SETTINGS && resultCode == RESULT_OK) {
+            detectCurrentLocation()
+        }
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == 1002 && grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            getCurrentLocation()
+        if (requestCode == 1003 && grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            enableGPSAndDetect()
         }
     }
 
-    private fun getCurrentLocation() {
-        val fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+    private fun detectCurrentLocation() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            fusedLocationClient.lastLocation.addOnSuccessListener { location ->
+            fusedLocationClient.getCurrentLocation(Priority.PRIORITY_HIGH_ACCURACY, null).addOnSuccessListener { location ->
                 if (location != null) {
                     try {
                         val geocoder = Geocoder(this, Locale.getDefault())
                         val addresses = geocoder.getFromLocation(location.latitude, location.longitude, 1)
                         if (!addresses.isNullOrEmpty()) {
-                            val addr = addresses[0]
-                            selectedLocation = "${addr.locality}, ${addr.adminArea}"
-                            Toast.makeText(this, "📍 Location detected: $selectedLocation", Toast.LENGTH_SHORT).show()
-                            updateButtonStyle()
+                            val address = addresses[0]
+                            val city = address.locality ?: address.subAdminArea ?: "Unknown City"
+                            val state = address.adminArea ?: ""
+                            selectedLocation = if (state.isNotEmpty()) "$city, $state" else city
+                            Toast.makeText(this, "Detected: $selectedLocation", Toast.LENGTH_SHORT).show()
+                        } else {
+                            selectedLocation = "Detected Location"
+                            Toast.makeText(this, "Location detected!", Toast.LENGTH_SHORT).show()
                         }
-                    } catch (e: Exception) { Log.e("LOC", "Error", e) }
+                    } catch (e: Exception) {
+                        selectedLocation = "Detected Location"
+                        Toast.makeText(this, "Location detected!", Toast.LENGTH_SHORT).show()
+                    }
+                    
+                    val locPune = findViewById<TextView>(R.id.loc_pune)
+                    val locDelhi = findViewById<TextView>(R.id.loc_delhi)
+                    val locMumbai = findViewById<TextView>(R.id.loc_mumbai)
+                    listOf(locPune, locDelhi, locMumbai).forEach { it.setBackgroundResource(R.drawable.input_field_bg) }
+                    
+                    checkFormValidity()
+                } else {
+                    Toast.makeText(this, "Could not get location. Please select manually.", Toast.LENGTH_SHORT).show()
                 }
             }
         }
     }
 
-    private fun updateButtonStyle() {
+    private fun saveProfileAndProceed() {
         val name = etName.text.toString().trim()
-        val isFormValid = name.isNotEmpty() && selectedLocation != null
-        if (isFormValid) {
-            btnStart.backgroundTintList = ColorStateList.valueOf(Color.WHITE)
-            btnStart.setTextColor(ContextCompat.getColor(this, R.color.brand_green_dark))
-        } else {
-            btnStart.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#81C784"))
-            btnStart.setTextColor(ContextCompat.getColor(this, R.color.brand_green_dark))
+        if (name.isEmpty()) {
+            Toast.makeText(this, "Please enter your name", Toast.LENGTH_SHORT).show()
+            return
         }
-    }
 
-    private fun setupAvatarSelection() {
-        val avatarIds = listOf(R.id.avatar_1, R.id.avatar_2, R.id.avatar_3, R.id.avatar_4, R.id.avatar_5, R.id.avatar_6)
-        avatarIds.forEachIndexed { index, id ->
-            findViewById<ImageView>(id)?.setOnClickListener {
-                selectedAvatarName = "av_farmer_${index + 1}"
-                avatarIds.forEach { otherId -> findViewById<ImageView>(otherId)?.setBackgroundResource(R.drawable.white_circle_bg) }
-                it.setBackgroundResource(R.drawable.option_item_selector)
-                val resId = resources.getIdentifier(selectedAvatarName, "drawable", packageName)
-                if (resId != 0) {
-                    ivSelectedAvatar.setImageResource(resId)
-                    ivSelectedAvatar.imageTintList = null 
-                    ivSelectedAvatar.colorFilter = null
-                }
-                updateButtonStyle()
-            }
+        if (userPhone.isEmpty()) {
+            Toast.makeText(this, "Session error. Please log in again.", Toast.LENGTH_SHORT).show()
+            return
         }
-    }
+        
+        btnStartFarming.isEnabled = false
+        
+        val userMap = hashMapOf(
+            "uid" to (auth.currentUser?.uid ?: ""),
+            "name" to name,
+            "phone" to userPhone,
+            "profileImageUrl" to selectedAvatarName,
+            "location" to selectedLocation,
+            "language" to LocaleHelper.getLanguage(this),
+            "farmSize" to 0.0,
+            "farmSizeUnit" to "Acres"
+        )
 
-    private fun saveProfileAndStart(name: String, location: String) {
-        val phone = userPhone ?: return
-        btnStart.isEnabled = false
-        btnStart.text = "Saving..."
-        val userMap = hashMapOf("name" to name, "location" to location, "profileImageUrl" to selectedAvatarName, "phone" to phone, "uid" to (auth.currentUser?.uid ?: ""), "registered" to true, "createdAt" to System.currentTimeMillis())
-        db.collection("users").document(phone).set(userMap, com.google.firebase.firestore.SetOptions.merge())
+        db.collection("users").document(userPhone).set(userMap)
             .addOnSuccessListener {
-                getSharedPreferences("KB_PREFS", MODE_PRIVATE).edit().putString("user_phone", phone).apply()
-                startActivity(Intent(this, MainActivity::class.java).apply { flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK })
+                getSharedPreferences("KB_PREFS", MODE_PRIVATE).edit()
+                    .putString("user_phone", userPhone)
+                    .putBoolean("is_logged_in", true)
+                    .apply()
+                
+                val intent = Intent(this, MainActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                startActivity(intent)
                 finish()
             }
-            .addOnFailureListener { btnStart.isEnabled = true; btnStart.text = "START FARMING" }
-    }
-
-    private fun setupLocationSelection() {
-        val locIds = listOf(R.id.loc_pune, R.id.loc_delhi, R.id.loc_mumbai)
-        locIds.forEach { id ->
-            findViewById<TextView>(id)?.setOnClickListener {
-                locIds.forEach { otherId -> findViewById<TextView>(otherId)?.setBackgroundResource(R.drawable.input_field_bg) }
-                it.setBackgroundResource(R.drawable.option_item_selector)
-                selectedLocation = (it as TextView).text.toString().replace("📍 ", "")
-                updateButtonStyle()
+            .addOnFailureListener {
+                btnStartFarming.isEnabled = true
+                Toast.makeText(this, "Failed to save profile: ${it.message}", Toast.LENGTH_SHORT).show()
             }
-        }
     }
 }

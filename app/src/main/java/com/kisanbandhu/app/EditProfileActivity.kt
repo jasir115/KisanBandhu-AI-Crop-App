@@ -1,7 +1,6 @@
 package com.kisanbandhu.app
 
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.widget.EditText
@@ -34,9 +33,9 @@ class EditProfileActivity : BaseActivity() {
         
         findViewById<View>(R.id.btn_back).setOnClickListener { finish() }
 
-        // TASK: Replace camera logic with a Toast fallback to avoid broken Storage/Firestore uploads
+        // Profile photo update placeholder
         findViewById<MaterialButton>(R.id.btn_take_photo).setOnClickListener {
-            Toast.makeText(this, "Profile photo update coming soon in the next update!", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Profile photo update coming soon!", Toast.LENGTH_SHORT).show()
         }
 
         setupLanguageSelection()
@@ -53,43 +52,27 @@ class EditProfileActivity : BaseActivity() {
         val langHindi = findViewById<RelativeLayout>(R.id.lang_hindi_container)
         val langMarathi = findViewById<RelativeLayout>(R.id.lang_marathi_container)
 
-        val checkEnglish = findViewById<ImageView>(R.id.lang_english_check)
-        val checkHindi = findViewById<ImageView>(R.id.lang_hindi_check)
-        val checkMarathi = findViewById<ImageView>(R.id.lang_marathi_check)
-
-        val containers = listOf(langEnglish, langHindi, langMarathi)
-        val checks = listOf(checkEnglish, checkHindi, checkMarathi)
-
-        fun updateUI(code: String) {
-            containers.forEach { it.setBackgroundResource(R.drawable.input_field_bg) }
-            checks.forEach { it.visibility = View.GONE }
-
-            when (code) {
-                "en" -> {
-                    langEnglish.setBackgroundResource(R.drawable.option_item_selector)
-                    checkEnglish.visibility = View.VISIBLE
-                }
-                "hi" -> {
-                    langHindi.setBackgroundResource(R.drawable.option_item_selector)
-                    checkHindi.visibility = View.VISIBLE
-                }
-                "mr" -> {
-                    langMarathi.setBackgroundResource(R.drawable.option_item_selector)
-                    checkMarathi.visibility = View.VISIBLE
-                }
-            }
-        }
-
         selectedLanguageCode = LocaleHelper.getLanguage(this)
         updateUI(selectedLanguageCode)
 
-        langEnglish.setOnClickListener { selectedLanguageCode = "en"; updateUI("en") }
-        langHindi.setOnClickListener { selectedLanguageCode = "hi"; updateUI("hi") }
-        langMarathi.setOnClickListener { selectedLanguageCode = "mr"; updateUI("mr") }
+        langEnglish.setOnClickListener { 
+            selectedLanguageCode = "en"
+            updateUI("en") 
+        }
+        
+        langHindi.setOnClickListener { 
+            selectedLanguageCode = "hi"
+            updateUI("hi") 
+        }
+        
+        langMarathi.setOnClickListener { 
+            selectedLanguageCode = "mr"
+            updateUI("mr")
+            Toast.makeText(this, "Marathi language support is coming soon! Please select English or Hindi to save changes.", Toast.LENGTH_LONG).show()
+        }
     }
 
     private fun loadCurrentProfile() {
-        // Fetch using Phone from SharedPreferences for consistency
         val phone = getSharedPreferences("KB_PREFS", MODE_PRIVATE).getString("user_phone", null) ?: return
         
         db.collection("users").document(phone).get()
@@ -98,7 +81,6 @@ class EditProfileActivity : BaseActivity() {
                     etName.setText(document.getString("name"))
                     val profileImageUrl = document.getString("profileImageUrl")
                     if (!profileImageUrl.isNullOrEmpty()) {
-                        // If it's a resource name (avatar), load it. If it's a URL, coil handles it.
                         val resId = resources.getIdentifier(profileImageUrl, "drawable", packageName)
                         if (resId != 0) {
                             ivAvatarPreview.setImageResource(resId)
@@ -110,8 +92,55 @@ class EditProfileActivity : BaseActivity() {
                     }
                     val code = document.getString("language") ?: "en"
                     selectedLanguageCode = code
+                    updateUI(code)
                 }
             }
+    }
+
+    private fun updateUI(code: String) {
+        val langEnglish = findViewById<RelativeLayout>(R.id.lang_english_container)
+        val langHindi = findViewById<RelativeLayout>(R.id.lang_hindi_container)
+        val langMarathi = findViewById<RelativeLayout>(R.id.lang_marathi_container)
+
+        val checkEnglish = findViewById<ImageView>(R.id.lang_english_check)
+        val checkHindi = findViewById<ImageView>(R.id.lang_hindi_check)
+        val checkMarathi = findViewById<ImageView>(R.id.lang_marathi_check)
+
+        val containers = listOf(langEnglish, langHindi, langMarathi)
+        val checks = listOf(checkEnglish, checkHindi, checkMarathi)
+
+        // Reset all
+        containers.forEach { it.setBackgroundResource(R.drawable.input_field_bg) }
+        checks.forEach { it.visibility = View.GONE }
+
+        // Handle selection and Save Button state
+        when (code) {
+            "en" -> {
+                langEnglish.setBackgroundResource(R.drawable.option_item_selector)
+                checkEnglish.visibility = View.VISIBLE
+                enableSaveButton(true)
+            }
+            "hi" -> {
+                langHindi.setBackgroundResource(R.drawable.option_item_selector)
+                checkHindi.visibility = View.VISIBLE
+                enableSaveButton(true)
+            }
+            "mr" -> {
+                langMarathi.setBackgroundResource(R.drawable.option_item_selector)
+                checkMarathi.visibility = View.VISIBLE
+                enableSaveButton(false) // Disable for Marathi
+            }
+        }
+    }
+
+    private fun enableSaveButton(enable: Boolean) {
+        btnSaveChanges.isEnabled = enable
+        if (enable) {
+            btnSaveChanges.alpha = 1.0f
+            // Resets to your theme's dark green/primary color
+        } else {
+            btnSaveChanges.alpha = 0.5f // Dim the button to indicate it's inactive
+        }
     }
 
     private fun saveProfile() {
@@ -130,7 +159,6 @@ class EditProfileActivity : BaseActivity() {
         btnSaveChanges.isEnabled = false
         btnSaveChanges.text = "Saving..."
 
-        // Update local locale
         LocaleHelper.setLocale(this, selectedLanguageCode)
 
         val updates = hashMapOf<String, Any>(
@@ -142,15 +170,14 @@ class EditProfileActivity : BaseActivity() {
             .update(updates)
             .addOnSuccessListener {
                 Toast.makeText(this, "Profile Updated!", Toast.LENGTH_SHORT).show()
-                // Restart MainActivity to apply changes
                 val intent = Intent(this, MainActivity::class.java)
                 intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                 startActivity(intent)
                 finish()
             }
             .addOnFailureListener { e ->
-                Toast.makeText(this, "Save failed: ${e.message}", Toast.LENGTH_SHORT).show()
-                btnSaveChanges.isEnabled = true
+                Toast.makeText(this, "Save failed: ${e.message}", Toast.LENGTH_LONG).show()
+                enableSaveButton(true)
                 btnSaveChanges.text = "SAVE CHANGES"
             }
     }

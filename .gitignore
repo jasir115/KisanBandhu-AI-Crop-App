@@ -39,3 +39,4 @@ local.properties
 
 # Secrets properties (Used for API Keys)
 secrets.properties
+/app/release/

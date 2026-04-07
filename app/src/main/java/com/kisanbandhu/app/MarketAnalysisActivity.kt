@@ -2,6 +2,7 @@ package com.kisanbandhu.app
 
 import android.Manifest
 import android.content.Intent
+import android.content.IntentSender
 import android.content.pm.PackageManager
 import android.location.Geocoder
 import android.os.Bundle
@@ -15,14 +16,18 @@ import androidx.activity.viewModels
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationServices
+import androidx.lifecycle.lifecycleScope
+import com.google.android.gms.common.api.ResolvableApiException
+import com.google.android.gms.location.*
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.kisanbandhu.app.utils.LocationUtils
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.util.Locale
 
 class MarketAnalysisActivity : SwipeableActivity() {
@@ -58,6 +63,7 @@ class MarketAnalysisActivity : SwipeableActivity() {
     
     private var searchHandler = android.os.Handler(android.os.Looper.getMainLooper())
     private var searchRunnable: Runnable? = null
+    private val REQUEST_CHECK_SETTINGS = 0x1
 
     // Filter states
     private var selectedSort: Int = 0 // 0: None, 1: High to Low, 2: Low to High
@@ -90,7 +96,17 @@ class MarketAnalysisActivity : SwipeableActivity() {
         observeViewModel()
         setupSearch()
 
-        val recommendedCrops = intent.getStringArrayListExtra("recommended_crops")
+        handleIntent(intent)
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        setIntent(intent)
+        handleIntent(intent)
+    }
+
+    private fun handleIntent(intent: Intent?) {
+        val recommendedCrops = intent?.getStringArrayListExtra("recommended_crops")
         if (recommendedCrops != null) {
             viewModel.fetchPricesForRecommendedCrops(recommendedCrops)
             cardSmartRecBanner.visibility = View.VISIBLE
@@ -290,7 +306,7 @@ class MarketAnalysisActivity : SwipeableActivity() {
         }
 
         viewModel.error.observe(this) { msg ->
-            Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
+            if (!isFinishing) Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -408,28 +424,61 @@ class MarketAnalysisActivity : SwipeableActivity() {
 
     private fun checkLocationPermission() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            LocationUtils.showLocationDisclosure(this, onAgree = { requestLocationPermission() }, onCancel = { fetchLocationAndStart() })
+            LocationUtils.showLocationDisclosure(this, onAgree = { requestLocationPermission() }, onCancel = { 
+                // RESPECT USER CHOICE: Stop persistent dialogs and fallback
+                tvCurrentLocation.text = "National Market"
+                viewModel.fetchMarketIntelligence(null)
+            })
             return
         }
-        fetchLocationAndStart()
+        enableGPSAndFetch()
     }
 
     private fun requestLocationPermission() {
         ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION), 1001)
     }
 
+    private fun enableGPSAndFetch() {
+        val locationRequest = LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 10000).build()
+        val builder = LocationSettingsRequest.Builder().addLocationRequest(locationRequest)
+        val client = LocationServices.getSettingsClient(this)
+        client.checkLocationSettings(builder.build())
+            .addOnSuccessListener { fetchLocationAndStart() }
+            .addOnFailureListener { exception ->
+                if (exception is ResolvableApiException) {
+                    try {
+                        exception.startResolutionForResult(this, REQUEST_CHECK_SETTINGS)
+                    } catch (e: Exception) {}
+                } else {
+                    fetchLocationAndStart()
+                }
+            }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == REQUEST_CHECK_SETTINGS && resultCode == RESULT_OK) {
+            fetchLocationAndStart()
+        }
+    }
+
     private fun fetchLocationAndStart() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            fusedLocationClient.lastLocation.addOnSuccessListener { location ->
-                val state = if (location != null) {
-                    try {
-                        val geocoder = Geocoder(this, Locale.getDefault())
-                        val addresses = geocoder.getFromLocation(location.latitude, location.longitude, 1)
-                        addresses?.get(0)?.adminArea
-                    } catch (e: Exception) { null }
-                } else null
-                tvCurrentLocation.text = state ?: "National Market"
-                viewModel.fetchMarketIntelligence(state)
+            fusedLocationClient.getCurrentLocation(Priority.PRIORITY_HIGH_ACCURACY, null).addOnSuccessListener { location ->
+                lifecycleScope.launch(Dispatchers.IO) {
+                    val state = if (location != null) {
+                        try {
+                            val geocoder = Geocoder(this@MarketAnalysisActivity, Locale.getDefault())
+                            val addresses = geocoder.getFromLocation(location.latitude, location.longitude, 1)
+                            addresses?.get(0)?.adminArea
+                        } catch (e: Exception) { null }
+                    } else null
+                    
+                    withContext(Dispatchers.Main) {
+                        tvCurrentLocation.text = state ?: "National Market"
+                        viewModel.fetchMarketIntelligence(state)
+                    }
+                }
             }
         } else {
             tvCurrentLocation.text = "National Market"
@@ -459,7 +508,7 @@ class MarketAnalysisActivity : SwipeableActivity() {
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == 1001 && grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            fetchLocationAndStart()
+            enableGPSAndFetch()
         }
     }
 }

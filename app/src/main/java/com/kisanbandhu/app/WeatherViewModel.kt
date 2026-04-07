@@ -17,7 +17,7 @@ class WeatherViewModel : ViewModel() {
     private val _error = MutableLiveData<String>()
     val error: LiveData<String> = _error
 
-    private val API_KEY = "b721364220874dd0914143951260103"
+    private val API_KEY = BuildConfig.WEATHER_API_KEY
     private val BASE_URL = "https://api.weatherapi.com/"
 
     private val retrofit = Retrofit.Builder()
@@ -28,6 +28,11 @@ class WeatherViewModel : ViewModel() {
     private val service = retrofit.create(WeatherApiService::class.java)
 
     fun fetchWeather(query: String) {
+        if (API_KEY.isEmpty()) {
+            _error.value = "Weather API Key missing"
+            return
+        }
+        
         service.getForecast(API_KEY, query).enqueue(object : Callback<WeatherResponse> {
             override fun onResponse(call: Call<WeatherResponse>, response: Response<WeatherResponse>) {
                 if (response.isSuccessful) {

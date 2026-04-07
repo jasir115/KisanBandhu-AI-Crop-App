@@ -81,6 +81,48 @@
     <string name="create_alert">Create Alert</string>
     <string name="market_disclaimer">📍 Note: Prices are indicative and may vary by region, quality grade, and market conditions. Always confirm with your local Mandi before making decisions.</string>
 
+    <!-- Crop Health Strings -->
+    <string name="crop_health_title">Crop Health Analysis</string>
+    <string name="ai_disease_detection">AI-powered disease detection</string>
+    <string name="how_it_works">How it works</string>
+    <string name="health_desc">Upload a clear photo of your crop leaves or affected parts. Our AI will identify diseases, pests, and provide treatment recommendations.</string>
+    <string name="take_photo_hindi">Take Photo / फोटो लें</string>
+    <string name="use_camera_desc">Use camera to capture crop image</string>
+    <string name="upload_gallery_hindi">Upload from Gallery / गैलरी से अपलोड करें</string>
+    <string name="choose_existing_desc">Choose existing photo from device</string>
+    <string name="photography_tips_hindi">📸 Photography Tips / फोटो टिप्स</string>
+    <string name="tips_list">✓ Capture in good natural lighting\n✓ Focus on affected leaves or parts\n✓ Avoid blurry or dark images\n✓ Show disease symptoms clearly</string>
+    
+    <string name="selected_image">Selected Image</string>
+    <string name="start_ai_analysis">START AI ANALYSIS</string>
+    <string name="choose_different">Choose Different Image</string>
+    <string name="analyzing_image">Analyzing Image...</string>
+    <string name="ai_processing_desc">AI is processing your crop image</string>
+    <string name="step_crop">Identifying crop type...</string>
+    <string name="step_disease">Detecting diseases &amp; symptoms...</string>
+    <string name="step_severity">Analyzing severity level...</string>
+    <string name="step_treatment">Generating treatment plan...</string>
+    
+    <string name="ai_analyzed">AI Analyzed</string>
+    <string name="save_btn">Save</string>
+    <string name="share_btn">Share</string>
+    <string name="gallery_btn">Gallery</string>
+    <string name="ai_confidence">AI Confidence</string>
+    <string name="take_action_soon">Take action soon</string>
+    
+    <string name="tab_description">Description</string>
+    <string name="tab_prevention">Prevention</string>
+    <string name="tab_treatment">Treatment</string>
+    <string name="disease_info">Disease Information</string>
+    <string name="common_symptoms">Common Symptoms</string>
+    <string name="prevention_methods">Prevention Methods</string>
+    <string name="recommended_treatment">Recommended Treatment</string>
+    
+    <string name="talk_expert_advisor">TALK TO EXPERT ADVISOR</string>
+    <string name="scan_another_leaf">SCAN ANOTHER LEAF</string>
+    <string name="focus_on_leaf_hindi">Focus on the leaf / पत्ती पर ध्यान दें</string>
+    <string name="good_lighting">Good Lighting</string>
+
     <!-- Crop Recommendation Flow -->
     <string name="crop_rec_title">Crop Recommendation Input</string>
     <string name="select_data_source">Select Data Source</string>

@@ -7,7 +7,6 @@ plugins {
 }
 
 android {
-    // UPDATED PACKAGE NAME FOR PLAY STORE
     namespace = "com.kisanbandhu.app"
     compileSdk = 36
 
@@ -15,8 +14,8 @@ android {
         applicationId = "com.kisanbandhu.app"
         minSdk = 26
         targetSdk = 36
-        versionCode = 1
-        versionName = "1.0.0"
+        versionCode = 3
+        versionName = "1.0.2"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
@@ -25,8 +24,12 @@ android {
         if (localPropertiesFile.exists()) {
             properties.load(localPropertiesFile.inputStream())
         }
-        val geminiApiKey = properties.getProperty("GEMINI_API_KEY") ?: ""
-        buildConfigField("String", "GEMINI_API_KEY", "\"$geminiApiKey\"")
+        
+        val hfToken = properties.getProperty("HF_TOKEN") ?: ""
+        buildConfigField("String", "HF_TOKEN", "\"$hfToken\"")
+
+        val weatherApiKey = properties.getProperty("WEATHER_API_KEY") ?: ""
+        buildConfigField("String", "WEATHER_API_KEY", "\"$weatherApiKey\"")
     }
 
     buildFeatures {
@@ -35,7 +38,7 @@ android {
 
     buildTypes {
         release {
-            isMinifyEnabled = true // ENABLED FOR PRODUCTION
+            isMinifyEnabled = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -84,15 +87,25 @@ dependencies {
     implementation(libs.firebase.firestore)
     implementation(libs.firebase.storage)
 
+    // CameraX
+    implementation(libs.androidx.camera.core)
+    implementation(libs.androidx.camera.camera2)
+    implementation(libs.androidx.camera.lifecycle)
+    implementation(libs.androidx.camera.view)
+    implementation(libs.androidx.camera.extensions)
+    
+    // ExifInterface for image rotation
+    implementation("androidx.exifinterface:exifinterface:1.3.7")
+    
+    // Guava ListenableFuture fix
+    implementation("com.google.guava:guava:33.3.1-android")
+
     // ML Models
     implementation(libs.onnxruntime.android)
     implementation("org.tensorflow:tensorflow-lite:2.17.0")
     implementation("org.tensorflow:tensorflow-lite-support:0.4.4") {
         exclude(group = "org.tensorflow", module = "tensorflow-lite-api")
     }
-
-    // Google AI SDK (Gemini Free Version)
-    implementation(libs.google.generativeai)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

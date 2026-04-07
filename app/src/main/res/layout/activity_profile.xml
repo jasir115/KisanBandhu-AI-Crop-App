@@ -357,12 +357,13 @@
                 app:strokeColor="#FFEBEE" />
 
             <TextView
+                android:id="@+id/tv_app_version"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="24dp"
-                android:text="KisanBandhu v1.0.0"
+                android:text="KisanBandhu v1.0.2"
                 android:textColor="@color/text_secondary"
                 android:textSize="12sp" />
 

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Grid Lines -->
+    <item>
+        <shape>
+            <stroke android:width="1dp" android:color="#33FFFFFF" />
+        </shape>
+    </item>
+    <item android:left="93dp" android:right="93dp">
+        <shape><solid android:color="#33FFFFFF"/></shape>
+    </item>
+    <item android:top="93dp" android:bottom="93dp">
+        <shape><solid android:color="#33FFFFFF"/></shape>
+    </item>
+    
+    <!-- Corner Brackets -->
+    <item android:width="40dp" android:height="40dp" android:gravity="top|left">
+        <shape><stroke android:width="3dp" android:color="#00E676"/>
+        <size android:width="40dp" android:height="40dp"/></shape>
+    </item>
+    <item android:width="40dp" android:height="40dp" android:gravity="top|right">
+        <shape><stroke android:width="3dp" android:color="#00E676"/></shape>
+    </item>
+    <item android:width="40dp" android:height="40dp" android:gravity="bottom|left">
+        <shape><stroke android:width="3dp" android:color="#00E676"/></shape>
+    </item>
+    <item android:width="40dp" android:height="40dp" android:gravity="bottom|right">
+        <shape><stroke android:width="3dp" android:color="#00E676"/></shape>
+    </item>
+</layer-list>

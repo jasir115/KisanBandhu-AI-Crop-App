@@ -48,26 +48,26 @@ class SettingsActivity : BaseActivity() {
         val prefs = getSharedPreferences("KB_PREFS", MODE_PRIVATE)
         
         // Dark Mode Logic
-        val switchDarkMode = findViewById<SwitchMaterial>(R.id.switch_dark_mode) ?: return
+        val switchDarkMode = findViewById<SwitchMaterial>(R.id.switch_dark_mode)
         val isDarkMode = prefs.getBoolean("dark_mode", false)
-        switchDarkMode.isChecked = isDarkMode
+        switchDarkMode?.isChecked = isDarkMode
         
-        switchDarkMode.setOnCheckedChangeListener { _, isChecked ->
+        switchDarkMode?.setOnCheckedChangeListener { _, isChecked ->
+            // Prevent redundant updates if state is same
+            if (prefs.getBoolean("dark_mode", false) == isChecked) return@setOnCheckedChangeListener
+            
             prefs.edit().putBoolean("dark_mode", isChecked).apply()
-            if (isChecked) {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-            } else {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
-            }
+            val targetMode = if (isChecked) AppCompatDelegate.MODE_NIGHT_YES else AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
+            AppCompatDelegate.setDefaultNightMode(targetMode)
             Toast.makeText(this, "Display theme updated", Toast.LENGTH_SHORT).show()
         }
 
         // Push Notifications Logic
-        val switchNotifications = findViewById<SwitchMaterial>(R.id.switch_notifications) ?: return
+        val switchNotifications = findViewById<SwitchMaterial>(R.id.switch_notifications)
         val notificationsEnabled = prefs.getBoolean("notifications_enabled", true)
-        switchNotifications.isChecked = notificationsEnabled
+        switchNotifications?.isChecked = notificationsEnabled
         
-        switchNotifications.setOnCheckedChangeListener { _, isChecked ->
+        switchNotifications?.setOnCheckedChangeListener { _, isChecked ->
             prefs.edit().putBoolean("notifications_enabled", isChecked).apply()
             val status = if (isChecked) "enabled" else "disabled"
             Toast.makeText(this, "Push notifications $status", Toast.LENGTH_SHORT).show()
@@ -162,6 +162,11 @@ class SettingsActivity : BaseActivity() {
             .setTitle(R.string.select_language)
             .setSingleChoiceItems(languages, if(currentIndex >= 0) currentIndex else 0) { dialog, which ->
                 val newCode = codes[which]
+                if (newCode == "mr") {
+                    Toast.makeText(this, "Marathi language support is coming soon in the next update!", Toast.LENGTH_SHORT).show()
+                    dialog.dismiss()
+                    return@setSingleChoiceItems
+                }
                 if (newCode != currentLang) {
                     updateLanguage(newCode)
                 }
@@ -174,9 +179,21 @@ class SettingsActivity : BaseActivity() {
         LocaleHelper.setLocale(this, code)
         val uid = auth.currentUser?.uid
         if (uid != null) {
-            db.collection("users").document(uid).update("language", code)
+            // Update the user's preferred language in Firestore
+            val phone = getSharedPreferences("KB_PREFS", MODE_PRIVATE).getString("user_phone", null)
+            if (phone != null) {
+                db.collection("users").document(phone).update("language", code)
+            } else {
+                db.collection("users").document(uid).update("language", code)
+            }
         }
-        navigateToWelcome()
+        
+        // REFRESH FIX: Instead of going to Welcome (which causes logout-like behavior), 
+        // we restart the current activity or go back to Main to apply changes.
+        val intent = Intent(this, MainActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        startActivity(intent)
+        finish()
     }
 
     private fun setupBottomNavigation() {
@@ -185,19 +202,27 @@ class SettingsActivity : BaseActivity() {
         bottomNav.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.nav_home -> {
-                    startActivity(Intent(this, MainActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT))
+                    val intent = Intent(this, MainActivity::class.java)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT or Intent.FLAG_ACTIVITY_NO_ANIMATION)
+                    startActivity(intent)
                     true
                 }
                 R.id.nav_market -> {
-                    startActivity(Intent(this, MarketAnalysisActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT))
+                    val intent = Intent(this, MarketAnalysisActivity::class.java)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT or Intent.FLAG_ACTIVITY_NO_ANIMATION)
+                    startActivity(intent)
                     true
                 }
                 R.id.nav_weather -> {
-                    startActivity(Intent(this, WeatherInfoActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT))
+                    val intent = Intent(this, WeatherInfoActivity::class.java)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT or Intent.FLAG_ACTIVITY_NO_ANIMATION)
+                    startActivity(intent)
                     true
                 }
                 R.id.nav_profile -> {
-                    startActivity(Intent(this, ProfileActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT))
+                    val intent = Intent(this, ProfileActivity::class.java)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT or Intent.FLAG_ACTIVITY_NO_ANIMATION)
+                    startActivity(intent)
                     true
                 }
                 else -> false

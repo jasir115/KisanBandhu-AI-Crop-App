@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/white">
 
-    <!-- Header Section -->
+    <!-- 1. Global Header -->
     <RelativeLayout
         android:id="@+id/header_layout"
         android:layout_width="match_parent"
@@ -34,7 +34,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="KisanBandhu"
+                android:text="@string/app_name"
                 android:textColor="@color/white"
                 android:textSize="18sp"
                 android:textStyle="bold" />
@@ -42,13 +42,13 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="AI Crop Advisor"
+                android:text="@string/ai_crop_advisor"
                 android:textColor="@color/white"
                 android:textSize="12sp" />
         </LinearLayout>
     </RelativeLayout>
 
-    <!-- Toolbar area -->
+    <!-- 2. Global Toolbar -->
     <RelativeLayout
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
@@ -72,9 +72,10 @@
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/tv_toolbar_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Crop Health Analysis"
+                android:text="@string/crop_health_title"
                 android:textColor="@color/black"
                 android:textSize="20sp"
                 android:textStyle="bold" />
@@ -83,56 +84,27 @@
                 android:id="@+id/tv_toolbar_subtitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="AI-powered disease detection"
+                android:text="@string/ai_disease_detection"
                 android:textColor="@color/text_secondary"
                 android:textSize="12sp" />
         </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/layout_action_buttons"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:orientation="horizontal"
-            android:visibility="gone">
-
-            <ImageView
-                android:id="@+id/btn_share"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:padding="6dp"
-                android:src="@drawable/ic_share"
-                app:tint="@color/black" />
-
-            <ImageView
-                android:id="@+id/btn_download"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:layout_marginStart="8dp"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:padding="6dp"
-                android:src="@drawable/ic_download"
-                app:tint="@color/black" />
-        </LinearLayout>
     </RelativeLayout>
 
-    <ScrollView
+    <!-- 3. Main State Container -->
+    <FrameLayout
+        android:id="@+id/main_container"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:fillViewport="true"
         app:layout_constraintBottom_toTopOf="@id/bottom_navigation"
         app:layout_constraintTop_toBottomOf="@id/toolbar">
 
-        <LinearLayout
+        <!-- STATE 1: INITIAL SELECTION -->
+        <ScrollView
+            android:id="@+id/layout_initial_selection"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <!-- Initial Selection UI -->
+            android:layout_height="match_parent"
+            android:visibility="visible">
             <LinearLayout
-                android:id="@+id/layout_initial_selection"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
@@ -146,37 +118,10 @@
                     app:cardElevation="0dp"
                     app:strokeColor="#C8E6C9"
                     app:strokeWidth="1dp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:orientation="vertical"
-                        android:padding="24dp">
-
-                        <ImageView
-                            android:layout_width="48dp"
-                            android:layout_height="48dp"
-                            android:src="@drawable/ic_leaf"
-                            app:tint="@color/brand_green" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="12dp"
-                            android:text="How it works"
-                            android:textColor="@color/brand_green_dark"
-                            android:textSize="16sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="8dp"
-                            android:gravity="center"
-                            android:text="Upload a clear photo of your crop leaves or affected parts. Our AI will identify diseases, pests, and provide treatment recommendations."
-                            android:textColor="#388E3C"
-                            android:textSize="13sp" />
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:gravity="center" android:orientation="vertical" android:padding="24dp">
+                        <ImageView android:layout_width="48dp" android:layout_height="48dp" android:src="@drawable/ic_leaf" app:tint="@color/brand_green" />
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:text="@string/how_it_works" android:textColor="@color/brand_green_dark" android:textSize="16sp" android:textStyle="bold" />
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:gravity="center" android:text="@string/health_desc" android:textColor="#388E3C" android:textSize="13sp" />
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
 
@@ -185,44 +130,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
-                    android:clickable="true"
-                    android:focusable="true"
                     app:cardCornerRadius="12dp"
-                    app:cardElevation="0dp"
                     app:strokeColor="#EEEEEE"
                     app:strokeWidth="1dp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:orientation="vertical"
-                        android:padding="24dp">
-
-                        <ImageView
-                            android:layout_width="48dp"
-                            android:layout_height="48dp"
-                            android:background="@drawable/white_circle_bg"
-                            android:backgroundTint="#F0F5FF"
-                            android:padding="12dp"
-                            android:src="@drawable/ic_camera"
-                            app:tint="@color/button_blue" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="12dp"
-                            android:text="Take Photo / फोटो लें"
-                            android:textColor="@color/black"
-                            android:textSize="16sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Use camera to capture crop image"
-                            android:textColor="@color/text_secondary"
-                            android:textSize="12sp" />
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:gravity="center" android:orientation="vertical" android:padding="24dp">
+                        <ImageView android:layout_width="48dp" android:layout_height="48dp" android:background="@drawable/white_circle_bg" android:backgroundTint="#F0F5FF" android:padding="12dp" android:src="@drawable/ic_camera" app:tint="@color/button_blue" />
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:text="@string/take_photo_hindi" android:textColor="@color/black" android:textSize="16sp" android:textStyle="bold" />
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/use_camera_desc" android:textColor="@color/text_secondary" android:textSize="12sp" />
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
 
@@ -231,44 +145,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
-                    android:clickable="true"
-                    android:focusable="true"
                     app:cardCornerRadius="12dp"
-                    app:cardElevation="0dp"
                     app:strokeColor="#EEEEEE"
                     app:strokeWidth="1dp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:orientation="vertical"
-                        android:padding="24dp">
-
-                        <ImageView
-                            android:layout_width="48dp"
-                            android:layout_height="48dp"
-                            android:background="@drawable/white_circle_bg"
-                            android:backgroundTint="#E8F5E9"
-                            android:padding="12dp"
-                            android:src="@drawable/ic_upload"
-                            app:tint="@color/brand_green" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="12dp"
-                            android:text="Upload from Gallery / गैलरी से अपलोड करें"
-                            android:textColor="@color/black"
-                            android:textSize="16sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Choose existing photo from device"
-                            android:textColor="@color/text_secondary"
-                            android:textSize="12sp" />
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:gravity="center" android:orientation="vertical" android:padding="24dp">
+                        <ImageView android:layout_width="48dp" android:layout_height="48dp" android:background="@drawable/white_circle_bg" android:backgroundTint="#E8F5E9" android:padding="12dp" android:src="@drawable/ic_upload" app:tint="@color/brand_green" />
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:text="@string/upload_gallery_hindi" android:textColor="@color/black" android:textSize="16sp" android:textStyle="bold" />
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/choose_existing_desc" android:textColor="@color/text_secondary" android:textSize="12sp" />
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
 
@@ -279,412 +162,208 @@
                     app:cardBackgroundColor="#FFF9C4"
                     app:cardCornerRadius="12dp"
                     app:cardElevation="0dp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:padding="16dp">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="📸 Photography Tips / फोटो टिप्स"
-                            android:textColor="#F57F17"
-                            android:textSize="14sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="12dp"
-                            android:lineSpacingExtra="4dp"
-                            android:text="✓ Capture in good natural lighting / अच्छी रोशनी में फोटो ले\n✓ Focus on affected leaves or parts / प्रभावित पत्तियों पर फोकस करें\n✓ Avoid blurry or dark images / धुंधली तस्वीरें न ले\n✓ Show disease symptoms clearly / रोग के लक्षण स्पष्ट दिखाएं"
-                            android:textColor="#BC5100"
-                            android:textSize="12sp" />
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="16dp">
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/photography_tips_hindi" android:textColor="#F57F17" android:textSize="14sp" android:textStyle="bold" />
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:lineSpacingExtra="4dp" android:text="@string/tips_list" android:textColor="#BC5100" android:textSize="12sp" />
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
             </LinearLayout>
+        </ScrollView>
 
-            <!-- Analysis UI (Visible during/after processing) -->
-            <LinearLayout
-                android:id="@+id/layout_analysis_view"
+        <!-- STATE 2: IMAGE PREVIEW -->
+        <LinearLayout
+            android:id="@+id/layout_preview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="16dp"
+            android:visibility="gone">
+            <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="16dp"
-                android:visibility="gone">
+                app:cardCornerRadius="16dp"
+                app:strokeColor="#EEEEEE"
+                app:strokeWidth="1dp">
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="16dp">
+                    <RelativeLayout android:layout_width="match_parent" android:layout_height="wrap_content">
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/selected_image" android:textColor="@color/black" android:textSize="16sp" android:textStyle="bold" />
+                        <ImageView android:id="@+id/btn_clear_preview" android:layout_width="24dp" android:layout_height="24dp" android:layout_alignParentEnd="true" android:src="@drawable/ic_close" app:tint="@color/text_secondary" />
+                    </RelativeLayout>
+                    <com.google.android.material.card.MaterialCardView android:layout_width="match_parent" android:layout_height="280dp" android:layout_marginTop="16dp" app:cardCornerRadius="12dp" app:cardElevation="0dp">
+                        <ImageView android:id="@+id/iv_preview_image" android:layout_width="match_parent" android:layout_height="match_parent" android:scaleType="centerCrop" />
+                    </com.google.android.material.card.MaterialCardView>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+            <com.google.android.material.button.MaterialButton android:id="@+id/btn_start_ai_analysis" android:layout_width="match_parent" android:layout_height="56dp" android:layout_marginTop="24dp" android:backgroundTint="@color/brand_green" android:text="@string/start_ai_analysis" app:icon="@drawable/ic_sparkles" />
+            <com.google.android.material.button.MaterialButton android:id="@+id/btn_choose_different" style="@style/Widget.MaterialComponents.Button.OutlinedButton" android:layout_width="match_parent" android:layout_height="56dp" android:layout_marginTop="12dp" android:text="@string/choose_different" />
+        </LinearLayout>
 
-                <com.google.android.material.card.MaterialCardView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:cardCornerRadius="16dp"
-                    app:cardElevation="4dp">
+        <!-- STATE 3: PROCESSING -->
+        <LinearLayout
+            android:id="@+id/layout_processing"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="24dp"
+            android:visibility="gone">
+            <com.google.android.material.card.MaterialCardView android:layout_width="match_parent" android:layout_height="wrap_content" app:cardCornerRadius="20dp" app:strokeColor="#E8F5E9" app:strokeWidth="2dp">
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:gravity="center" android:orientation="vertical" android:padding="32dp">
+                    <com.google.android.material.progressindicator.CircularProgressIndicator android:id="@+id/processing_indicator" android:layout_width="wrap_content" android:layout_height="wrap_content" android:indeterminate="true" app:indicatorColor="@color/brand_green" app:indicatorSize="80dp" app:trackThickness="6dp" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="24dp" android:text="@string/analyzing_image" android:textColor="@color/brand_green_dark" android:textSize="20sp" android:textStyle="bold" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:text="@string/ai_processing_desc" android:textColor="@color/text_secondary" />
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="32dp" android:orientation="vertical">
+                        <TextView android:id="@+id/step_crop_type" android:layout_width="wrap_content" android:layout_height="wrap_content" android:drawablePadding="12dp" android:paddingVertical="6dp" android:text="@string/step_crop" android:textColor="#4CAF50" app:drawableStartCompat="@drawable/circle_dot_yellow" />
+                        <TextView android:id="@+id/step_disease" android:layout_width="wrap_content" android:layout_height="wrap_content" android:drawablePadding="12dp" android:paddingVertical="6dp" android:text="@string/step_disease" android:textColor="#2196F3" app:drawableStartCompat="@drawable/circle_dot_yellow" />
+                        <TextView android:id="@+id/step_severity" android:layout_width="wrap_content" android:layout_height="wrap_content" android:drawablePadding="12dp" android:paddingVertical="6dp" android:text="@string/step_severity" android:textColor="#9C27B0" app:drawableStartCompat="@drawable/circle_dot_yellow" />
+                        <TextView android:id="@+id/step_treatment" android:layout_width="wrap_content" android:layout_height="wrap_content" android:drawablePadding="12dp" android:paddingVertical="6dp" android:text="@string/step_treatment" android:textColor="#FF9800" app:drawableStartCompat="@drawable/circle_dot_yellow" />
+                    </LinearLayout>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+        </LinearLayout>
 
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="250dp">
-
-                        <ImageView
-                            android:id="@+id/iv_analyzed_crop"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:scaleType="centerCrop"
-                            android:src="@drawable/bg_rounded_green_light" />
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="100dp"
-                            android:layout_alignParentBottom="true"
-                            android:background="@drawable/bottom_gradient_shade" />
-
-                        <TextView
-                            android:id="@+id/tv_detected_crop_type"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentBottom="true"
-                            android:layout_margin="16dp"
-                            android:text="Analyzing..."
-                            android:textColor="@color/white"
-                            android:textSize="18sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:id="@+id/badge_ai_analyzed"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentEnd="true"
-                            android:layout_margin="12dp"
-                            android:background="@drawable/bg_ai_badge"
-                            android:drawablePadding="4dp"
-                            android:paddingHorizontal="12dp"
-                            android:paddingVertical="6dp"
-                            android:text="AI Analyzed"
-                            android:textColor="@color/white"
-                            android:textSize="12sp"
-                            android:textStyle="bold"
-                            app:drawableStartCompat="@drawable/ic_leaf"
-                            app:drawableTint="@color/white" />
+        <!-- STATE 4: RESULT -->
+        <ScrollView
+            android:id="@+id/layout_analysis_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone">
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="16dp">
+                
+                <com.google.android.material.card.MaterialCardView android:layout_width="match_parent" android:layout_height="250dp" app:cardCornerRadius="16dp" app:cardElevation="4dp">
+                    <RelativeLayout android:layout_width="match_parent" android:layout_height="match_parent">
+                        <ImageView android:id="@+id/iv_analyzed_crop" android:layout_width="match_parent" android:layout_height="match_parent" android:scaleType="centerCrop" />
+                        <View android:layout_width="match_parent" android:layout_height="100dp" android:layout_alignParentBottom="true" android:background="@drawable/bottom_gradient_shade" />
+                        <TextView android:id="@+id/tv_detected_crop_type" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_alignParentBottom="true" android:layout_margin="16dp" android:text="Wheat" android:textColor="@color/white" android:textSize="18sp" android:textStyle="bold" />
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_alignParentEnd="true" android:layout_margin="12dp" android:background="@drawable/bg_ai_badge" android:paddingHorizontal="12dp" android:paddingVertical="6dp" android:text="@string/ai_analyzed" android:textColor="@color/white" android:textSize="12sp" android:textStyle="bold" app:drawableStartCompat="@drawable/ic_leaf" app:drawableTint="@color/white" />
                     </RelativeLayout>
                 </com.google.android.material.card.MaterialCardView>
 
+                <!-- Quick Actions Card -->
                 <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/card_disease_summary"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    app:cardBackgroundColor="#FFF8E1"
-                    app:cardCornerRadius="12dp"
-                    app:cardElevation="2dp"
-                    app:strokeColor="#FFE082"
-                    app:strokeWidth="1dp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:padding="16dp">
-
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
-
-                            <ImageView
-                                android:id="@+id/iv_severity_icon"
-                                android:layout_width="40dp"
-                                android:layout_height="40dp"
-                                android:src="@drawable/ic_warning"
-                                app:tint="#F57C00" />
-
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="12dp"
-                                android:layout_toEndOf="@id/iv_severity_icon"
-                                android:orientation="vertical">
-
-                                <LinearLayout
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:gravity="center_vertical">
-
-                                    <TextView
-                                        android:id="@+id/tv_disease_title"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="Analyzing symptoms..."
-                                        android:textColor="#BF360C"
-                                        android:textSize="18sp"
-                                        android:textStyle="bold" />
-
-                                    <TextView
-                                        android:id="@+id/badge_severity"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_marginStart="8dp"
-                                        android:background="@drawable/bg_rounded_orange"
-                                        android:paddingHorizontal="8dp"
-                                        android:paddingVertical="2dp"
-                                        android:text="Detecting..."
-                                        android:textColor="@color/white"
-                                        android:textSize="10sp"
-                                        android:visibility="gone"/>
-                                </LinearLayout>
-
-                                <TextView
-                                    android:id="@+id/tv_disease_hindi"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="लक्षणों का विश्लेषण कर रहे हैं..."
-                                    android:textColor="#5D4037"
-                                    android:textSize="14sp" />
-                            </LinearLayout>
-                        </RelativeLayout>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="16dp"
-                            android:text="AI Confidence"
-                            android:textColor="@color/text_secondary"
-                            android:textSize="12sp" />
-
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
-
-                            <com.google.android.material.progressindicator.LinearProgressIndicator
-                                android:id="@+id/pb_confidence"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_centerVertical="true"
-                                android:layout_marginEnd="60dp"
-                                android:progress="0"
-                                app:indicatorColor="@color/black"
-                                app:trackColor="#E0E0E0"
-                                app:trackThickness="8dp" />
-
-                            <TextView
-                                android:id="@+id/tv_confidence_percent"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_alignParentEnd="true"
-                                android:text="0%"
-                                android:textColor="@color/black"
-                                android:textStyle="bold" />
-                        </RelativeLayout>
-
-                        <TextView
-                            android:id="@+id/tv_action_suggest"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="8dp"
-                            android:text="Processing image data"
-                            android:textColor="@color/text_secondary"
-                            android:textSize="11sp" />
-                    </LinearLayout>
-                </com.google.android.material.card.MaterialCardView>
-
-                <!-- Info Tabs -->
-                <com.google.android.material.tabs.TabLayout
-                    android:id="@+id/tabs_disease_info"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:background="@drawable/bg_tab_layout"
-                    app:tabGravity="fill"
-                    app:tabIndicatorHeight="0dp"
-                    app:tabMode="fixed"
-                    app:tabRippleColor="@null"
-                    app:tabSelectedTextColor="@color/black"
-                    app:tabTextAppearance="@style/TabTextAppearance"
-                    app:tabTextColor="@color/text_secondary">
-
-                    <com.google.android.material.tabs.TabItem
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:icon="@drawable/ic_description"
-                        android:text="Description" />
-
-                    <com.google.android.material.tabs.TabItem
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:icon="@drawable/ic_shield"
-                        android:text="Prevention" />
-
-                    <com.google.android.material.tabs.TabItem
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:icon="@drawable/ic_treatment"
-                        android:text="Treatment" />
-                </com.google.android.material.tabs.TabLayout>
-
-                <!-- Dynamic Content Container -->
-                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/card_quick_actions"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
                     app:cardCornerRadius="12dp"
-                    app:cardElevation="0dp"
-                    app:strokeColor="#EEEEEE"
-                    app:strokeWidth="1dp">
-
-                    <LinearLayout
-                        android:id="@+id/ll_dynamic_content"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:padding="16dp">
-
-                        <!-- Info Section -->
-                        <LinearLayout
-                            android:id="@+id/view_description"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical">
-
-                            <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:gravity="center_vertical">
-                                <ImageView android:layout_width="18dp" android:layout_height="18dp" android:src="@drawable/ic_info" app:tint="@color/button_blue"/>
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="8dp" android:text="Disease Information" android:textColor="@color/black" android:textStyle="bold"/>
-                            </LinearLayout>
-
-                            <TextView
-                                android:id="@+id/tv_disease_desc"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="16dp"
-                                android:text="Waiting for analysis..."
-                                android:textColor="@color/text_secondary"
-                                android:textSize="13sp"
-                                android:lineSpacingExtra="4dp"/>
-
-                            <View android:layout_width="match_parent" android:layout_height="1dp" android:layout_marginTop="16dp" android:background="#F5F5F5"/>
-
-                            <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="16dp" android:gravity="center_vertical">
-                                <ImageView android:layout_width="18dp" android:layout_height="18dp" android:src="@drawable/ic_warning" app:tint="#F57C00"/>
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="8dp" android:text="Common Symptoms" android:textColor="@color/black" android:textStyle="bold"/>
-                            </LinearLayout>
-
-                            <TextView
-                                android:id="@+id/tv_symptoms"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="12dp"
-                                android:text="Symptoms will appear after diagnosis."
-                                android:textColor="@color/text_secondary"
-                                android:textSize="13sp"
-                                android:lineSpacingExtra="6dp"/>
-                        </LinearLayout>
-
-                        <!-- Prevention Section -->
-                        <LinearLayout
-                            android:id="@+id/view_prevention"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:visibility="gone">
-
-                            <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:gravity="center_vertical">
-                                <ImageView android:layout_width="18dp" android:layout_height="18dp" android:src="@drawable/ic_shield" app:tint="@color/brand_green"/>
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="8dp" android:text="Prevention Methods" android:textColor="@color/black" android:textStyle="bold"/>
-                            </LinearLayout>
-
-                            <TextView
-                                android:id="@+id/tv_prevention_info"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="16dp"
-                                android:text="Prevention guidelines will be listed here."
-                                android:textColor="@color/text_secondary"
-                                android:textSize="13sp"
-                                android:lineSpacingExtra="4dp"/>
-                        </LinearLayout>
-
-                        <!-- Treatment Section -->
-                        <LinearLayout
-                            android:id="@+id/view_treatment"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:visibility="gone">
-
-                            <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:gravity="center_vertical">
-                                <ImageView android:layout_width="18dp" android:layout_height="18dp" android:src="@drawable/ic_treatment" app:tint="#D32F2F"/>
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="8dp" android:text="Recommended Treatment" android:textColor="@color/black" android:textStyle="bold"/>
-                            </LinearLayout>
-
-                            <TextView
-                                android:id="@+id/tv_treatment_info"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="16dp"
-                                android:text="Treatment options will be provided after diagnosis."
-                                android:textColor="@color/text_secondary"
-                                android:textSize="13sp"
-                                android:lineSpacingExtra="4dp"/>
-                        </LinearLayout>
-                    </LinearLayout>
-                </com.google.android.material.card.MaterialCardView>
-
-                <!-- Tip of the day -->
-                <com.google.android.material.card.MaterialCardView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    app:cardBackgroundColor="#FFFDE7"
-                    app:cardCornerRadius="12dp"
-                    app:cardElevation="0dp"
-                    app:strokeColor="#FFF176"
-                    app:strokeWidth="1dp">
+                    app:cardElevation="2dp">
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:padding="16dp">
-                        <ImageView android:layout_width="32dp" android:layout_height="32dp" android:src="@drawable/ic_lightbulb" app:tint="#FBC02D"/>
-                        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:layout_marginStart="12dp" android:orientation="vertical">
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Tip of the Day / आज की युक्ति" android:textColor="#F57F17" android:textStyle="bold"/>
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:text="Use organic methods first before chemicals for sustainable farming" android:textColor="#F57F17" android:textSize="12sp"/>
+                        android:padding="8dp"
+                        android:gravity="center">
+                        
+                        <LinearLayout
+                            android:id="@+id/btn_save_report"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:background="?attr/selectableItemBackground"
+                            android:orientation="vertical"
+                            android:padding="8dp">
+                            <ImageView android:layout_width="24dp" android:layout_height="24dp" android:src="@drawable/ic_star" app:tint="@color/brand_green" />
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/save_btn" android:textSize="11sp" android:layout_marginTop="4dp" />
+                        </LinearLayout>
+
+                        <View android:layout_width="1dp" android:layout_height="30dp" android:background="#EEEEEE" />
+
+                        <LinearLayout
+                            android:id="@+id/btn_share"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:background="?attr/selectableItemBackground"
+                            android:orientation="vertical"
+                            android:padding="8dp">
+                            <ImageView android:layout_width="24dp" android:layout_height="24dp" android:src="@drawable/ic_share" app:tint="#2196F3" />
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/share_btn" android:textSize="11sp" android:layout_marginTop="4dp" />
+                        </LinearLayout>
+
+                        <View android:layout_width="1dp" android:layout_height="30dp" android:background="#EEEEEE" />
+
+                        <LinearLayout
+                            android:id="@+id/btn_download"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:background="?attr/selectableItemBackground"
+                            android:orientation="vertical"
+                            android:padding="8dp">
+                            <ImageView android:layout_width="24dp" android:layout_height="24dp" android:src="@drawable/ic_download" app:tint="#FF9800" />
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/gallery_btn" android:textSize="11sp" android:layout_marginTop="4dp" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <com.google.android.material.card.MaterialCardView android:id="@+id/card_disease_summary" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" app:cardBackgroundColor="#FFF8E1" app:cardCornerRadius="12dp" app:strokeColor="#FFE082" app:strokeWidth="1dp">
+                    <androidx.constraintlayout.widget.ConstraintLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:padding="16dp">
+                        <ImageView android:id="@+id/iv_severity_icon" android:layout_width="44dp" android:layout_height="44dp" android:src="@drawable/ic_warning" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="parent" app:tint="#F57C00" />
+                        
+                        <TextView android:id="@+id/badge_severity" android:layout_width="wrap_content" android:layout_height="wrap_content" android:minWidth="90dp" android:gravity="center" android:background="@drawable/bg_rounded_orange" android:paddingHorizontal="10dp" android:paddingVertical="4dp" android:text="Moderate" android:textColor="@color/white" android:textSize="10sp" android:textStyle="bold" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView android:id="@+id/tv_disease_title" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginStart="12dp" android:layout_marginEnd="12dp" android:text="Wheat Leaf Rust" android:textColor="#BF360C" android:textSize="18sp" android:textStyle="bold" app:layout_constraintEnd_toStartOf="@id/badge_severity" app:layout_constraintStart_toEndOf="@id/iv_severity_icon" app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView android:id="@+id/tv_disease_hindi" android:layout_width="0dp" android:layout_height="wrap_content" android:text="गेहूं का पत्ती रतुआ" android:textColor="#5D4037" android:textSize="14sp" app:layout_constraintEnd_toEndOf="@id/tv_disease_title" app:layout_constraintStart_toStartOf="@id/tv_disease_title" app:layout_constraintTop_toBottomOf="@id/tv_disease_title" />
+
+                        <TextView android:id="@+id/tv_confidence_label" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="16dp" android:text="@string/ai_confidence" android:textColor="@color/text_secondary" android:textSize="12sp" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toBottomOf="@id/tv_disease_hindi" />
+                        
+                        <com.google.android.material.progressindicator.LinearProgressIndicator android:id="@+id/pb_confidence" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:layout_marginEnd="12dp" android:progress="94" app:indicatorColor="@color/black" app:layout_constraintEnd_toStartOf="@id/tv_confidence_percent" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toBottomOf="@id/tv_confidence_label" app:trackColor="#E0E0E0" app:trackThickness="8dp" />
+                        
+                        <TextView android:id="@+id/tv_confidence_percent" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="94.5%" android:textColor="@color/black" android:textStyle="bold" app:layout_constraintBottom_toBottomOf="@id/pb_confidence" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="@id/pb_confidence" />
+
+                        <TextView android:id="@+id/tv_action_suggest" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:text="@string/take_action_soon" android:textColor="@color/text_secondary" android:textSize="11sp" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toBottomOf="@id/pb_confidence" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <com.google.android.material.tabs.TabLayout android:id="@+id/tabs_disease_info" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="16dp" android:background="@drawable/bg_tab_layout" app:tabGravity="fill" app:tabIndicatorHeight="0dp" app:tabMode="fixed" app:tabSelectedTextColor="@color/black" app:tabTextColor="@color/text_secondary">
+                    <com.google.android.material.tabs.TabItem android:icon="@drawable/ic_description" android:text="@string/tab_description" />
+                    <com.google.android.material.tabs.TabItem android:icon="@drawable/ic_shield" android:text="@string/tab_prevention" />
+                    <com.google.android.material.tabs.TabItem android:icon="@drawable/ic_treatment" android:text="@string/tab_treatment" />
+                </com.google.android.material.tabs.TabLayout>
+
+                <com.google.android.material.card.MaterialCardView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" app:cardCornerRadius="12dp" app:strokeColor="#EEEEEE" app:strokeWidth="1dp">
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="16dp">
+                        <LinearLayout android:id="@+id/view_description" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical">
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/disease_info" android:textStyle="bold" app:drawableStartCompat="@drawable/ic_info" android:drawablePadding="8dp" />
+                            <TextView android:id="@+id/tv_disease_desc" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:textColor="@color/text_secondary" />
+                            <View android:layout_width="match_parent" android:layout_height="1dp" android:layout_marginTop="16dp" android:background="#F5F5F5" />
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="16dp" android:text="@string/common_symptoms" android:textStyle="bold" app:drawableStartCompat="@drawable/ic_warning" android:drawablePadding="8dp" app:drawableTint="#F57C00" />
+                            <TextView android:id="@+id/tv_symptoms" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:textColor="@color/text_secondary" />
+                        </LinearLayout>
+                        <LinearLayout android:id="@+id/view_prevention" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:visibility="gone">
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/prevention_methods" android:textStyle="bold" app:drawableStartCompat="@drawable/ic_shield" android:drawablePadding="8dp" app:drawableTint="@color/brand_green" />
+                            <TextView android:id="@+id/tv_prevention_info" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:textColor="@color/text_secondary" />
+                        </LinearLayout>
+                        <LinearLayout android:id="@+id/view_treatment" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:visibility="gone">
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/recommended_treatment" android:textStyle="bold" app:drawableStartCompat="@drawable/ic_treatment" android:drawablePadding="8dp" app:drawableTint="#D32F2F" />
+                            <TextView android:id="@+id/tv_treatment_info" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:textColor="@color/text_secondary" />
                         </LinearLayout>
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
 
                 <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btn_scan_another"
-                    android:layout_width="match_parent"
-                    android:layout_height="56dp"
-                    android:layout_marginTop="24dp"
-                    android:backgroundTint="@color/brand_green"
-                    android:text="SCAN ANOTHER LEAF"
-                    android:textStyle="bold"
-                    app:cornerRadius="8dp"
-                    app:icon="@drawable/ic_leaf" />
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btn_save_report"
-                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                    android:layout_width="match_parent"
-                    android:layout_height="56dp"
-                    android:layout_marginTop="12dp"
-                    android:text="Save Result / परिणाम सहेजें"
-                    android:textColor="@color/brand_green_dark"
-                    app:cornerRadius="8dp"
-                    app:icon="@drawable/ic_download"
-                    app:iconTint="@color/brand_green_dark"
-                    app:strokeColor="@color/brand_green" />
-
-                <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_get_expert"
-                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                     android:layout_width="match_parent"
                     android:layout_height="56dp"
-                    android:layout_marginTop="12dp"
-                    android:text="Get Expert Advice / विशेषज्ञ सलाह ले"
-                    android:textColor="#1976D2"
-                    app:cornerRadius="8dp"
-                    app:icon="@drawable/ic_phone"
-                    app:iconTint="#1976D2"
-                    app:strokeColor="#1976D2" />
+                    android:layout_marginTop="16dp"
+                    android:text="@string/talk_expert_advisor"
+                    android:textColor="@color/white"
+                    app:backgroundTint="#1976D2"
+                    app:cornerRadius="12dp"
+                    app:icon="@drawable/ic_phone" />
+
+                <com.google.android.material.button.MaterialButton 
+                    android:id="@+id/btn_scan_another" 
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="match_parent" 
+                    android:layout_height="56dp" 
+                    android:layout_marginTop="12dp" 
+                    android:text="@string/scan_another_leaf" 
+                    app:cornerRadius="12dp"/>
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -707,11 +386,138 @@
                         android:textColor="@color/text_secondary"
                         android:textSize="12sp" />
                 </RelativeLayout>
-
             </LinearLayout>
+        </ScrollView>
+    </FrameLayout>
 
+    <!-- FULLSCREEN CAMERA OVERLAY -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout_camera_interface"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/black"
+        android:elevation="20dp"
+        android:visibility="gone">
+        <androidx.camera.view.PreviewView android:id="@+id/viewFinder" android:layout_width="match_parent" android:layout_height="match_parent" />
+        
+        <ImageView 
+            android:id="@+id/btn_close_camera" 
+            android:layout_width="40dp" 
+            android:layout_height="40dp" 
+            android:layout_margin="20dp" 
+            android:src="@drawable/ic_close" 
+            app:layout_constraintEnd_toEndOf="parent" 
+            app:layout_constraintTop_toTopOf="parent" 
+            app:tint="@color/white" 
+            android:padding="10dp"
+            android:background="@drawable/white_circle_bg"
+            android:backgroundTint="#60000000" />
+
+        <View 
+            android:id="@+id/camera_focus_frame" 
+            android:layout_width="0dp" 
+            android:layout_height="0dp" 
+            app:layout_constraintDimensionRatio="1:1" 
+            app:layout_constraintWidth_percent="0.75" 
+            android:background="@drawable/bg_camera_focus_grid" 
+            app:layout_constraintBottom_toBottomOf="parent" 
+            app:layout_constraintLeft_toLeftOf="parent" 
+            app:layout_constraintRight_toRightOf="parent" 
+            app:layout_constraintTop_toTopOf="parent" 
+            app:layout_constraintVertical_bias="0.3" />
+
+        <LinearLayout 
+            android:id="@+id/layout_quality_compact" 
+            android:layout_width="wrap_content" 
+            android:layout_height="wrap_content" 
+            android:layout_marginTop="16dp" 
+            android:gravity="center_vertical" 
+            android:background="@drawable/bg_pill" 
+            android:backgroundTint="#80000000"
+            android:paddingHorizontal="12dp" 
+            android:paddingVertical="6dp" 
+            app:layout_constraintEnd_toEndOf="parent" 
+            app:layout_constraintStart_toStartOf="parent" 
+            app:layout_constraintTop_toBottomOf="@id/camera_focus_frame">
+            <View 
+                android:id="@+id/dot_quality" 
+                android:layout_width="8dp" 
+                android:layout_height="8dp" 
+                android:background="@drawable/circle_dot_yellow" />
+            <TextView 
+                android:id="@+id/tv_quality" 
+                android:layout_width="wrap_content" 
+                android:layout_height="wrap_content" 
+                android:layout_marginStart="8dp" 
+                android:text="@string/good_lighting" 
+                android:textColor="@color/white" 
+                android:textStyle="bold" 
+                android:textSize="12sp" />
         </LinearLayout>
-    </ScrollView>
+
+        <TextView 
+            android:id="@+id/tv_cam_instruction" 
+            android:layout_width="wrap_content" 
+            android:layout_height="wrap_content" 
+            android:layout_marginTop="8dp" 
+            android:text="@string/focus_on_leaf_hindi" 
+            android:textColor="@color/white" 
+            android:textSize="14sp" 
+            app:layout_constraintEnd_toEndOf="parent" 
+            app:layout_constraintStart_toStartOf="parent" 
+            app:layout_constraintTop_toBottomOf="@id/layout_quality_compact" />
+
+        <LinearLayout 
+            android:id="@+id/camera_secondary_controls"
+            android:layout_width="wrap_content" 
+            android:layout_height="wrap_content" 
+            android:layout_marginTop="32dp"
+            android:background="@drawable/bg_pill"
+            android:backgroundTint="#60000000"
+            android:gravity="center" 
+            android:paddingHorizontal="24dp"
+            android:paddingVertical="12dp" 
+            android:orientation="horizontal" 
+            app:layout_constraintTop_toBottomOf="@id/tv_cam_instruction"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+            
+            <ImageView 
+                android:id="@+id/btn_cam_flash" 
+                android:layout_width="28dp" 
+                android:layout_height="28dp" 
+                android:src="@drawable/ic_flash_off" 
+                app:tint="@color/white" />
+                
+            <ImageView 
+                android:id="@+id/btn_cam_grid" 
+                android:layout_width="28dp" 
+                android:layout_height="28dp" 
+                android:layout_marginStart="40dp" 
+                android:src="@drawable/ic_grid" 
+                app:tint="@color/white" />
+                
+            <ImageView 
+                android:id="@+id/btn_cam_switch" 
+                android:layout_width="28dp" 
+                android:layout_height="28dp" 
+                android:layout_marginStart="40dp" 
+                android:src="@drawable/ic_flip_camera" 
+                app:tint="@color/white" />
+        </LinearLayout>
+
+        <ImageButton 
+            android:id="@+id/btn_capture_circle" 
+            android:layout_width="72dp" 
+            android:layout_height="72dp" 
+            android:layout_marginBottom="40dp" 
+            android:background="@drawable/bg_capture_button" 
+            android:src="@drawable/ic_camera" 
+            app:layout_constraintBottom_toBottomOf="parent" 
+            app:layout_constraintEnd_toEndOf="parent" 
+            app:layout_constraintStart_toStartOf="parent" 
+            app:tint="@color/white" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation"
@@ -720,7 +526,6 @@
         android:background="@color/white"
         app:itemIconTint="@color/nav_item_color_state"
         app:itemTextColor="@color/nav_item_color_state"
-        app:labelVisibilityMode="labeled"
         app:layout_constraintBottom_toBottomOf="parent"
         app:menu="@menu/bottom_nav_menu" />
 

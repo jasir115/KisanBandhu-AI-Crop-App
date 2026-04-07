@@ -4,7 +4,11 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
+import android.widget.Toast
 import com.google.android.material.button.MaterialButton
+import com.kisanbandhu.app.R
+import com.kisanbandhu.app.BaseActivity
+import com.kisanbandhu.app.LocaleHelper
 
 class LanguageSelectionActivity : BaseActivity() {
 
@@ -36,6 +40,8 @@ class LanguageSelectionActivity : BaseActivity() {
         btnMarathi.setOnClickListener {
             updateSelection("mr")
             selectedLanguageCode = "mr"
+            // Show toast since Marathi is not fully implemented yet
+            Toast.makeText(this, "Marathi language support is coming soon in the next update!", Toast.LENGTH_SHORT).show()
         }
 
         btnContinue.setOnClickListener {
@@ -64,7 +70,7 @@ class LanguageSelectionActivity : BaseActivity() {
 
         allContainers.forEach { (code, id) ->
             val container = findViewById<View>(id)
-            container.setBackgroundResource(R.drawable.input_field_bg)
+            container?.setBackgroundResource(R.drawable.input_field_bg)
             findViewById<ImageView>(allCheckmarks[code]!!).visibility = View.GONE
         }
 

@@ -2,6 +2,7 @@ package com.kisanbandhu.app
 
 import android.Manifest
 import android.content.Intent
+import android.content.IntentSender
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
@@ -12,8 +13,9 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.core.app.ActivityCompat
 import coil.load
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationServices
+import com.google.android.gms.common.api.ResolvableApiException
+import com.google.android.gms.location.*
+import com.google.android.gms.tasks.Task
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.card.MaterialCardView
 import com.google.firebase.auth.FirebaseAuth
@@ -27,6 +29,7 @@ class MainActivity : SwipeableActivity() {
     private val weatherViewModel: WeatherViewModel by viewModels()
     private val auth = FirebaseAuth.getInstance()
     private val db = FirebaseFirestore.getInstance()
+    private val REQUEST_CHECK_SETTINGS = 0x1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,7 +47,9 @@ class MainActivity : SwipeableActivity() {
                 val intent = Intent(this, CropHealthActivity::class.java)
                 startActivity(intent)
             } catch (e: Exception) {
-                Toast.makeText(this, "Error starting scanner: ${e.message}", Toast.LENGTH_SHORT).show()
+                if (!isFinishing) {
+                    Toast.makeText(this, "Error starting scanner: ${e.message}", Toast.LENGTH_SHORT).show()
+                }
                 e.printStackTrace()
             }
         }
@@ -75,7 +80,7 @@ class MainActivity : SwipeableActivity() {
             val uid = auth.currentUser?.uid ?: return
             db.collection("users").whereEqualTo("uid", uid).limit(1).get()
                 .addOnSuccessListener { query ->
-                    if (!query.isEmpty) {
+                    if (!isFinishing && !query.isEmpty) {
                         val doc = query.documents[0]
                         updateUI(doc.getString("name"), doc.getString("profileImageUrl"))
                     }
@@ -84,6 +89,8 @@ class MainActivity : SwipeableActivity() {
         }
 
         db.collection("users").document(phone).addSnapshotListener { document, error ->
+            if (isFinishing) return@addSnapshotListener
+            
             if (error != null) {
                 Log.e("MAIN_FS", "Error: ${error.message}")
                 return@addSnapshotListener
@@ -98,12 +105,14 @@ class MainActivity : SwipeableActivity() {
     }
 
     private fun updateUI(name: String?, avatarName: String?) {
+        if (isFinishing) return
+        
         if (!name.isNullOrEmpty()) {
             val welcomeText = getString(R.string.welcome) + " " + name + "!"
             findViewById<TextView>(R.id.tv_welcome_name)?.text = welcomeText
         }
         
-        val ivLogo = findViewById<ImageView>(R.id.logo) ?: return
+        val ivLogo = findViewById<ImageView>(R.id.iv_main_avatar) ?: return
         
         if (!avatarName.isNullOrEmpty()) {
             val resId = resources.getIdentifier(avatarName, "drawable", packageName)
@@ -117,15 +126,44 @@ class MainActivity : SwipeableActivity() {
 
     private fun checkLocationPermission() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // CALLING CENTRALIZED UTILS
             LocationUtils.showLocationDisclosure(
                 this,
                 onAgree = { requestLocationPermission() },
-                onCancel = { /* Do nothing, respect user choice */ }
+                onCancel = { 
+                    // RESPECT USER CHOICE: Stop persistent dialogs and fallback
+                    if (!isFinishing) {
+                        weatherViewModel.fetchWeather("Pune")
+                    }
+                }
             )
             return
         }
-        updateLocationAndWeather()
+        enableGPSAndGetLocation()
+    }
+
+    private fun enableGPSAndGetLocation() {
+        val locationRequest = LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 10000)
+            .setMinUpdateIntervalMillis(5000)
+            .build()
+
+        val builder = LocationSettingsRequest.Builder()
+            .addLocationRequest(locationRequest)
+
+        val client: SettingsClient = LocationServices.getSettingsClient(this)
+        val task: Task<LocationSettingsResponse> = client.checkLocationSettings(builder.build())
+
+        task.addOnSuccessListener { 
+            if (!isFinishing) updateLocationAndWeather()
+        }
+
+        task.addOnFailureListener { exception ->
+            if (!isFinishing && exception is ResolvableApiException) {
+                try {
+                    exception.startResolutionForResult(this, REQUEST_CHECK_SETTINGS)
+                } catch (sendEx: IntentSender.SendIntentException) {
+                }
+            }
+        }
     }
 
     private fun requestLocationPermission() {
@@ -134,27 +172,54 @@ class MainActivity : SwipeableActivity() {
             1002)
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == 1002 && grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            updateLocationAndWeather()
-        }
-    }
-
-    private fun updateLocationAndWeather() {
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            fusedLocationClient.lastLocation.addOnSuccessListener { location ->
-                if (location != null) {
-                    weatherViewModel.fetchWeather("${location.latitude},${location.longitude}")
-                } else {
-                    weatherViewModel.fetchWeather("Pune")
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == REQUEST_CHECK_SETTINGS) {
+            if (resultCode == RESULT_OK) {
+                updateLocationAndWeather()
+            } else {
+                if (!isFinishing) {
+                    Toast.makeText(this, "Location must be turned on for weather updates", Toast.LENGTH_SHORT).show()
                 }
             }
         }
     }
 
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == 1002 && grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            enableGPSAndGetLocation()
+        }
+    }
+
+    private fun updateLocationAndWeather() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            fusedLocationClient.getCurrentLocation(Priority.PRIORITY_HIGH_ACCURACY, null)
+                .addOnSuccessListener { location ->
+                    if (isFinishing) return@addOnSuccessListener
+                    if (location != null) {
+                        weatherViewModel.fetchWeather("${location.latitude},${location.longitude}")
+                    } else {
+                        fusedLocationClient.lastLocation.addOnSuccessListener { lastLoc ->
+                            if (!isFinishing) {
+                                if (lastLoc != null) {
+                                    weatherViewModel.fetchWeather("${lastLoc.latitude},${lastLoc.longitude}")
+                                } else {
+                                    weatherViewModel.fetchWeather("Pune")
+                                }
+                            }
+                        }
+                    }
+                }
+                .addOnFailureListener {
+                    if (!isFinishing) weatherViewModel.fetchWeather("Pune")
+                }
+        }
+    }
+
     private fun observeWeather() {
         weatherViewModel.weatherData.observe(this) { data ->
+            if (isFinishing) return@observe
             if (data != null) {
                 findViewById<TextView>(R.id.tv_current_location)?.text = "${getString(R.string.location_prefix)}: ${data.location.name}, ${data.location.region}"
                 findViewById<TextView>(R.id.tv_location_mode)?.text = ""

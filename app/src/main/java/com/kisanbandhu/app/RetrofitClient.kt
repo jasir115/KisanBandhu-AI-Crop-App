@@ -1,13 +1,21 @@
 package com.kisanbandhu.app
 
+import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.concurrent.TimeUnit
 
 object RetrofitClient {
 
     private const val BASE_URL = "https://kisanbandhu-backend.onrender.com/"
     private const val GOV_BASE_URL = "https://api.data.gov.in/"
-    private const val GEMINI_BASE_URL = "https://generativelanguage.googleapis.com/"
+    private const val HF_BASE_URL = "https://router.huggingface.co/"
+
+    private val okHttpClient = OkHttpClient.Builder()
+        .connectTimeout(30, TimeUnit.SECONDS)
+        .readTimeout(30, TimeUnit.SECONDS)
+        .writeTimeout(30, TimeUnit.SECONDS)
+        .build()
 
     val api: ApiService by lazy {
         Retrofit.Builder()
@@ -25,11 +33,12 @@ object RetrofitClient {
             .create(ApiService::class.java)
     }
 
-    val geminiApi: GeminiApiService by lazy {
+    val hfApi: HuggingFaceApiService by lazy {
         Retrofit.Builder()
-            .baseUrl(GEMINI_BASE_URL)
+            .baseUrl(HF_BASE_URL)
+            .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
-            .create(GeminiApiService::class.java)
+            .create(HuggingFaceApiService::class.java)
     }
 }

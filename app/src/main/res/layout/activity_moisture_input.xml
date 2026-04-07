@@ -1,169 +1,175 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/bottom_sheet_bg"
-    android:orientation="vertical"
-    android:padding="20dp">
-
-    <!-- Drag Handle -->
-    <View
-        android:layout_width="40dp"
-        android:layout_height="4dp"
-        android:layout_gravity="center"
-        android:layout_marginBottom="20dp"
-        android:background="#E0E0E0" />
-
-    <!-- Header Section -->
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <ImageView
-            android:id="@+id/iv_moisture_icon"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_centerVertical="true"
-            android:src="@drawable/ic_humidity"
-            app:tint="@color/button_blue" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginStart="12dp"
-            android:layout_toEndOf="@id/iv_moisture_icon"
-            android:text="@string/enter_humidity_title"
-            android:textColor="@color/black"
-            android:textSize="18sp"
-            android:textStyle="bold" />
-
-        <ImageButton
-            android:id="@+id/btn_close"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:src="@android:drawable/ic_menu_close_clear_cancel"
-            app:tint="#BDBDBD" />
-    </RelativeLayout>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:text="@string/enter_humidity_desc"
-        android:textColor="@color/text_secondary"
-        android:textSize="14sp" />
-
-    <!-- Current Value Display -->
-    <TextView
-        android:id="@+id/tv_moisture_value"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="32dp"
-        android:text="19%"
-        android:textColor="@color/brand_green"
-        android:textSize="48sp"
-        android:textStyle="bold" />
-
-    <!-- Slider Section -->
-    <com.google.android.material.slider.Slider
-        android:id="@+id/slider_moisture"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:value="19.0"
-        android:valueFrom="0.0"
-        android:valueTo="100.0"
-        app:thumbColor="@color/brand_green"
-        app:trackColorActive="@color/brand_green"
-        app:trackColorInactive="#E0E0E0"
-        app:trackHeight="10dp"
-        app:thumbRadius="10dp"/>
-
-    <TextView
-        android:id="@+id/tv_moisture_status"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="8dp"
-        android:text="@string/moisture_good"
-        android:textColor="@color/brand_green"
-        android:textStyle="bold" />
-
-    <!-- Manual Entry Section -->
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:text="@string/enter_manually"
-        android:textColor="@color/black"
-        android:textStyle="bold" />
+    android:fillViewport="true">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="54dp"
-        android:layout_marginTop="12dp"
-        android:background="@drawable/input_field_bg"
-        android:backgroundTint="#F5F5F5"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:paddingHorizontal="16dp">
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp">
 
-        <EditText
-            android:id="@+id/et_moisture"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@android:color/transparent"
-            android:hint="19"
-            android:inputType="number"
-            android:textColor="@color/black"
-            android:textSize="18sp" />
+        <!-- Drag Handle -->
+        <View
+            android:layout_width="40dp"
+            android:layout_height="4dp"
+            android:layout_gravity="center"
+            android:layout_marginBottom="20dp"
+            android:background="#E0E0E0" />
+
+        <!-- Header Section -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/iv_moisture_icon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_humidity"
+                app:tint="@color/button_blue" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="12dp"
+                android:layout_toEndOf="@id/iv_moisture_icon"
+                android:text="@string/enter_humidity_title"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <ImageButton
+                android:id="@+id/btn_close"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@android:drawable/ic_menu_close_clear_cancel"
+                app:tint="#BDBDBD" />
+        </RelativeLayout>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:text="%"
-            android:textColor="#9E9E9E" />
+            android:layout_marginTop="4dp"
+            android:text="@string/enter_humidity_desc"
+            android:textColor="@color/text_secondary"
+            android:textSize="14sp" />
 
-        <LinearLayout
+        <!-- Current Value Display -->
+        <TextView
+            android:id="@+id/tv_moisture_value"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:gravity="center">
-            <ImageButton
-                android:id="@+id/btn_moisture_up"
-                android:layout_width="24dp"
-                android:layout_height="18dp"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:src="@android:drawable/arrow_up_float"
-                app:tint="@color/black" />
-            <ImageButton
-                android:id="@+id/btn_moisture_down"
-                android:layout_width="24dp"
-                android:layout_height="18dp"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:src="@android:drawable/arrow_down_float"
-                app:tint="@color/black" />
+            android:layout_gravity="center"
+            android:layout_marginTop="32dp"
+            android:text="19%"
+            android:textColor="@color/brand_green"
+            android:textSize="48sp"
+            android:textStyle="bold" />
+
+        <!-- Slider Section -->
+        <com.google.android.material.slider.Slider
+            android:id="@+id/slider_moisture"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:value="19.0"
+            android:valueFrom="0.0"
+            android:valueTo="100.0"
+            app:thumbColor="@color/brand_green"
+            app:trackColorActive="@color/brand_green"
+            app:trackColorInactive="#E0E0E0"
+            app:trackHeight="10dp"
+            app:thumbRadius="10dp"/>
+
+        <TextView
+            android:id="@+id/tv_moisture_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="8dp"
+            android:text="@string/moisture_good"
+            android:textColor="@color/brand_green"
+            android:textStyle="bold" />
+
+        <!-- Manual Entry Section -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:text="@string/enter_manually"
+            android:textColor="@color/black"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="54dp"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/input_field_bg"
+            android:backgroundTint="#F5F5F5"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingHorizontal="16dp">
+
+            <EditText
+                android:id="@+id/et_moisture"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:hint="19"
+                android:inputType="number"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:text="%"
+                android:textColor="#9E9E9E" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center">
+                <ImageButton
+                    android:id="@+id/btn_moisture_up"
+                    android:layout_width="24dp"
+                    android:layout_height="18dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:src="@android:drawable/arrow_up_float"
+                    app:tint="@color/black" />
+                <ImageButton
+                    android:id="@+id/btn_moisture_down"
+                    android:layout_width="24dp"
+                    android:layout_height="18dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:src="@android:drawable/arrow_down_float"
+                    app:tint="@color/black" />
+            </LinearLayout>
         </LinearLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_save"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginBottom="12dp"
+            android:backgroundTint="@color/brand_green"
+            android:text="@string/save_value"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            app:cornerRadius="8dp" />
+
     </LinearLayout>
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btn_save"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_marginTop="32dp"
-        android:layout_marginBottom="12dp"
-        android:backgroundTint="@color/brand_green"
-        android:text="@string/save_value"
-        android:textColor="@color/white"
-        android:textStyle="bold"
-        app:cornerRadius="8dp" />
-
-</LinearLayout>
+</androidx.core.widget.NestedScrollView>

@@ -1,6 +1,7 @@
 package com.kisanbandhu.app
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -68,9 +69,9 @@ class ProfileActivity : SwipeableActivity() {
             startActivity(Intent(this, SettingsActivity::class.java))
         }
 
-        // Menu: Help & Support
+        // Menu: Help & Support - REPLACED WITH EMAIL INTENT
         findViewById<View>(R.id.btn_menu_help)?.setOnClickListener {
-            showComingSoon()
+            contactSupport()
         }
 
         // Logout
@@ -85,8 +86,18 @@ class ProfileActivity : SwipeableActivity() {
         }
     }
 
-    private fun showComingSoon() {
-        Toast.makeText(this, "This feature is coming soon in the next update!", Toast.LENGTH_SHORT).show()
+    private fun contactSupport() {
+        try {
+            val intent = Intent(Intent.ACTION_SENDTO).apply {
+                data = Uri.parse("mailto:")
+                putExtra(Intent.EXTRA_EMAIL, arrayOf("khanjasir115@gmail.com"))
+                putExtra(Intent.EXTRA_SUBJECT, "Support Request: KisanBandhu App")
+                putExtra(Intent.EXTRA_TEXT, "Hello Team,\n\nI need help with...")
+            }
+            startActivity(Intent.createChooser(intent, "Send Email via"))
+        } catch (e: Exception) {
+            Toast.makeText(this, "No email app found to send support request.", Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun loadUserProfile() {

@@ -81,6 +81,48 @@
     <string name="create_alert">अलर्ट बनाएं</string>
     <string name="market_disclaimer">📍 नोट: कीमतें सांकेतिक हैं और क्षेत्र, गुणवत्ता ग्रेड और बाजार की स्थितियों के अनुसार भिन्न हो सकती हैं। निर्णय लेने से पहले हमेशा अपनी स्थानीय मंडी से पुष्टि करें।</string>
 
+    <!-- Crop Health Strings -->
+    <string name="crop_health_title">फसल स्वास्थ्य विश्लेषण</string>
+    <string name="ai_disease_detection">AI-आधारित रोग पहचान</string>
+    <string name="how_it_works">यह कैसे काम करता है</string>
+    <string name="health_desc">अपनी फसल की पत्तियों या प्रभावित हिस्सों की स्पष्ट तस्वीर अपलोड करें। हमारा AI रोगों, कीटों की पहचान करेगा और उपचार की सिफारिशें प्रदान करेगा।</string>
+    <string name="take_photo_hindi">फोटो लें</string>
+    <string name="use_camera_desc">फसल की तस्वीर लेने के लिए कैमरे का उपयोग करें</string>
+    <string name="upload_gallery_hindi">गैलरी से अपलोड करें</string>
+    <string name="choose_existing_desc">डिवाइस से मौजूदा फोटो चुनें</string>
+    <string name="photography_tips_hindi">📸 फोटोग्राफी टिप्स</string>
+    <string name="tips_list">✓ अच्छी प्राकृतिक रोशनी में फोटो लें\n✓ प्रभावित पत्तियों या हिस्सों पर ध्यान केंद्रित करें\n✓ धुंधली या अंधेरे वाली तस्वीरों से बचें\n✓ रोग के लक्षणों को स्पष्ट रूप से दिखाएं</string>
+    
+    <string name="selected_image">चयनित छवि</string>
+    <string name="start_ai_analysis">AI विश्लेषण शुरू करें</string>
+    <string name="choose_different">दूसरी तस्वीर चुनें</string>
+    <string name="analyzing_image">छवि का विश्लेषण किया जा रहा है...</string>
+    <string name="ai_processing_desc">AI आपकी फसल की छवि को प्रोसेस कर रहा है</string>
+    <string name="step_crop">फसल के प्रकार की पहचान की जा रही है...</string>
+    <string name="step_disease">रोगों और लक्षणों का पता लगाया जा रहा है...</string>
+    <string name="step_severity">गंभीरता के स्तर का विश्लेषण किया जा रहा है...</string>
+    <string name="step_treatment">उपचार योजना तैयार की जा रही है...</string>
+    
+    <string name="ai_analyzed">AI द्वारा विश्लेषित</string>
+    <string name="save_btn">सहेजें</string>
+    <string name="share_btn">साझा करें</string>
+    <string name="gallery_btn">गैलरी</string>
+    <string name="ai_confidence">AI आत्मविश्वास</string>
+    <string name="take_action_soon">जल्द ही कार्रवाई करें</string>
+    
+    <string name="tab_description">विवरण</string>
+    <string name="tab_prevention">रोकथाम</string>
+    <string name="tab_treatment">उपचार</string>
+    <string name="disease_info">रोग की जानकारी</string>
+    <string name="common_symptoms">सामान्य लक्षण</string>
+    <string name="prevention_methods">रोकथाम के तरीके</string>
+    <string name="recommended_treatment">अनुशंसित उपचार</string>
+    
+    <string name="talk_expert_advisor">विशेषज्ञ सलाहकार से बात करें</string>
+    <string name="scan_another_leaf">दूसरी पत्ती को स्कैन करें</string>
+    <string name="focus_on_leaf_hindi">पत्ती पर ध्यान दें</string>
+    <string name="good_lighting">अच्छी रोशनी</string>
+
     <!-- Crop Recommendation Flow -->
     <string name="crop_rec_title">फसल सिफारिश इनपुट</string>
     <string name="select_data_source">डेटा स्रोत चुनें</string>
@@ -145,10 +187,10 @@
     <string name="best_suited">आपकी स्थितियों के लिए सबसे उपयुक्त</string>
     <string name="your_input_params">आपके इनपुट पैरामीटर</string>
     <string name="prev_crop_history">3. पिछला फसल इतिहास</string>
-    <string name="last_season_prefix">पिछला सीजन:</string>
+    <string name="last_season_prefix">पिछले सीजन:</string>
     <string name="last_season">पिछला सीजन: कपास</string>
     <string name="target_season">लक्ष्य: रबी सीजन (अक्टूबर - मार्च)</string>
-    <string name="edit_history">इतिहासिक संपादित करें</string>
+    <string name="edit_history">इतिहास संपादित करें</string>
     <string name="top_match">शीर्ष मिलान</string>
     <string name="calculating">गणना की जा रही है...</string>
     <string name="feeding_ai_model">AI मॉडल को डेटा दिया जा रहा है...</string>
