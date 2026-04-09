@@ -233,7 +233,8 @@ class ProfileSetupActivity : BaseActivity() {
             "location" to selectedLocation,
             "language" to LocaleHelper.getLanguage(this),
             "farmSize" to 0.0,
-            "farmSizeUnit" to "Acres"
+            "farmSizeUnit" to "Acres",
+            "registered" to true
         )
 
         db.collection("users").document(userPhone).set(userMap)

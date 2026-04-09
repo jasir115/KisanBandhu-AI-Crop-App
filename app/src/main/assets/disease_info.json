@@ -20,12 +20,82 @@
     "prevention": "• Destroy infected leaves\n• Use resistant varieties\n• Avoid dense foliage",
     "treatment": "Spray Copper Oxychloride or Carbendazim."
   },
+  "Grape___healthy": {
+    "hindi_name": "अंगूर स्वस्थ है",
+    "description": "Your grape vine appears to be in excellent health.",
+    "symptoms": "• Vibrant green leaves\n• Firm fruit\n• No visible spots or pests",
+    "prevention": "• Regular pruning\n• Balanced irrigation\n• Monitoring for pests",
+    "treatment": "Continue your current maintenance routine."
+  },
   "Maize___Cercospora_leaf_spot Gray_leaf_spot": {
     "hindi_name": "मक्के का ग्रे लीफ स्पॉट",
     "description": "One of the most significant yield-limiting diseases of corn worldwide.",
     "symptoms": "• Rectangular tan spots\n• Spots parallel to leaf veins\n• Grayish cast to lesions",
     "prevention": "• Crop rotation\n• Tillage to bury residue\n• Hybrid selection",
     "treatment": "Apply foliar fungicides like Pyraclostrobin during silking."
+  },
+  "Maize___Common_rust": {
+    "hindi_name": "मक्के का सामान्य रतुआ",
+    "description": "Fungal disease causing small, brown pustules on leaf surfaces.",
+    "symptoms": "• Circular to elongate golden-brown pustules\n• Pustules appear on both leaf surfaces\n• Chlorosis and death of leaves in severe cases",
+    "prevention": "• Use resistant hybrids\n• Early planting\n• Avoid excessive nitrogen",
+    "treatment": "Spray fungicides like Mancozeb if infection is high."
+  },
+  "Maize___Northern_Leaf_Blight": {
+    "hindi_name": "मक्के का उत्तरी पत्ता झुलसा",
+    "description": "Fungal disease that causes large, cigar-shaped lesions on leaves.",
+    "symptoms": "• Long, elliptical, grayish-green lesions\n• Lesions turn tan as they mature\n• Reduced grain fill",
+    "prevention": "• Tillage to reduce crop residue\n• Crop rotation\n• Use of resistant hybrids",
+    "treatment": "Timely application of triazole or strobilurin fungicides."
+  },
+  "Maize___healthy": {
+    "hindi_name": "मक्का स्वस्थ है",
+    "description": "The maize plant shows no signs of disease or deficiency.",
+    "symptoms": "• Deep green, wide leaves\n• Strong stalks\n• No visible spots",
+    "prevention": "• Soil health management\n• Adequate watering\n• Regular scouting",
+    "treatment": "Maintain current fertilizer and water schedules."
+  },
+  "Orange___Haunglongbing_(Citrus_greening)": {
+    "hindi_name": "संतरे का ग्रीनिंग रोग",
+    "description": "A devastating bacterial disease spread by psyllids, affecting fruit quality.",
+    "symptoms": "• Mottled yellow leaves (asymmetric yellowing)\n• Small, lopsided fruit\n• Bitter fruit juice",
+    "prevention": "• Control citrus psyllids\n• Use disease-free nursery stock\n• Remove infected trees",
+    "treatment": "No known cure; management focuses on psyllid control and nutrition."
+  },
+  "Pepper,_bell___Bacterial_spot": {
+    "hindi_name": "शिमला मिर्च का जीवाणु धब्बा",
+    "description": "Bacterial disease causing spots on leaves and fruit, leading to defoliation.",
+    "symptoms": "• Small, water-soaked spots on leaves\n• Spots turn brown and scabby\n• Premature leaf drop",
+    "prevention": "• Use pathogen-free seeds\n• Avoid overhead irrigation\n• Rotate crops",
+    "treatment": "Apply copper-based sprays regularly during wet periods."
+  },
+  "Pepper,_bell___healthy": {
+    "hindi_name": "शिमला मिर्च स्वस्थ है",
+    "description": "The bell pepper plant appears healthy and vigorous.",
+    "symptoms": "• Glossy, dark green leaves\n• Strong stems\n• Healthy fruit set",
+    "prevention": "• Consistent watering\n• Mulching\n• Pests monitoring",
+    "treatment": "Continue organic fertilization and care."
+  },
+  "Potato___Early_blight": {
+    "hindi_name": "आलू का अगेती झुलसा",
+    "description": "Fungal disease characterized by 'target' spots with concentric rings.",
+    "symptoms": "• Dark brown spots with concentric rings\n• Spots appear first on older leaves\n• Yellowing around lesions",
+    "prevention": "• Use certified seeds\n• Crop rotation with non-solanaceous crops\n• Proper irrigation",
+    "treatment": "Foliar sprays of Mancozeb or Chlorothalonil."
+  },
+  "Potato___Late_blight": {
+    "hindi_name": "आलू का पछेती झुलसा",
+    "description": "Highly destructive disease that can rapidly destroy potato fields in cool, wet weather.",
+    "symptoms": "• Large, irregular water-soaked lesions\n• White fungal growth on leaf undersides\n• Darkening and rotting of tubers",
+    "prevention": "• Destroy volunteer plants\n• Use resistant varieties\n• Good soil drainage",
+    "treatment": "Preventive spray of Metalaxyl-Mancozeb mixtures."
+  },
+  "Potato___healthy": {
+    "hindi_name": "आलू स्वस्थ है",
+    "description": "The potato plant is healthy and growing well.",
+    "symptoms": "• Lush green foliage\n• No spots on leaves\n• Healthy tuber development",
+    "prevention": "• Hill potatoes correctly\n• Monitor for beetles\n• Balanced N-P-K",
+    "treatment": "Keep up the preventive monitoring."
   },
   "Rice___Bacterial_Leaf_Blight": {
     "hindi_name": "धान का जीवाणु झुलसा",
@@ -35,7 +105,7 @@
     "treatment": "Spray Streptocycline (6g) mixed with Copper Oxychloride (500g) per acre."
   },
   "Rice___Bakanae_Disease": {
-    "hindi_name": "धान का बकाने रोग (फूकिश सीडलिंग)",
+    "hindi_name": "धान का बकाने रोग",
     "description": "A seed-borne fungal disease causing plants to grow abnormally tall and thin.",
     "symptoms": "• Tall, spindly, pale yellow plants\n• Poor root development\n• Seedling death",
     "prevention": "• Use certified disease-free seeds\n• Seed treatment with fungicides\n• Remove infected plants",
@@ -62,12 +132,40 @@
     "prevention": "• Apply balanced fertilizers (NKP)\n• Seed treatment with Carbendazim\n• Improve soil health",
     "treatment": "Spray Mancozeb or Edifenphos if symptoms are widespread."
   },
+  "Rice___Chilo_Stem_Borer": {
+    "hindi_name": "धान का तना छेदक (चिलो)",
+    "description": "The larvae bore into the rice stem, causing central shoot death.",
+    "symptoms": "• 'Dead hearts' in early stages\n• 'White heads' during flowering\n• Holes in the stems",
+    "prevention": "• Use pheromone traps\n• Clip leaf tips before transplanting\n• Conserve egg parasitoids",
+    "treatment": "Apply Cartap Hydrochloride or Fipronil granules."
+  },
   "Rice___False_Smut": {
     "hindi_name": "धान का झूठा कंडुआ",
     "description": "Fungal disease that transforms individual grains into orange/black velvety balls.",
     "symptoms": "• Large greenish-yellow balls on grains\n• Balls turn orange then dark green/black\n• Only a few grains per panicle affected",
     "prevention": "• Use clean seeds\n• Early planting\n• Moderate nitrogen use",
     "treatment": "Spray Copper Oxychloride or Propiconazole at booting stage."
+  },
+  "Rice___Hispa": {
+    "hindi_name": "धान का हिस्पा",
+    "description": "A beetle whose larvae mine the leaf, leaving white parallel streaks.",
+    "symptoms": "• Scraping of the upper leaf surface\n• White parallel streaks on leaves\n• Leaves become thin and dry",
+    "prevention": "• Remove alternative weed hosts\n• Avoid excessive nitrogen\n• Clip leaf tips to remove eggs",
+    "treatment": "Spray Triazophos or Quinalphos."
+  },
+  "Rice___Leaf_Scald": {
+    "hindi_name": "धान का लीफ स्काल्ड",
+    "description": "Fungal disease causing banding patterns on leaves, often starting from the tip.",
+    "symptoms": "• Wavy-edged, water-soaked lesions\n• Lesions turn light brown with dark bands\n• Tips of leaves dry out",
+    "prevention": "• Use disease-free seeds\n• Balanced fertilization\n• Good water management",
+    "treatment": "Spray fungicides like Benomyl or Carbendazim."
+  },
+  "Rice___Narrow_Brown_Spot": {
+    "hindi_name": "धान का संकीर्ण भूरा धब्बा",
+    "description": "Fungal disease appearing as short, narrow brown lesions on leaves.",
+    "symptoms": "• Short, linear, reddish-brown lesions\n• Lesions parallel to the veins\n• Premature leaf senescence",
+    "prevention": "• Plant resistant varieties\n• Improve soil fertility\n• Crop rotation",
+    "treatment": "Apply Propiconazole or Mancozeb if needed."
   },
   "Rice___Nitrogen_Deficiency": {
     "hindi_name": "धान में नाइट्रोजन की कमी",
@@ -76,12 +174,103 @@
     "prevention": "• Soil testing\n• Split application of Urea\n• Use of Green Manures",
     "treatment": "Top-dress with Urea or apply Neem-coated Urea."
   },
-  "Tomato___Tomato_Yellow_Leaf_Curl_Virus": {
-    "hindi_name": "टमाटर का पीला पत्ता मरोड़ वायरस",
-    "description": "A viral disease spread by whiteflies that can cause 100% crop loss.",
-    "symptoms": "• Leaves curl upward and inward\n• Intense yellowing of leaf edges\n• Stunted plant growth",
-    "prevention": "• Use whitefly-proof mesh\n• Yellow sticky traps\n• Remove silverleaf nightshade weeds",
-    "treatment": "Control whiteflies using Neem oil or systemic insecticides."
+  "Rice___Phosphorus_Deficiency": {
+    "hindi_name": "धान में फास्फोरस की कमी",
+    "description": "Lack of phosphorus causes dark green leaves and severely reduced tillering.",
+    "symptoms": "• Stunted growth and dark green leaves\n• Narrow, short, and erect leaves\n• Poor root development and delayed flowering",
+    "prevention": "• Apply basal dose of DAP or SSP\n• Improve soil organic matter\n• Maintain proper soil pH",
+    "treatment": "Apply soil or foliar phosphorus fertilizers."
+  },
+  "Rice___Potassium_Deficiency": {
+    "hindi_name": "धान में पोटैशियम की कमी",
+    "description": "Deficiency causing yellowing and browning of leaf margins, increasing disease risk.",
+    "symptoms": "• Yellowing and browning of leaf tips and edges\n• Dark rusty spots on older leaves\n• Weak stems and lodging",
+    "prevention": "• Apply Muriate of Potash (MOP)\n• Return rice straw to the field\n• Balanced fertilizer application",
+    "treatment": "Apply Potash fertilizers during soil preparation."
+  },
+  "Rice___Rice_Gall_Midge": {
+    "hindi_name": "धान का गॉल मिज (सिल्वर शूट)",
+    "description": "Pest larvae cause the leaf sheath to form a hollow, silver-colored tube.",
+    "symptoms": "• Formation of 'Silver Shoots' (onion leaf galls)\n• Stunted tillering\n• Vigorous growth of side tillers",
+    "prevention": "• Early planting\n• Use resistant varieties\n• Remove weed hosts like wild rice",
+    "treatment": "Apply Thiamethoxam or Carbofuran granules."
+  },
+  "Rice___Rice_Leaf_Folder": {
+    "hindi_name": "धान का लीफ फोल्डर",
+    "description": "Larvae fold the leaves and feed inside, creating white transparent streaks.",
+    "symptoms": "• Folded leaves longitudinally\n• White scraped patches on leaves\n• Reduced photosynthetic area",
+    "prevention": "• Avoid excessive use of Nitrogen\n• Use of light traps\n• Field sanitation",
+    "treatment": "Spray Chlorantraniliprole or Flubendiamide."
+  },
+  "Rice___Rice_Skipper": {
+    "hindi_name": "धान का राइस स्किपर",
+    "description": "Caterpillars that fold leaf blades together and feed on them.",
+    "symptoms": "• Leaves webbed/folded into tubes\n• Edges of leaves eaten away\n• Smooth, green caterpillars found inside folds",
+    "prevention": "• Manual collection of larvae\n• Clean cultivation\n• Natural predators (birds/wasps)",
+    "treatment": "Generally doesn't require chemicals; spray Quinalphos if severe."
+  },
+  "Rice___Sheath_Blight": {
+    "hindi_name": "धान का शीथ ब्लाइट",
+    "description": "Fungal disease causing large oval spots on the leaf sheath near the water line.",
+    "symptoms": "• Large, irregular, grayish-white spots on sheaths\n• Spots have purple-brown borders\n• Infection spreads to upper leaves",
+    "prevention": "• Balanced fertilizer application\n• Optimal plant spacing\n• Weed control",
+    "treatment": "Spray Hexaconazole or Validamycin."
+  },
+  "Rice___Thrips": {
+    "hindi_name": "धान का थ्रिप्स",
+    "description": "Tiny insects that suck sap from young leaves, causing curling and drying.",
+    "symptoms": "• Silver streaks on leaves\n• Leaves roll at the edges or tips\n• Terminal parts of leaves dry up",
+    "prevention": "• Flood the field for a few days\n• Use resistant varieties\n• Monitoring during dry weather",
+    "treatment": "Spray Imidacloprid or Spinosad."
+  },
+  "Rice___Tungro_Virus": {
+    "hindi_name": "धान का टुंगरो वायरस",
+    "description": "Viral disease spread by Green Leafhoppers, causing severe stunting.",
+    "symptoms": "• Severe stunting of plants\n• Leaves turn yellow to orange-yellow\n• Reduced number of tillers and sterile grains",
+    "prevention": "• Control Green Leafhoppers (GLH)\n• Plant resistant varieties\n• Avoid planting during peak GLH seasons",
+    "treatment": "No cure for virus; use insecticides to control the vectors."
+  },
+  "Rice___Yellow_Stem_Borer": {
+    "hindi_name": "धान का पीला तना छेदक",
+    "description": "A major pest where larvae destroy the growing point of the rice plant.",
+    "symptoms": "• 'Dead hearts' (drying of central shoot)\n• 'White heads' (empty panicles)\n• Larvae found inside the stem",
+    "prevention": "• Mass trapping with pheromones\n• Harvest at ground level\n• Destruction of stubble",
+    "treatment": "Apply Chlorantraniliprole (Ferterra) or Fipronil."
+  },
+  "Rice___healthy": {
+    "hindi_name": "धान स्वस्थ है",
+    "description": "The rice crop is in healthy condition.",
+    "symptoms": "• Strong tillering\n• Uniform green leaves\n• Healthy root system",
+    "prevention": "• Systematic weeding\n• Proper water level\n• Balanced nutrition",
+    "treatment": "Keep monitoring for seasonal pests."
+  },
+  "Soybean___healthy": {
+    "hindi_name": "सोयाबीन स्वस्थ है",
+    "description": "The soybean crop is healthy and free from visible diseases.",
+    "symptoms": "• Broad green leaves\n• No visible spots or mottling\n• Good pod development",
+    "prevention": "• Seed inoculation\n• Weed management\n• Soil moisture monitoring",
+    "treatment": "Regular crop inspection is advised."
+  },
+  "Tomato___Bacterial_spot": {
+    "hindi_name": "टमाटर का जीवाणु धब्बा",
+    "description": "Bacterial disease causing small, dark, water-soaked spots on leaves and stems.",
+    "symptoms": "• Small, circular, dark spots on leaves\n• Spots appear greasy on fruit\n• Yellowing and eventual drop of leaves",
+    "prevention": "• Use certified seeds\n• Avoid overhead watering\n• Remove crop debris",
+    "treatment": "Spray copper-based bactericides."
+  },
+  "Tomato___Early_blight": {
+    "hindi_name": "टमाटर का अगेती झुलसा",
+    "description": "Common fungal disease causing target-like spots on tomato leaves.",
+    "symptoms": "• Concentric rings in brown spots\n• Lower leaves affected first\n• Stem lesions and fruit rot",
+    "prevention": "• Rotate crops annually\n• Mulch around plants\n• Prune lower leaves",
+    "treatment": "Apply Chlorothalonil or Mancozeb."
+  },
+  "Tomato___Late_blight": {
+    "hindi_name": "टमाटर का पछेती झुलसा",
+    "description": "Fungal-like organism that can destroy tomato plants quickly in wet weather.",
+    "symptoms": "• Large, dark, water-soaked patches on leaves\n• White fuzzy growth on undersides\n• Rapid wilting and browning",
+    "prevention": "• Use resistant cultivars\n• Ensure good air circulation\n• Monitor weather alerts",
+    "treatment": "Fungicides like Revus (Mandipropamid)."
   },
   "Tomato___Leaf_Mold": {
     "hindi_name": "टमाटर का पत्ता फफूंद",
@@ -90,6 +279,34 @@
     "prevention": "• Improve greenhouse ventilation\n• Avoid wetting leaves\n• Resistant varieties",
     "treatment": "Spray fungicides like Chlorothalonil or Difenoconazole."
   },
+  "Tomato___Septoria_leaf_spot": {
+    "hindi_name": "टमाटर का सेप्टोरिया पत्ता धब्बा",
+    "description": "Fungal disease causing many small circular spots with gray centers.",
+    "symptoms": "• Numerous small spots with dark borders\n• Gray or tan centers in spots\n• Leaves turn yellow and fall",
+    "prevention": "• Control weeds\n• Water at the base, not foliage\n• Remove infected plants",
+    "treatment": "Standard tomato fungicides (Copper or Chlorothalonil)."
+  },
+  "Tomato___Spider_mites Two-spotted_spider_mite": {
+    "hindi_name": "टमाटर का मकड़ी घुन",
+    "description": "Tiny pests that suck sap, causing stippling and webbing on leaves.",
+    "symptoms": "• Tiny yellow/white spots (stippling)\n• Fine webbing on leaf undersides\n• Leaves look dusty and eventually dry up",
+    "prevention": "• Increase humidity\n• Maintain plant health\n• Introduce predatory mites",
+    "treatment": "Use Abamectin or neem oil sprays."
+  },
+  "Tomato___Target_Spot": {
+    "hindi_name": "टमाटर का टारगेट स्पॉट",
+    "description": "Fungal disease characterized by target-like lesions on leaves and fruit.",
+    "symptoms": "• Small, brown spots with concentric circles\n• Spots expand and merge\n• Pitted lesions on fruit",
+    "prevention": "• Improve spacing for air flow\n• Remove lower foliage\n• Avoid high humidity",
+    "treatment": "Spray fungicides like Azoxystrobin."
+  },
+  "Tomato___Tomato_Yellow_Leaf_Curl_Virus": {
+    "hindi_name": "टमाटर का पीला पत्ता मरोड़ वायरस",
+    "description": "A viral disease spread by whiteflies that can cause 100% crop loss.",
+    "symptoms": "• Leaves curl upward and inward\n• Intense yellowing of leaf edges\n• Stunted plant growth",
+    "prevention": "• Use whitefly-proof mesh\n• Yellow sticky traps\n• Remove silverleaf nightshade weeds",
+    "treatment": "Control whiteflies using Neem oil or systemic insecticides."
+  },
   "Tomato___Tomato_mosaic_virus": {
     "hindi_name": "टमाटर का मोज़ेक वायरस",
     "description": "Viral disease that causes mottled patterns on leaves and reduces fruit quality.",
@@ -97,18 +314,18 @@
     "prevention": "• Do not smoke near plants\n• Wash hands before handling\n• Use certified virus-free seeds",
     "treatment": "No cure for virus; remove and burn infected plants immediately."
   },
+  "Tomato___healthy": {
+    "hindi_name": "टमाटर स्वस्थ है",
+    "description": "The tomato plant is in peak health.",
+    "symptoms": "• Robust green growth\n• No spots or wilting\n• Healthy blossoms and fruit",
+    "prevention": "• Consistent watering\n• Staking/caging\n• Monitoring for pests",
+    "treatment": "Continue regular feeding and care."
+  },
   "not_a_leaf": {
     "hindi_name": "पत्ता नहीं मिला",
     "description": "The AI model did not detect a plant leaf in the photo.",
     "symptoms": "• Blurred object\n• Background noise\n• Non-plant object",
     "prevention": "N/A",
     "treatment": "Please retake the photo focusing clearly on a single diseased leaf."
-  },
-  "healthy": {
-    "hindi_name": "स्वस्थ फसल",
-    "description": "The crop appears healthy with no visible signs of disease.",
-    "symptoms": "• Vibrant green leaves\n• Strong stems\n• Regular growth pattern",
-    "prevention": "• Regular monitoring\n• Balanced fertilization\n• Proper watering",
-    "treatment": "Continue regular maintenance and preventive care."
   }
 }

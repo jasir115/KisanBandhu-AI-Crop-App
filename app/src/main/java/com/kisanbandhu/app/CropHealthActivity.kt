@@ -55,6 +55,7 @@ class CropHealthActivity : SwipeableActivity() {
     private lateinit var layoutAnalysis: View
     private lateinit var layoutCamera: View
 
+    private var camera: Camera? = null
     private var imageCapture: ImageCapture? = null
     private var imageAnalyzer: ImageAnalysis? = null
     private lateinit var cameraExecutor: ExecutorService
@@ -90,6 +91,8 @@ class CropHealthActivity : SwipeableActivity() {
     private lateinit var tvSymptoms: TextView
     private lateinit var tvPreventionInfo: TextView
     private lateinit var tvTreatmentInfo: TextView
+    
+    private lateinit var zoomSeekBar: SeekBar
 
     private val galleryLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
         if (isFinishing) return@registerForActivityResult
@@ -103,7 +106,6 @@ class CropHealthActivity : SwipeableActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_crop_health)
 
-        // SOLUTION: Clear old temp files on startup to keep cache clean
         clearInternalCache()
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
@@ -169,6 +171,8 @@ class CropHealthActivity : SwipeableActivity() {
         tvSymptoms = findViewById(R.id.tv_symptoms)
         tvPreventionInfo = findViewById(R.id.tv_prevention_info)
         tvTreatmentInfo = findViewById(R.id.tv_treatment_info)
+        
+        zoomSeekBar = findViewById(R.id.zoom_seekbar)
     }
 
     private fun setupClickListeners() {
@@ -196,6 +200,16 @@ class CropHealthActivity : SwipeableActivity() {
             override fun onTabSelected(tab: TabLayout.Tab?) { updateTabContent(tab?.position ?: 0) }
             override fun onTabUnselected(tab: TabLayout.Tab?) {}
             override fun onTabReselected(tab: TabLayout.Tab?) {}
+        })
+        
+        zoomSeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                if (fromUser) {
+                    camera?.cameraControl?.setLinearZoom(progress / 100f)
+                }
+            }
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
         })
     }
 
@@ -269,7 +283,6 @@ class CropHealthActivity : SwipeableActivity() {
 
         updateSeverityStyle(response.severity, response.disease_name)
 
-        // Rendering HTML formatted AI content
         tvDiseaseDesc.text = formatHtml(response.description)
         tvSymptoms.text = formatHtml(response.symptoms)
         tvPreventionInfo.text = formatHtml(response.prevention)
@@ -316,7 +329,13 @@ class CropHealthActivity : SwipeableActivity() {
             val cameraSelector = CameraSelector.Builder().requireLensFacing(lensFacing).build()
             try {
                 cameraProvider.unbindAll()
-                cameraProvider.bindToLifecycle(this, cameraSelector, preview, imageCapture, imageAnalyzer)
+                camera = cameraProvider.bindToLifecycle(this, cameraSelector, preview, imageCapture, imageAnalyzer)
+                
+                // Initialize zoom seekbar to current zoom level
+                camera?.cameraInfo?.zoomState?.observe(this) { zoomState ->
+                    val progress = (zoomState.linearZoom * 100).toInt()
+                    zoomSeekBar.progress = progress
+                }
             } catch (exc: Exception) { Log.e(TAG, "Use case binding failed", exc) }
         }, ContextCompat.getMainExecutor(this))
     }
@@ -382,10 +401,7 @@ class CropHealthActivity : SwipeableActivity() {
         layoutProcessing.visibility = View.GONE
         layoutAnalysis.visibility = View.GONE
         layoutCamera.visibility = View.GONE
-        
-        // Cleanup temp files on reset to prevent accumulation during session
         clearInternalCache()
-        
         selectedImageUri = null
         currentResult = null
     }
@@ -432,7 +448,9 @@ class CropHealthActivity : SwipeableActivity() {
     private fun requestCameraPermission() { ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CAMERA), 1003) }
 
     private fun loadBitmapWithRotation(file: File): Bitmap? {
-        val bitmap = BitmapFactory.decodeFile(file.absolutePath) ?: return null
+        val options = BitmapFactory.Options()
+        options.inPreferredConfig = Bitmap.Config.ARGB_8888
+        val bitmap = BitmapFactory.decodeFile(file.absolutePath, options) ?: return null
         val exif = ExifInterface(file.absolutePath)
         val matrix = Matrix()
         when (exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL)) {
@@ -443,24 +461,23 @@ class CropHealthActivity : SwipeableActivity() {
         return Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, matrix, true)
     }
 
-    private fun cropToFocusFrame(source: Bitmap): Bitmap {
-        val focusFrame = findViewById<View>(R.id.camera_focus_frame) ?: return source
-        val container = findViewById<View>(R.id.layout_camera_interface) ?: return source
-        val widthRatio = focusFrame.width.toFloat() / container.width.toFloat()
-        val heightRatio = focusFrame.height.toFloat() / container.height.toFloat()
-        val cropW = (source.width * widthRatio).toInt()
-        val cropH = (source.height * heightRatio).toInt()
-        val cropX = (source.width * ((1f - widthRatio) / 2f)).toInt()
-        val cropY = (source.height * (0.3f * (1f - heightRatio))).toInt()
-        return try { Bitmap.createBitmap(source, cropX.coerceIn(0, source.width - 1), cropY.coerceIn(0, source.height - 1), cropW.coerceAtMost(source.width - cropX), cropH.coerceAtMost(source.height - cropY)) } catch (e: Exception) { source }
-    }
-
     private fun uriToBitmap(uri: Uri): Bitmap? {
         return try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                ImageDecoder.decodeBitmap(ImageDecoder.createSource(contentResolver, uri)) { d, _, _ -> d.isMutableRequired = true }
-            } else MediaStore.Images.Media.getBitmap(contentResolver, uri)
-        } catch (e: Exception) { null }
+                val source = ImageDecoder.createSource(contentResolver, uri)
+                ImageDecoder.decodeBitmap(source) { decoder, _, _ ->
+                    decoder.isMutableRequired = true
+                    decoder.allocator = ImageDecoder.ALLOCATOR_SOFTWARE // CRITICAL FIX: No Hardware Bitmaps
+                }
+            } else {
+                @Suppress("DEPRECATION")
+                val bmp = MediaStore.Images.Media.getBitmap(contentResolver, uri)
+                bmp.copy(Bitmap.Config.ARGB_8888, true)
+            }
+        } catch (e: Exception) { 
+            Log.e(TAG, "Bitmap conversion failed", e)
+            null 
+        }
     }
 
     private fun calculateLuminance(image: ImageProxy): Double {
@@ -480,8 +497,6 @@ class CropHealthActivity : SwipeableActivity() {
 
     private fun takePhoto() {
         val imageCapture = imageCapture ?: return
-        
-        // FIXED FILENAME: Overwrites existing file instead of creating new ones
         val photoFile = File(cacheDir, "temp_crop_capture.jpg")
         val outputOptions = ImageCapture.OutputFileOptions.Builder(photoFile).build()
 
@@ -489,18 +504,11 @@ class CropHealthActivity : SwipeableActivity() {
             override fun onError(exc: ImageCaptureException) { Log.e(TAG, "Capture failed", exc) }
             override fun onImageSaved(output: ImageCapture.OutputFileResults) {
                 if (isFinishing) return
-                val originalBitmap = loadBitmapWithRotation(photoFile)
-                if (originalBitmap != null) {
-                    val croppedBitmap = cropToFocusFrame(originalBitmap)
-                    // FIXED FILENAME: Overwrites existing file
-                    val croppedFile = File(cacheDir, "cropped_crop_output.jpg")
-                    FileOutputStream(croppedFile).use { croppedBitmap.compress(Bitmap.CompressFormat.JPEG, 90, it) }
-                    selectedImageUri = Uri.fromFile(croppedFile)
-                    
-                    // Cleanup original large raw capture
-                    if (photoFile.exists()) photoFile.delete()
-                } else {
-                    selectedImageUri = Uri.fromFile(photoFile)
+                val bitmap = loadBitmapWithRotation(photoFile)
+                if (bitmap != null) {
+                    val savedFile = File(cacheDir, "cropped_crop_output.jpg")
+                    FileOutputStream(savedFile).use { bitmap.compress(Bitmap.CompressFormat.JPEG, 95, it) }
+                    selectedImageUri = Uri.fromFile(savedFile)
                 }
                 runOnUiThread {
                     hideCamera()
@@ -544,7 +552,7 @@ class CropHealthActivity : SwipeableActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        clearInternalCache() // FINAL CLEANUP: Wipe all session images
+        clearInternalCache()
         cameraExecutor.shutdown()
     }
 }
