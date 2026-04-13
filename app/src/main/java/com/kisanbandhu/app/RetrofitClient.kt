@@ -9,12 +9,13 @@ object RetrofitClient {
 
     private const val BASE_URL = "https://kisanbandhu-backend.onrender.com/"
     private const val GOV_BASE_URL = "https://api.data.gov.in/"
+    // UPDATED: Using router.huggingface.co to resolve the 410 Gone error and improve reliability
     private const val HF_BASE_URL = "https://router.huggingface.co/"
 
     private val okHttpClient = OkHttpClient.Builder()
-        .connectTimeout(30, TimeUnit.SECONDS)
-        .readTimeout(30, TimeUnit.SECONDS)
-        .writeTimeout(30, TimeUnit.SECONDS)
+        .connectTimeout(60, TimeUnit.SECONDS)
+        .readTimeout(60, TimeUnit.SECONDS)
+        .writeTimeout(60, TimeUnit.SECONDS)
         .build()
 
     val api: ApiService by lazy {

@@ -1,36 +1,40 @@
-# --- App Specific Models ---
+# --- App Specific Logic (The Sledgehammer Rule) ---
+# This keeps ALL your code identical to the emulator version.
 -keep class com.kisanbandhu.app.** { *; }
 
-# --- TensorFlow Lite ---
+# --- GSON & Serialization ---
+-keepattributes Signature, *Annotation*, EnclosingMethod, InnerClasses
+-keep class com.google.gson.** { *; }
+-keepclassmembers class * {
+    @com.google.gson.annotations.SerializedName <fields>;
+}
+
+# --- TensorFlow Lite & ML ---
 -keep class org.tensorflow.lite.** { *; }
 -dontwarn org.tensorflow.lite.**
-
-# --- ONNX Runtime ---
 -keep class ai.onnxruntime.** { *; }
 -dontwarn ai.onnxruntime.**
-
-# --- Google Gemini AI ---
--keep class com.google.ai.client.generativeai.** { *; }
--dontwarn com.google.ai.client.generativeai.**
-
-# --- Firebase & Google Services ---
--keep class com.google.firebase.** { *; }
--keep class com.google.android.gms.** { *; }
+-keep class org.tensorflow.lite.NativeInterpreterWrapper { *; }
+-keep class org.tensorflow.lite.Interpreter { *; }
+-keep class org.tensorflow.lite.Tensor { *; }
 
 # --- Retrofit & OkHttp ---
--keepattributes Signature, InnerClasses, EnclosingMethod
--keepattributes RuntimeVisibleAnnotations, RuntimeVisibleParameterAnnotations
--keepattributes AnnotationDefault
 -keep class retrofit2.** { *; }
 -keep class okhttp3.** { *; }
 -dontwarn retrofit2.**
 -dontwarn okhttp3.**
+-dontwarn okio.**
 
-# --- Gson ---
--keepattributes Signature
--keepattributes *Annotation*
--dontwarn sun.misc.**
--keep class com.google.gson.** { *; }
+# --- Firebase & Google Services ---
+-keep class com.google.firebase.** { *; }
+-keep class com.google.android.gms.** { *; }
+-keepattributes SourceFile, LineNumberTable
+
+# --- CameraX ---
+-keep class androidx.camera.core.** { *; }
+-keep class androidx.camera.camera2.** { *; }
+-dontwarn androidx.camera.core.**
+-dontwarn androidx.camera.camera2.**
 
 # --- Coil (Image Loading) ---
 -keep class coil.** { *; }

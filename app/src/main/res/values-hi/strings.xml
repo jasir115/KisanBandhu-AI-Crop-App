@@ -122,6 +122,21 @@
     <string name="scan_another_leaf">दूसरी पत्ती को स्कैन करें</string>
     <string name="focus_on_leaf_hindi">पत्ती पर ध्यान दें</string>
     <string name="good_lighting">अच्छी रोशनी</string>
+    <string name="fill_square_with_leaf">पत्ती को फ्रेम के अंदर रखें</string>
+
+    <!-- Analysis Result Strings -->
+    <string name="severity_high">उच्च गंभीरता</string>
+    <string name="severity_medium">मध्यम गंभीरता</string>
+    <string name="severity_low">कम गंभीरता</string>
+    <string name="severity_healthy">स्वस्थ</string>
+    <string name="severity_none">कोई संक्रमण नहीं</string>
+    <string name="severity_invalid">अमान्य स्कैन</string>
+    
+    <string name="action_healthy">शानदार! आपकी फसल बहुत स्वस्थ है। इसे ऐसे ही बनाए रखें।</string>
+    <string name="action_high_severity">तत्काल कार्रवाई आवश्यक: कृपया तुरंत अनुशंसित उपचार लागू करें।</string>
+    <string name="action_medium_severity">निवारक कार्रवाई की सिफारिश की जाती है: प्रसार को रोकने के लिए चरणों का पालन करें।</string>
+    <string name="action_default">रिकवरी के लिए विस्तृत सिफारिशों का पालन करें।</string>
+    <string name="action_retry_scan">AI को पत्ती नहीं मिली। कृपया फसल की पत्ती की एक स्पष्ट, अच्छी रोशनी वाली क्लोज-अप तस्वीर लें।</string>
 
     <!-- Crop Recommendation Flow -->
     <string name="crop_rec_title">फसल सिफारिश इनपुट</string>
@@ -188,7 +203,7 @@
     <string name="your_input_params">आपके इनपुट पैरामीटर</string>
     <string name="prev_crop_history">3. पिछला फसल इतिहास</string>
     <string name="last_season_prefix">पिछले सीजन:</string>
-    <string name="last_season">पिछला सीजन: कपास</string>
+    <string name="last_season">पिछले सीजन: कपास</string>
     <string name="target_season">लक्ष्य: रबी सीजन (अक्टूबर - मार्च)</string>
     <string name="edit_history">इतिहास संपादित करें</string>
     <string name="top_match">शीर्ष मिलान</string>

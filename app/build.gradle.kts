@@ -14,8 +14,8 @@ android {
         applicationId = "com.kisanbandhu.app"
         minSdk = 26
         targetSdk = 36
-        versionCode = 3
-        versionName = "1.0.2"
+        versionCode = 5
+        versionName = "1.0.4"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
@@ -30,6 +30,9 @@ android {
 
         val weatherApiKey = properties.getProperty("WEATHER_API_KEY") ?: ""
         buildConfigField("String", "WEATHER_API_KEY", "\"$weatherApiKey\"")
+
+        val marketApiKey = properties.getProperty("MARKET_API_KEY") ?: ""
+        buildConfigField("String", "MARKET_API_KEY", "\"$marketApiKey\"")
     }
 
     buildFeatures {

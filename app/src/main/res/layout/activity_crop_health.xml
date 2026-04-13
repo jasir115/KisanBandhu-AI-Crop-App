@@ -170,33 +170,82 @@
             </LinearLayout>
         </ScrollView>
 
-        <!-- STATE 2: IMAGE PREVIEW -->
-        <LinearLayout
+        <!-- STATE 2: IMAGE PREVIEW (FIXED FOR SMALL SCREENS) -->
+        <ScrollView
             android:id="@+id/layout_preview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:padding="16dp"
+            android:fillViewport="true"
             android:visibility="gone">
-            <com.google.android.material.card.MaterialCardView
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardCornerRadius="16dp"
-                app:strokeColor="#EEEEEE"
-                app:strokeWidth="1dp">
-                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="16dp">
-                    <RelativeLayout android:layout_width="match_parent" android:layout_height="wrap_content">
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/selected_image" android:textColor="@color/black" android:textSize="16sp" android:textStyle="bold" />
-                        <ImageView android:id="@+id/btn_clear_preview" android:layout_width="24dp" android:layout_height="24dp" android:layout_alignParentEnd="true" android:src="@drawable/ic_close" app:tint="@color/text_secondary" />
-                    </RelativeLayout>
-                    <com.google.android.material.card.MaterialCardView android:layout_width="match_parent" android:layout_height="280dp" android:layout_marginTop="16dp" app:cardCornerRadius="12dp" app:cardElevation="0dp">
-                        <ImageView android:id="@+id/iv_preview_image" android:layout_width="match_parent" android:layout_height="match_parent" android:scaleType="centerCrop" />
-                    </com.google.android.material.card.MaterialCardView>
-                </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
-            <com.google.android.material.button.MaterialButton android:id="@+id/btn_start_ai_analysis" android:layout_width="match_parent" android:layout_height="56dp" android:layout_marginTop="24dp" android:backgroundTint="@color/brand_green" android:text="@string/start_ai_analysis" app:icon="@drawable/ic_sparkles" />
-            <com.google.android.material.button.MaterialButton android:id="@+id/btn_choose_different" style="@style/Widget.MaterialComponents.Button.OutlinedButton" android:layout_width="match_parent" android:layout_height="56dp" android:layout_marginTop="12dp" android:text="@string/choose_different" />
-        </LinearLayout>
+                android:orientation="vertical"
+                android:padding="16dp">
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardCornerRadius="16dp"
+                    app:strokeColor="#EEEEEE"
+                    app:strokeWidth="1dp">
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="16dp">
+                        <TextView
+                            android:id="@+id/tv_preview_label"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/selected_image"
+                            android:textColor="@color/black"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+                        <ImageView
+                            android:id="@+id/btn_clear_preview"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@drawable/ic_close"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:tint="@color/text_secondary" />
+                        <com.google.android.material.card.MaterialCardView
+                            android:id="@+id/card_image_container"
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:layout_marginTop="16dp"
+                            app:cardCornerRadius="12dp"
+                            app:cardElevation="0dp"
+                            app:layout_constraintDimensionRatio="1:1"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/tv_preview_label">
+                            <ImageView
+                                android:id="@+id/iv_preview_image"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:scaleType="centerCrop" />
+                        </com.google.android.material.card.MaterialCardView>
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </com.google.android.material.card.MaterialCardView>
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_start_ai_analysis"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:layout_marginTop="24dp"
+                    android:backgroundTint="@color/brand_green"
+                    android:text="@string/start_ai_analysis"
+                    app:icon="@drawable/ic_sparkles" />
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_choose_different"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:layout_marginTop="12dp"
+                    android:text="@string/choose_different" />
+            </LinearLayout>
+        </ScrollView>
 
         <!-- STATE 3: PROCESSING -->
         <LinearLayout
@@ -229,7 +278,7 @@
             android:layout_height="match_parent"
             android:visibility="gone">
             <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="16dp">
-                
+
                 <com.google.android.material.card.MaterialCardView android:layout_width="match_parent" android:layout_height="250dp" app:cardCornerRadius="16dp" app:cardElevation="4dp">
                     <RelativeLayout android:layout_width="match_parent" android:layout_height="match_parent">
                         <ImageView android:id="@+id/iv_analyzed_crop" android:layout_width="match_parent" android:layout_height="match_parent" android:scaleType="centerCrop" />
@@ -253,7 +302,7 @@
                         android:orientation="horizontal"
                         android:padding="8dp"
                         android:gravity="center">
-                        
+
                         <LinearLayout
                             android:id="@+id/btn_save_report"
                             android:layout_width="0dp"
@@ -302,7 +351,7 @@
                 <com.google.android.material.card.MaterialCardView android:id="@+id/card_disease_summary" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" app:cardBackgroundColor="#FFF8E1" app:cardCornerRadius="12dp" app:strokeColor="#FFE082" app:strokeWidth="1dp">
                     <androidx.constraintlayout.widget.ConstraintLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:padding="16dp">
                         <ImageView android:id="@+id/iv_severity_icon" android:layout_width="44dp" android:layout_height="44dp" android:src="@drawable/ic_warning" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="parent" app:tint="#F57C00" />
-                        
+
                         <TextView android:id="@+id/badge_severity" android:layout_width="wrap_content" android:layout_height="wrap_content" android:minWidth="90dp" android:gravity="center" android:background="@drawable/bg_rounded_orange" android:paddingHorizontal="10dp" android:paddingVertical="4dp" android:text="Moderate" android:textColor="@color/white" android:textSize="10sp" android:textStyle="bold" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="parent" />
 
                         <TextView android:id="@+id/tv_disease_title" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginStart="12dp" android:layout_marginEnd="12dp" android:text="Wheat Leaf Rust" android:textColor="#BF360C" android:textSize="18sp" android:textStyle="bold" app:layout_constraintEnd_toStartOf="@id/badge_severity" app:layout_constraintStart_toEndOf="@id/iv_severity_icon" app:layout_constraintTop_toTopOf="parent" />
@@ -310,9 +359,9 @@
                         <TextView android:id="@+id/tv_disease_hindi" android:layout_width="0dp" android:layout_height="wrap_content" android:text="गेहूं का पत्ती रतुआ" android:textColor="#5D4037" android:textSize="14sp" app:layout_constraintEnd_toEndOf="@id/tv_disease_title" app:layout_constraintStart_toStartOf="@id/tv_disease_title" app:layout_constraintTop_toBottomOf="@id/tv_disease_title" />
 
                         <TextView android:id="@+id/tv_confidence_label" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="16dp" android:text="@string/ai_confidence" android:textColor="@color/text_secondary" android:textSize="12sp" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toBottomOf="@id/tv_disease_hindi" />
-                        
+
                         <com.google.android.material.progressindicator.LinearProgressIndicator android:id="@+id/pb_confidence" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:layout_marginEnd="12dp" android:progress="94" app:indicatorColor="@color/black" app:layout_constraintEnd_toStartOf="@id/tv_confidence_percent" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toBottomOf="@id/tv_confidence_label" app:trackColor="#E0E0E0" app:trackThickness="8dp" />
-                        
+
                         <TextView android:id="@+id/tv_confidence_percent" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="94.5%" android:textColor="@color/black" android:textStyle="bold" app:layout_constraintBottom_toBottomOf="@id/pb_confidence" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="@id/pb_confidence" />
 
                         <TextView android:id="@+id/tv_action_suggest" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:text="@string/take_action_soon" android:textColor="@color/text_secondary" android:textSize="11sp" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toBottomOf="@id/pb_confidence" />
@@ -356,13 +405,13 @@
                     app:cornerRadius="12dp"
                     app:icon="@drawable/ic_phone" />
 
-                <com.google.android.material.button.MaterialButton 
-                    android:id="@+id/btn_scan_another" 
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_scan_another"
                     style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                    android:layout_width="match_parent" 
-                    android:layout_height="56dp" 
-                    android:layout_marginTop="12dp" 
-                    android:text="@string/scan_another_leaf" 
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:layout_marginTop="12dp"
+                    android:text="@string/scan_another_leaf"
                     app:cornerRadius="12dp"/>
 
                 <RelativeLayout
@@ -399,75 +448,90 @@
         android:elevation="20dp"
         android:visibility="gone">
         <androidx.camera.view.PreviewView android:id="@+id/viewFinder" android:layout_width="match_parent" android:layout_height="match_parent" />
-        
-        <ImageView 
-            android:id="@+id/btn_close_camera" 
-            android:layout_width="40dp" 
-            android:layout_height="40dp" 
-            android:layout_margin="20dp" 
-            android:src="@drawable/ic_close" 
-            app:layout_constraintEnd_toEndOf="parent" 
-            app:layout_constraintTop_toTopOf="parent" 
-            app:tint="@color/white" 
+
+        <ImageView
+            android:id="@+id/btn_close_camera"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_margin="16dp"
+            android:src="@drawable/ic_close"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             android:padding="10dp"
             android:background="@drawable/white_circle_bg"
-            android:backgroundTint="#60000000" />
+            android:backgroundTint="#60000000"
+            app:tint="@color/white" />
 
-        <View 
-            android:id="@+id/camera_focus_frame" 
-            android:layout_width="0dp" 
-            android:layout_height="0dp" 
-            app:layout_constraintDimensionRatio="1:1" 
-            app:layout_constraintWidth_percent="0.75" 
-            android:background="@drawable/bg_camera_focus_grid" 
-            app:layout_constraintBottom_toBottomOf="parent" 
-            app:layout_constraintLeft_toLeftOf="parent" 
-            app:layout_constraintRight_toRightOf="parent" 
-            app:layout_constraintTop_toTopOf="parent" 
-            app:layout_constraintVertical_bias="0.3" />
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/card_guidance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:layout_marginHorizontal="60dp"
+            app:cardBackgroundColor="#CC000000"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="0dp"
+            app:strokeWidth="1dp"
+            app:strokeColor="#40FFFFFF"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+            
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingHorizontal="16dp"
+                android:paddingVertical="10dp"
+                android:gravity="center">
 
-        <LinearLayout 
-            android:id="@+id/layout_quality_compact" 
-            android:layout_width="wrap_content" 
-            android:layout_height="wrap_content" 
-            android:layout_marginTop="16dp" 
-            android:gravity="center_vertical" 
-            android:background="@drawable/bg_pill" 
-            android:backgroundTint="#80000000"
-            android:paddingHorizontal="12dp" 
-            android:paddingVertical="6dp" 
-            app:layout_constraintEnd_toEndOf="parent" 
-            app:layout_constraintStart_toStartOf="parent" 
-            app:layout_constraintTop_toBottomOf="@id/camera_focus_frame">
-            <View 
-                android:id="@+id/dot_quality" 
-                android:layout_width="8dp" 
-                android:layout_height="8dp" 
-                android:background="@drawable/circle_dot_yellow" />
-            <TextView 
-                android:id="@+id/tv_quality" 
-                android:layout_width="wrap_content" 
-                android:layout_height="wrap_content" 
-                android:layout_marginStart="8dp" 
-                android:text="@string/good_lighting" 
-                android:textColor="@color/white" 
-                android:textStyle="bold" 
-                android:textSize="12sp" />
-        </LinearLayout>
+                <TextView
+                    android:id="@+id/tv_cam_instruction"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/fill_square_with_leaf"
+                    android:textColor="@color/white"
+                    android:textSize="13sp"
+                    android:textStyle="bold"
+                    android:gravity="center" />
 
-        <TextView 
-            android:id="@+id/tv_cam_instruction" 
-            android:layout_width="wrap_content" 
-            android:layout_height="wrap_content" 
-            android:layout_marginTop="8dp" 
-            android:text="@string/focus_on_leaf_hindi" 
-            android:textColor="@color/white" 
-            android:textSize="14sp" 
-            app:layout_constraintEnd_toEndOf="parent" 
-            app:layout_constraintStart_toStartOf="parent" 
-            app:layout_constraintTop_toBottomOf="@id/layout_quality_compact" />
+                <LinearLayout
+                    android:id="@+id/layout_quality_compact"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+                    <View
+                        android:id="@+id/dot_quality"
+                        android:layout_width="8dp"
+                        android:layout_height="8dp"
+                        android:background="@drawable/circle_dot_yellow" />
+                    <TextView
+                        android:id="@+id/tv_quality"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:text="@string/good_lighting"
+                        android:textColor="@color/white"
+                        android:textSize="11sp" />
+                </LinearLayout>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
 
-        <!-- Zoom Control SeekBar -->
+        <View
+            android:id="@+id/camera_focus_frame"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintWidth_percent="0.85"
+            android:background="@drawable/bg_camera_focus_grid"
+            app:layout_constraintBottom_toTopOf="@id/zoom_seekbar"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/card_guidance"
+            app:layout_constraintVertical_bias="0.4" />
+
         <SeekBar
             android:id="@+id/zoom_seekbar"
             android:layout_width="match_parent"
@@ -480,55 +544,55 @@
             android:thumbTint="@color/brand_green"
             app:layout_constraintBottom_toTopOf="@id/camera_secondary_controls" />
 
-        <LinearLayout 
+        <LinearLayout
             android:id="@+id/camera_secondary_controls"
-            android:layout_width="wrap_content" 
-            android:layout_height="wrap_content" 
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginBottom="24dp"
             android:background="@drawable/bg_pill"
             android:backgroundTint="#60000000"
-            android:gravity="center" 
+            android:gravity="center"
             android:paddingHorizontal="24dp"
-            android:paddingVertical="12dp" 
-            android:orientation="horizontal" 
+            android:paddingVertical="12dp"
+            android:orientation="horizontal"
             app:layout_constraintBottom_toTopOf="@id/btn_capture_circle"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
-            
-            <ImageView 
-                android:id="@+id/btn_cam_flash" 
-                android:layout_width="28dp" 
-                android:layout_height="28dp" 
-                android:src="@drawable/ic_flash_off" 
+
+            <ImageView
+                android:id="@+id/btn_cam_flash"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:src="@drawable/ic_flash_off"
                 app:tint="@color/white" />
-                
-            <ImageView 
-                android:id="@+id/btn_cam_grid" 
-                android:layout_width="28dp" 
-                android:layout_height="28dp" 
-                android:layout_marginStart="40dp" 
-                android:src="@drawable/ic_grid" 
+
+            <ImageView
+                android:id="@+id/btn_cam_grid"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:layout_marginStart="40dp"
+                android:src="@drawable/ic_grid"
                 app:tint="@color/white" />
-                
-            <ImageView 
-                android:id="@+id/btn_cam_switch" 
-                android:layout_width="28dp" 
-                android:layout_height="28dp" 
-                android:layout_marginStart="40dp" 
-                android:src="@drawable/ic_flip_camera" 
+
+            <ImageView
+                android:id="@+id/btn_cam_switch"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:layout_marginStart="40dp"
+                android:src="@drawable/ic_flip_camera"
                 app:tint="@color/white" />
         </LinearLayout>
 
-        <ImageButton 
-            android:id="@+id/btn_capture_circle" 
-            android:layout_width="72dp" 
-            android:layout_height="72dp" 
-            android:layout_marginBottom="40dp" 
-            android:background="@drawable/bg_capture_button" 
-            android:src="@drawable/ic_camera" 
-            app:layout_constraintBottom_toBottomOf="parent" 
-            app:layout_constraintEnd_toEndOf="parent" 
-            app:layout_constraintStart_toStartOf="parent" 
+        <ImageButton
+            android:id="@+id/btn_capture_circle"
+            android:layout_width="72dp"
+            android:layout_height="72dp"
+            android:layout_marginBottom="40dp"
+            android:background="@drawable/bg_capture_button"
+            android:src="@drawable/ic_camera"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:tint="@color/white" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 

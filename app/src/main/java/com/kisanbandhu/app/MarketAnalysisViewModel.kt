@@ -11,7 +11,7 @@ import retrofit2.Response
 class MarketAnalysisViewModel(application: Application) : AndroidViewModel(application) {
 
     private val TAG = "MarketViewModelDebug"
-    private val apiKey = "579b464db66ec23bdd000001afaa734f77284bf5426a771984ced436"
+    private val apiKey = BuildConfig.MARKET_API_KEY
 
     private val _allProcessedMarketData = MutableLiveData<List<MarketPriceInfo>>()
     val allProcessedMarketData: LiveData<List<MarketPriceInfo>> = _allProcessedMarketData
@@ -37,6 +37,10 @@ class MarketAnalysisViewModel(application: Application) : AndroidViewModel(appli
     private val grainKeywords = listOf("Rice", "Wheat", "Maize", "Barley", "Millet", "Jowar", "Bajra", "Ragi", "Gram", "Arhar", "Tur", "Moong", "Urad", "Cotton", "Soyabean")
 
     fun fetchMarketIntelligence(state: String? = null) {
+        if (apiKey.isEmpty()) {
+            _error.value = "Market API Key missing"
+            return
+        }
         _isLoading.value = true
         _infoMessage.value = null
         
@@ -81,6 +85,10 @@ class MarketAnalysisViewModel(application: Application) : AndroidViewModel(appli
     // NEW: Improved Search Logic with Fallback & Real-time fetching
     fun searchMarketPrices(query: String) {
         if (query.isEmpty()) return
+        if (apiKey.isEmpty()) {
+            _error.value = "Market API Key missing"
+            return
+        }
         
         _isLoading.value = true
         

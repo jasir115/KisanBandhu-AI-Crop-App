@@ -17,6 +17,8 @@ import android.os.Looper
 import android.provider.MediaStore
 import android.text.Html
 import android.util.Log
+import android.util.Rational
+import android.util.Size
 import android.view.View
 import android.view.WindowInsetsController
 import android.widget.*
@@ -43,6 +45,7 @@ import java.io.OutputStream
 import java.util.*
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
+import kotlin.math.min
 
 class CropHealthActivity : SwipeableActivity() {
 
@@ -91,8 +94,11 @@ class CropHealthActivity : SwipeableActivity() {
     private lateinit var tvSymptoms: TextView
     private lateinit var tvPreventionInfo: TextView
     private lateinit var tvTreatmentInfo: TextView
-    
+
     private lateinit var zoomSeekBar: SeekBar
+
+    // Performance: Frame throttling for ImageAnalysis
+    private var lastAnalysisTime = 0L
 
     private val galleryLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
         if (isFinishing) return@registerForActivityResult
@@ -146,6 +152,8 @@ class CropHealthActivity : SwipeableActivity() {
         layoutCamera = findViewById(R.id.layout_camera_interface)
 
         viewFinder = findViewById(R.id.viewFinder)
+        viewFinder.scaleType = PreviewView.ScaleType.FILL_CENTER
+
         ivPreviewImage = findViewById(R.id.iv_preview_image)
 
         stepCrop = findViewById(R.id.step_crop_type)
@@ -171,7 +179,7 @@ class CropHealthActivity : SwipeableActivity() {
         tvSymptoms = findViewById(R.id.tv_symptoms)
         tvPreventionInfo = findViewById(R.id.tv_prevention_info)
         tvTreatmentInfo = findViewById(R.id.tv_treatment_info)
-        
+
         zoomSeekBar = findViewById(R.id.zoom_seekbar)
     }
 
@@ -201,7 +209,7 @@ class CropHealthActivity : SwipeableActivity() {
             override fun onTabUnselected(tab: TabLayout.Tab?) {}
             override fun onTabReselected(tab: TabLayout.Tab?) {}
         })
-        
+
         zoomSeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 if (fromUser) {
@@ -246,15 +254,19 @@ class CropHealthActivity : SwipeableActivity() {
     }
 
     private fun checkResultStatusAndNotify(response: DiseaseResponse) {
+        val language = LocaleHelper.getLanguage(this)
         when {
             response.isRejected -> {
-                showTopToast("⚠️ Not a Leaf: Please capture a clear photo of the leaf.", true)
+                val msg = if (language == "hi") "⚠️ पत्ती नहीं मिली: कृपया पत्ती की स्पष्ट फोटो लें।" else "⚠️ Not a Leaf: Please capture a clear photo of the leaf."
+                showTopToast(msg, true)
             }
             response.disease_name == "Uncertain Detection" || response.confidence < 0.45f -> {
-                showTopToast("❓ Uncertain Result: AI is unsure. Try better lighting.", true)
+                val msg = if (language == "hi") "❓ अनिश्चित परिणाम: AI सुनिश्चित नहीं है। बेहतर रोशनी में प्रयास करें।" else "❓ Uncertain Result: AI is unsure. Try better lighting."
+                showTopToast(msg, true)
             }
             response.confidence < 0.70f -> {
-                showTopToast("ℹ️ Basic Analysis: Using offline expert data for accuracy.", false)
+                val msg = if (language == "hi") "ℹ️ बुनियादी विश्लेषण: सटीकता के लिए विशेषज्ञ डेटा का उपयोग किया जा रहा है।" else "ℹ️ Basic Analysis: Using offline expert data for accuracy."
+                showTopToast(msg, false)
             }
         }
     }
@@ -273,7 +285,8 @@ class CropHealthActivity : SwipeableActivity() {
         layoutAnalysis.visibility = View.VISIBLE
 
         ivAnalyzedCrop.load(selectedImageUri)
-        tvDetectedCropType.text = "Detected: ${response.crop_type ?: "Crop"}"
+        val detectedLabel = if (LocaleHelper.getLanguage(this) == "hi") "पता चला:" else "Detected:"
+        tvDetectedCropType.text = "$detectedLabel ${response.crop_type ?: "Crop"}"
         tvDiseaseTitle.text = response.disease_name
         tvDiseaseHindi.text = response.hindi_name
 
@@ -281,7 +294,7 @@ class CropHealthActivity : SwipeableActivity() {
         tvConfidencePercent.text = "$confidence%"
         pbConfidence.progress = confidence
 
-        updateSeverityStyle(response.severity, response.disease_name)
+        updateSeverityStyle(response.severity, response.disease_name, response.isRejected)
 
         tvDiseaseDesc.text = formatHtml(response.description)
         tvSymptoms.text = formatHtml(response.symptoms)
@@ -290,12 +303,14 @@ class CropHealthActivity : SwipeableActivity() {
 
         val sev = response.severity?.lowercase()
         val isHealthy = sev == "healthy" || sev == "none" || response.disease_name?.lowercase()?.contains("healthy") == true
-        
+        val isRejected = response.isRejected
+
         tvActionSuggest.text = when {
-            isHealthy -> "Excellent! Your crop is in great health. Keep up the good work."
-            sev == "high" -> "Urgent Action Required: Please apply the recommended treatment immediately."
-            sev == "medium" -> "Preventive Action Recommended: Follow the steps to control spread."
-            else -> "Follow the detailed recommendations for optimal recovery."
+            isRejected -> getString(R.string.action_retry_scan)
+            isHealthy -> getString(R.string.action_healthy)
+            sev == "high" -> getString(R.string.action_high_severity)
+            sev == "medium" -> getString(R.string.action_medium_severity)
+            else -> getString(R.string.action_default)
         }
     }
 
@@ -317,21 +332,46 @@ class CropHealthActivity : SwipeableActivity() {
         cameraProviderFuture.addListener({
             if (isFinishing) return@addListener
             val cameraProvider: ProcessCameraProvider = cameraProviderFuture.get()
+
             val preview = Preview.Builder().build().also { it.setSurfaceProvider(viewFinder.surfaceProvider) }
-            imageCapture = ImageCapture.Builder().setCaptureMode(ImageCapture.CAPTURE_MODE_MINIMIZE_LATENCY).build()
-            imageAnalyzer = ImageAnalysis.Builder().setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST).build().also {
-                it.setAnalyzer(cameraExecutor) { imageProxy ->
-                    val luminance = calculateLuminance(imageProxy)
-                    updateQualityUI(luminance)
-                    imageProxy.close()
+
+            imageCapture = ImageCapture.Builder()
+                .setCaptureMode(ImageCapture.CAPTURE_MODE_MAXIMIZE_QUALITY)
+                .build()
+
+            // Performance Fix: Lower resolution (640x480) and Frame Throttling (300ms)
+            imageAnalyzer = ImageAnalysis.Builder()
+                .setTargetResolution(Size(640, 480))
+                .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
+                .build().also {
+                    it.setAnalyzer(cameraExecutor) { imageProxy ->
+                        val currentTime = System.currentTimeMillis()
+                        if (currentTime - lastAnalysisTime >= 300) {
+                            lastAnalysisTime = currentTime
+                            val luminance = calculateLuminance(imageProxy)
+                            updateQualityUI(luminance)
+                        }
+                        imageProxy.close()
+                    }
                 }
-            }
+
             val cameraSelector = CameraSelector.Builder().requireLensFacing(lensFacing).build()
+
             try {
                 cameraProvider.unbindAll()
-                camera = cameraProvider.bindToLifecycle(this, cameraSelector, preview, imageCapture, imageAnalyzer)
-                
-                // Initialize zoom seekbar to current zoom level
+
+                // FORCE 1:1 Rational to sync with the square scanner box
+                val viewPort = ViewPort.Builder(Rational(1, 1), viewFinder.display.rotation).build()
+
+                val useCaseGroup = UseCaseGroup.Builder()
+                    .addUseCase(preview)
+                    .addUseCase(imageCapture!!)
+                    .addUseCase(imageAnalyzer!!)
+                    .setViewPort(viewPort)
+                    .build()
+
+                camera = cameraProvider.bindToLifecycle(this, cameraSelector, useCaseGroup)
+
                 camera?.cameraInfo?.zoomState?.observe(this) { zoomState ->
                     val progress = (zoomState.linearZoom * 100).toInt()
                     zoomSeekBar.progress = progress
@@ -386,12 +426,17 @@ class CropHealthActivity : SwipeableActivity() {
         handler.postDelayed({ if (!isFinishing) stepSeverity.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_check_circle, 0, 0, 0) }, 2400)
         handler.postDelayed({ if (!isFinishing) stepTreatment.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_check_circle, 0, 0, 0) }, 3200)
 
-        val bitmap = uriToBitmap(uri)
-        if (bitmap != null) {
-            val language = LocaleHelper.getLanguage(this)
-            viewModel.scanCropOffline(bitmap, language)
-        } else {
-            resetUI()
+        // PERFORMANCE: Move bitmap processing to background
+        cameraExecutor.execute {
+            val bitmap = uriToBitmap(uri)
+            runOnUiThread {
+                if (bitmap != null) {
+                    val language = LocaleHelper.getLanguage(this)
+                    viewModel.scanCropOffline(bitmap, language)
+                } else {
+                    resetUI()
+                }
+            }
         }
     }
 
@@ -412,32 +457,44 @@ class CropHealthActivity : SwipeableActivity() {
         viewTreatment.visibility = if (position == 2) View.VISIBLE else View.GONE
     }
 
-    private fun updateSeverityStyle(severity: String?, diseaseName: String?) {
+    private fun updateSeverityStyle(severity: String?, diseaseName: String?, isRejected: Boolean) {
         val sev = severity?.lowercase() ?: "low"
         val isHealthy = sev == "healthy" || sev == "none" || diseaseName?.lowercase()?.contains("healthy") == true
-        
+
         val color = when {
+            isRejected -> R.color.text_secondary
             isHealthy -> R.color.brand_green
             sev == "high" -> android.R.color.holo_red_dark
             sev == "medium" -> android.R.color.holo_orange_dark
             else -> R.color.brand_green
         }
-        
+
         val background = when {
+            isRejected -> R.drawable.bg_pill
             isHealthy -> R.drawable.bg_rounded_green_light
             sev == "high" -> R.drawable.bg_loss_badge
             sev == "medium" -> R.drawable.bg_rounded_orange
             else -> R.drawable.bg_rounded_green_light
         }
-        
+
         badgeSeverity.setBackgroundResource(background)
-        badgeSeverity.text = if (isHealthy) "No Infection" else "${sev.replaceFirstChar { it.uppercase() }} Severity"
+        badgeSeverity.text = when {
+            isRejected -> getString(R.string.severity_invalid)
+            isHealthy -> getString(R.string.severity_healthy)
+            sev == "high" -> getString(R.string.severity_high)
+            sev == "medium" -> getString(R.string.severity_medium)
+            else -> getString(R.string.severity_low)
+        }
+
         ivSeverityIcon.setColorFilter(ContextCompat.getColor(this, color))
-        
+        ivSeverityIcon.setImageResource(if (isRejected) R.drawable.ic_info else if (isHealthy) R.drawable.ic_check_circle else R.drawable.ic_warning)
+
         if (isHealthy) {
             badgeSeverity.setTextColor(ContextCompat.getColor(this, R.color.brand_green_dark))
         } else if (sev == "high") {
             badgeSeverity.setTextColor(ContextCompat.getColor(this, android.R.color.white))
+        } else if (isRejected) {
+            badgeSeverity.setTextColor(ContextCompat.getColor(this, R.color.text_secondary))
         } else {
             badgeSeverity.setTextColor(ContextCompat.getColor(this, color))
         }
@@ -474,9 +531,9 @@ class CropHealthActivity : SwipeableActivity() {
                 val bmp = MediaStore.Images.Media.getBitmap(contentResolver, uri)
                 bmp.copy(Bitmap.Config.ARGB_8888, true)
             }
-        } catch (e: Exception) { 
+        } catch (e: Exception) {
             Log.e(TAG, "Bitmap conversion failed", e)
-            null 
+            null
         }
     }
 
@@ -500,19 +557,34 @@ class CropHealthActivity : SwipeableActivity() {
         val photoFile = File(cacheDir, "temp_crop_capture.jpg")
         val outputOptions = ImageCapture.OutputFileOptions.Builder(photoFile).build()
 
-        imageCapture.takePicture(outputOptions, ContextCompat.getMainExecutor(this), object : ImageCapture.OnImageSavedCallback {
+        // PERFORMANCE: Run image saving and processing on cameraExecutor
+        imageCapture.takePicture(outputOptions, cameraExecutor, object : ImageCapture.OnImageSavedCallback {
             override fun onError(exc: ImageCaptureException) { Log.e(TAG, "Capture failed", exc) }
             override fun onImageSaved(output: ImageCapture.OutputFileResults) {
                 if (isFinishing) return
+
                 val bitmap = loadBitmapWithRotation(photoFile)
                 if (bitmap != null) {
+                    val originalWidth = bitmap.width
+                    val originalHeight = bitmap.height
+                    val size = min(originalWidth, originalHeight)
+
+                    val cropSize = (size * 0.55).toInt()
+                    val x = (originalWidth - cropSize) / 2
+                    val y = (originalHeight - cropSize) / 2
+
+                    val squareBitmap = Bitmap.createBitmap(bitmap, x, y, cropSize, cropSize)
+
                     val savedFile = File(cacheDir, "cropped_crop_output.jpg")
-                    FileOutputStream(savedFile).use { bitmap.compress(Bitmap.CompressFormat.JPEG, 95, it) }
+                    FileOutputStream(savedFile).use { squareBitmap.compress(Bitmap.CompressFormat.JPEG, 95, it) }
                     selectedImageUri = Uri.fromFile(savedFile)
                 }
+
                 runOnUiThread {
-                    hideCamera()
-                    showPreview(selectedImageUri!!)
+                    if (!isFinishing) {
+                        hideCamera()
+                        selectedImageUri?.let { showPreview(it) }
+                    }
                 }
             }
         })
@@ -534,7 +606,7 @@ class CropHealthActivity : SwipeableActivity() {
     }
 
     private fun downloadReport() { Toast.makeText(this, "Report saved to gallery", Toast.LENGTH_SHORT).show() }
-    
+
     private fun getExpertAdvice() { startActivity(Intent(Intent.ACTION_DIAL, Uri.parse("tel:18001801551"))) }
 
     private fun setupBottomNavigation() {

@@ -122,6 +122,21 @@
     <string name="scan_another_leaf">SCAN ANOTHER LEAF</string>
     <string name="focus_on_leaf_hindi">Focus on the leaf / पत्ती पर ध्यान दें</string>
     <string name="good_lighting">Good Lighting</string>
+    <string name="fill_square_with_leaf">Position leaf inside the frame</string>
+    
+    <!-- Analysis Result Strings -->
+    <string name="severity_high">High Severity</string>
+    <string name="severity_medium">Medium Severity</string>
+    <string name="severity_low">Low Severity</string>
+    <string name="severity_healthy">Healthy</string>
+    <string name="severity_none">No Infection</string>
+    <string name="severity_invalid">Invalid Scan</string>
+    
+    <string name="action_healthy">Excellent! Your crop is in great health. Keep up the good work.</string>
+    <string name="action_high_severity">Urgent Action Required: Please apply the recommended treatment immediately.</string>
+    <string name="action_medium_severity">Preventive Action Recommended: Follow the steps to control spread.</string>
+    <string name="action_default">Follow the detailed recommendations for optimal recovery.</string>
+    <string name="action_retry_scan">The AI couldn\'t find a leaf. Please capture a clear, well-lit close-up of the crop leaf.</string>
 
     <!-- Crop Recommendation Flow -->
     <string name="crop_rec_title">Crop Recommendation Input</string>

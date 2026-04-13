@@ -363,7 +363,7 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="24dp"
-                android:text="KisanBandhu v1.0.2"
+                android:text="KisanBandhu v1.0.3"
                 android:textColor="@color/text_secondary"
                 android:textSize="12sp" />
 
